@@ -64,7 +64,6 @@ fclose($fp);
 <th style="font-size:8px">USERNAME</th>
 <th style="font-size:8px">PASSWORD</th>
 <th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -73,7 +72,7 @@ $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
-<tr style="font-size:8px">
+<tr style="font-size:8px" onclick="window.location.href='view_user.php?id=<?php echo $member->id?>' " style="cursor: pointer;">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
 <td ><?php echo $member->User_Group?></td>
@@ -82,10 +81,6 @@ foreach($json as $member){
 <td ><?php echo $member->Username?></td>
 <td ><?php echo $member->Password?></td>
 <td ><?php echo $member->Status?></td>
-<td >
-<a href="view_user.php?id=<?php echo $member->id?>">
-<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Detail</button></a>
-</td>
 </tr>
 <?php
 }
@@ -151,7 +146,6 @@ fclose($fp);
 <th style="font-size:8px">USERNAME</th>
 <th style="font-size:8px">PASSWORD</th>
 <th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -160,7 +154,7 @@ $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
-<tr style="font-size:8px">
+<tr style="font-size:8px" onclick="window.location.href='view_user.php?id=<?php echo $member->id?>' " style="cursor: pointer;">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
 <td ><?php echo $member->User_Group?></td>
@@ -169,10 +163,6 @@ foreach($json as $member){
 <td ><?php echo $member->Username?></td>
 <td ><?php echo $member->Password?></td>
 <td ><?php echo $member->Status?></td>
-<td >
-<a href="view_user.php?id=<?php echo $member->id?>">
-<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Detail</button></a>
-</td>
 </tr>
 <?php
 }
@@ -238,7 +228,6 @@ fclose($fp);
 <th style="font-size:8px">USERNAME</th>
 <th style="font-size:8px">PASSWORD</th>
 <th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -247,7 +236,7 @@ $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
-<tr style="font-size:8px">
+<tr style="font-size:8px" onclick="window.location.href='view_user.php?id=<?php echo $member->id?>' " style="cursor: pointer;">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
 <td ><?php echo $member->User_Group?></td>
@@ -256,10 +245,6 @@ foreach($json as $member){
 <td ><?php echo $member->Username?></td>
 <td ><?php echo $member->Password?></td>
 <td ><?php echo $member->Status?></td>
-<td >
-<a href="view_user.php?id=<?php echo $member->id?>">
-<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Detail</button></a>
-</td>
 </tr>
 <?php
 }
@@ -324,7 +309,6 @@ fclose($fp);
 <th style="font-size:8px">USERNAME</th>
 <th style="font-size:8px">PASSWORD</th>
 <th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -333,7 +317,7 @@ $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
-<tr style="font-size:8px">
+<tr style="font-size:8px" onclick="window.location.href='view_user.php?id=<?php echo $member->id?>' " style="cursor: pointer;">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
 <td ><?php echo $member->User_Group?></td>
@@ -342,10 +326,6 @@ foreach($json as $member){
 <td ><?php echo $member->Username?></td>
 <td ><?php echo $member->Password?></td>
 <td ><?php echo $member->Status?></td>
-<td >
-<a href="view_user.php?id=<?php echo $member->id?>">
-<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Detail</button></a>
-</td>
 </tr>
 <?php
 }
