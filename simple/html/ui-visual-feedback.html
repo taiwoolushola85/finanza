@@ -1,0 +1,1985 @@
+
+<!--
+* Author: Coderthemes
+* Product Name: Simple
+* Version: 1.0.0
+* Contact: support@coderthemes.com
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Visual Feedback | Simple - Responsive Bootstrap 5 Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="admin dashboard template on Themeforest. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features.">
+    <meta name="keywords" content="Simple, Admin dashboard, Themeforest, HTML template,Shadcn, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template">
+    <meta name="author" content="Coderthemes">
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- Theme Config Js -->
+    <script src="assets/js/config.js"></script>
+
+    <!-- Vendor css -->
+    <link href="assets/css/vendors.min.css" rel="stylesheet" type="text/css">
+
+    <!-- App css -->
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css">
+
+    <script src="assets/plugins/lucide/lucide.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        
+        <!-- Topbar Start -->
+        <header class="app-topbar">
+            <div class="container-fluid topbar-menu">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <!-- Topbar Brand Logo -->
+                    <div class="logo-topbar">
+                        <a href="index.html" class="logo-dark">
+                            <span class="d-flex align-items-center gap-1">
+                                <span class="avatar avatar-xs rounded-circle text-bg-dark">
+                                    <span class="avatar-title">
+                                        <i data-lucide="sparkles" class="fs-md"></i>
+                                    </span>
+                                </span>
+                                <span class="logo-text text-body fw-bold fs-xl">Simple</span>
+                            </span>
+                        </a>
+                        <a href="index.html" class="logo-light">
+                            <span class="d-flex align-items-center gap-1">
+                                <span class="avatar avatar-xs rounded-circle text-bg-dark">
+                                    <span class="avatar-title">
+                                        <i data-lucide="sparkles" class="fs-md"></i>
+                                    </span>
+                                </span>
+                                <span class="logo-text text-white fw-bold fs-xl">Simple</span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="d-lg-none d-flex mx-1">
+                        <a href="index.html">
+                            <img src="assets/images/logo-sm.png" height="28" alt="Logo">
+                        </a>
+                    </div>
+
+                    <!-- Sidebar Hover Menu Toggle Button -->
+                    <button class="button-collapse-toggle d-xl-none">
+                        <i data-lucide="menu" class="fs-22 align-middle"></i>
+                    </button>
+
+                    <!-- Topbar Link Item -->
+                    <div class="topbar-item d-none d-lg-flex">
+                        <a href="#!" class="topbar-link btn shadow-none btn-link px-2 disabled"> v1.0.0</a>
+                    </div>
+
+                    <!-- Topbar Link Item -->
+                    <div class="topbar-item d-none d-lg-flex">
+                        <a href="#!" class="topbar-link btn shadow-none btn-link px-2"> Components</a>
+                    </div>
+
+                    <!-- Dropdown -->
+                    <div class="topbar-item">
+                        <div class="dropdown">
+                            <a href="#!" class="topbar-link btn shadow-none btn-link dropdown-toggle drop-arrow-none px-2"
+                               data-bs-toggle="dropdown" data-bs-offset="0,13">
+                                Dropdown <i class="ti ti-chevron-down ms-1"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#!">
+                                    <i class="ti ti-user-plus fs-15 me-1"></i> Add Project Member
+                                </a>
+                                <a class="dropdown-item" href="#!">
+                                    <i class="ti ti-activity fs-15 me-1"></i> View Activity
+                                </a>
+                                <a class="dropdown-item" href="#!">
+                                    <i class="ti ti-settings fs-15 me-1"></i> Settings
+                                </a>
+                            </div> <!-- end dropdown-menu-->
+                        </div> <!-- end dropdown-->
+                    </div> <!-- end topbar item-->
+
+                    <!-- Mega Menu Dropdown -->
+                    <div class="topbar-item d-none d-md-flex">
+                        <div class="dropdown">
+                            <button class="topbar-link btn shadow-none btn-link px-2 dropdown-toggle drop-arrow-none"
+                                    data-bs-toggle="dropdown" data-bs-offset="0,13" type="button" aria-haspopup="false"
+                                    aria-expanded="false">
+                                Mega Menu <i class="ti ti-chevron-down ms-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-xxl p-0">
+                                <div class="h-100" style="max-height: 380px;" data-simplebar>
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <div class="p-3">
+                                                <h5 class="fw-semibold fs-sm dropdown-header">Workspace Tools</h5>
+                                                <ul class="list-unstyled">
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">My Dashboard</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Recent Activity</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Notifications
+                                                        Center</a></li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">File Manager</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Calendar View</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="p-3">
+                                                <h5 class="fw-semibold fs-sm dropdown-header">Team Operations</h5>
+                                                <ul class="list-unstyled">
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Team Overview</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Meeting Schedule</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Timesheets</a></li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Feedback Hub</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Resource
+                                                        Allocation</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="p-3">
+                                                <h5 class="fw-semibold fs-sm dropdown-header">Account Settings</h5>
+                                                <ul class="list-unstyled">
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Profile Settings</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Billing & Plans</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Integrations</a>
+                                                    </li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Privacy &
+                                                        Security</a></li>
+                                                    <li><a href="javascript:void(0);" class="dropdown-item">Support Center</a>
+                                                    </li>
+                                                </ul>
+                                            </div> <!-- end dropdown-->
+                                        </div> <!-- end col-->
+                                    </div> <!-- end row-->
+                                </div> <!-- end .h-100-->
+                            </div> <!-- .dropdown-menu-->
+                        </div> <!-- .dropdown-->
+                    </div> <!-- end topbar-item -->
+                </div> <!-- .d-flex-->
+
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Search -->
+                    <div class="app-search d-none d-xl-flex me-xl-2">
+                        <input type="search" class="form-control topbar-search" name="search"
+                               placeholder="Search for something...">
+                        <i data-lucide="search" class="app-search-icon text-muted"></i>
+                    </div>
+
+                    <!-- Theme Dropdown -->
+                    <div class="topbar-item me-2">
+                        <div class="dropdown" data-dropdown="custom">
+                            <button class="topbar-link  fw-semibold" data-bs-toggle="dropdown" data-bs-offset="0,19"
+                                    type="button" aria-haspopup="false" aria-expanded="false">
+                                <img data-trigger-img src="assets/images/themes/shadcn.svg" alt="user-image"
+                                     class="w-100 rounded me-2"
+                                     height="18">
+                                <span data-trigger-label class="text-nowrap"> Shadcn </span>
+                                <span class="dot-blink" aria-label="live status indicator"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-1">
+                                <div class="h-100" style="max-height: 250px;" data-simplebar>
+                                    <div class="row g-0">
+                                        <div class="col-md-6">
+                                            <button class="dropdown-item position-relative drop-custom-active"
+                                                    data-skin="shadcn">
+                                                <img src="assets/images/themes/shadcn.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Shadcn</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="corporate">
+                                                <img src="assets/images/themes/corporate.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Corporate</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="spotify">
+                                                <img src="assets/images/themes/spotify.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Spotify</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="saas">
+                                                <img src="assets/images/themes/saas.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">SaaS</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="nature">
+                                                <img src="assets/images/themes/nature.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Nature</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="vintage">
+                                                <img src="assets/images/themes/vintage.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Vintage</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="leafline">
+                                                <img src="assets/images/themes/leafline.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Leafline</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <button class="dropdown-item position-relative" data-skin="ghibli">
+                                                <img src="assets/images/themes/ghibli.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Ghibli</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="slack">
+                                                <img src="assets/images/themes/slack.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Slack</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="material">
+                                                <img src="assets/images/themes/material.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Material Design</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="flat">
+                                                <img src="assets/images/themes/flat.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Flat</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="pastel">
+                                                <img src="assets/images/themes/pastel.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Pastel Pop</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="caffieine">
+                                                <img src="assets/images/themes/caffieine.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Caffieine</span>
+                                            </button>
+
+                                            <button class="dropdown-item position-relative" data-skin="redshift">
+                                                <img src="assets/images/themes/redshift.svg" alt="" class="me-1 rounded"
+                                                     height="18">
+                                                <span class="align-middle">Redshift</span>
+                                            </button>
+                                        </div>
+                                    </div> <!-- end row-->
+
+
+                                </div> <!-- end .h-100-->
+                            </div> <!-- .dropdown-menu-->
+
+                        </div> <!-- end dropdown-->
+                    </div> <!-- end topbar item-->
+
+                    <!-- Language Dropdown -->
+                    <div class="topbar-item">
+                        <div class="dropdown">
+                            <button class="topbar-link fw-semibold" data-bs-toggle="dropdown" data-bs-offset="0,19"
+                                    type="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="assets/images/flags/us.svg" alt="user-image" class="w-100 rounded me-2" height="18"
+                                     id="selected-language-image">
+                                <span id="selected-language-code"> EN </span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="en" title="English">
+                                    <img src="assets/images/flags/us.svg" alt="English" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">English</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="de" title="German">
+                                    <img src="assets/images/flags/de.svg" alt="German" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">Deutsch</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="it" title="Italian">
+                                    <img src="assets/images/flags/it.svg" alt="Italian" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">Italiano</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="hi" title="Hindi">
+                                    <img src="assets/images/flags/in.svg" alt="Hindi" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">हिन्दी</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="es" title="Spanish">
+                                    <img src="assets/images/flags/es.svg" alt="Spanish" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">Español</span>
+                                </a>
+                                <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="ru" title="Russian">
+                                    <img src="assets/images/flags/ru.svg" alt="Russian" class="me-1 rounded" height="18"
+                                         data-translator-image>
+                                    <span class="align-middle">Русский</span>
+                                </a>
+                            </div> <!-- end dropdown-menu-->
+                        </div> <!-- end dropdown-->
+                    </div> <!-- end topbar item-->
+
+                    <!-- Notification Dropdown -->
+                    <div class="topbar-item">
+                        <div class="dropdown">
+                            <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown"
+                                    data-bs-offset="0,19" type="button" data-bs-auto-close="outside" aria-haspopup="false"
+                                    aria-expanded="false">
+                                <i data-lucide="bell" class="fs-xxl"></i>
+                                <span class="badge badge-square text-bg-success topbar-badge">9</span>
+                            </button>
+
+                            <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
+                                <div class="px-3 py-2 border-bottom">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0 fs-md fw-semibold">Notifications</h6>
+                                        </div>
+                                        <div class="col text-end">
+                                            <a href="#!" class="badge text-bg-light badge-label py-1">9 Alerts</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="max-height: 300px;" data-simplebar>
+                                    <!-- item 1 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="notification-1">
+                                        <span class="d-flex gap-2">
+                                            <span class="avatar-md flex-shrink-0">
+                                                <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
+                                                    <i data-lucide="cloud-cog" class="fs-xl fill-primary"></i>
+                                                </span>
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">Backup completed successfully</span><br>
+                                                <span class="fs-xs">Just now</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#notification-1">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 2 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="notification-2">
+                                        <span class="d-flex gap-2">
+                                            <span class="avatar-md flex-shrink-0">
+                                                <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
+                                                    <i data-lucide="bug" class="fs-xl fill-primary"></i>
+                                                </span>
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">New bug reported in Payment Module</span><br>
+                                                <span class="fs-xs">8 minutes ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#notification-2">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 3 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap active" id="message-1">
+                                        <span class="d-flex gap-2">
+                                            <span class="flex-shrink-0">
+                                                <img src="assets/images/users/user-3.jpg" class="avatar-md rounded-circle"
+                                                     alt="User Avatar">
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">Olivia Bennett</span> shared a new report in <span
+                                                    class="fw-medium text-body">Weekly Planning</span><br>
+                                                <span class="fs-xs">2 minutes ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#message-1">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 4 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="message-2">
+                                        <span class="d-flex gap-2">
+                                            <span class="flex-shrink-0">
+                                                <img src="assets/images/users/user-4.jpg" class="avatar-md rounded-circle"
+                                                     alt="User Avatar">
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">Lucas Gray</span> mentioned you in <span
+                                                    class="fw-medium text-body">Sprint Standup</span><br>
+                                                <span class="fs-xs">14 minutes ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#message-2">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 5 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="message-3">
+                                        <span class="d-flex gap-2">
+                                            <span class="avatar-md flex-shrink-0">
+                                                <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
+                                                    <i data-lucide="file-warning" class="fs-22 fill-primary"></i>
+                                                </span>
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                Security policy update required for your account<br>
+                                                <span class="fs-xs">22 minutes ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#message-3">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 6 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="notification-6">
+                                        <span class="d-flex gap-2">
+                                            <span class="avatar-md flex-shrink-0">
+                                                <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
+                                                    <i data-lucide="mail" class="fs-xl fill-primary"></i>
+                                                </span>
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">You've received a new support ticket</span><br>
+                                                <span class="fs-xs">18 minutes ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#notification-6">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <!-- item 7 -->
+                                    <div class="dropdown-item notification-item py-2 text-wrap" id="notification-7">
+                                        <span class="d-flex gap-2">
+                                            <span class="avatar-md flex-shrink-0">
+                                                <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-22">
+                                                    <i data-lucide="calendar-clock" class="fs-xl fill-primary"></i>
+                                                </span>
+                                            </span>
+                                            <span class="flex-grow-1 text-muted">
+                                                <span class="fw-medium text-body">System maintenance starts at 12 AM</span><br>
+                                                <span class="fs-xs">1 hour ago</span>
+                                            </span>
+                                            <button type="button" class="flex-shrink-0 text-muted btn shadow-none btn-link p-0"
+                                                    data-dismissible="#notification-7">
+                                                <i data-lucide="circle-x" class="fs-xxl"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div> <!-- end dropdown -->
+
+
+                                <!-- All-->
+                                <a href="javascript:void(0);"
+                                   class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2">
+                                    View All Notifications
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button Trigger Customizer Offcanvas -->
+                    <div class="topbar-item d-none d-sm-flex">
+                        <button class="topbar-link" data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas"
+                                type="button">
+                            <i data-lucide="settings" class="fs-xxl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Light/Dark Mode Button -->
+                    <div class="topbar-item d-none d-sm-flex">
+                        <button class="topbar-link" id="light-dark-mode" type="button">
+                            <i data-lucide="moon" class="fs-xxl mode-light-moon"></i>
+                            <i data-lucide="sun" class="fs-xxl mode-light-sun"></i>
+                        </button>
+                    </div>
+
+                    <!-- Monochrome Mode Button -->
+                    <div class="topbar-item d-none d-sm-flex">
+                        <button class="topbar-link" id="monochrome-mode" type="button">
+                            <i data-lucide="palette" class="fs-xxl mode-light-moon"></i>
+                        </button>
+                    </div>
+
+                    <!-- User Dropdown -->
+                    <div class="topbar-item nav-user">
+                        <div class="dropdown">
+                            <a class="topbar-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
+                               data-bs-offset="0,13" href="#!" aria-haspopup="false" aria-expanded="false">
+                                <img src="assets/images/users/user-2.jpg" width="32" class="rounded-circle d-flex"
+                                     alt="user-image">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- Header -->
+                                <div class="dropdown-header noti-title">
+                                    <h6 class="text-overflow m-0">Welcome back!</h6>
+                                </div>
+
+                                <!-- My Profile -->
+                                <a href="#!" class="dropdown-item">
+                                    <i class="ti ti-user-circle me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Profile</span>
+                                </a>
+
+                                <!-- Notifications -->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ti ti-bell-ringing me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Notifications</span>
+                                </a>
+
+                                <!-- Wallet -->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ti ti-credit-card me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Balance: <span class="fw-semibold">$985.25</span></span>
+                                </a>
+
+                                <!-- Settings -->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ti ti-settings-2 me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Account Settings</span>
+                                </a>
+
+                                <!-- Support -->
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ti ti-headset me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Support Center</span>
+                                </a>
+
+                                <!-- Divider -->
+                                <div class="dropdown-divider"></div>
+
+                                <!-- Lock -->
+                                <a href="auth-lock-screen.html" class="dropdown-item">
+                                    <i class="ti ti-lock me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Lock Screen</span>
+                                </a>
+
+                                <!-- Logout -->
+                                <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold">
+                                    <i class="ti ti-logout-2 me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle">Log Out</span>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Topbar End -->
+
+        <script>
+            // Skin Dropdown
+            document.querySelectorAll('[data-dropdown="custom"]').forEach(dropdown => {
+                const trigger = dropdown.querySelector('a[data-bs-toggle="dropdown"], button[data-bs-toggle="dropdown"]');
+                const items = dropdown.querySelectorAll('button[data-skin]');
+
+                const triggerImg = trigger.querySelector('[data-trigger-img]');
+                const triggerLabel = trigger.querySelector('[data-trigger-label]');
+
+                const config = JSON.parse(JSON.stringify(window.config));
+                const currentSkin = config.skin;
+
+                items.forEach(item => {
+                    const itemSkin = item.getAttribute('data-skin');
+                    const itemImg = item.querySelector('img')?.getAttribute('src');
+                    const itemText = item.querySelector('span')?.textContent.trim();
+
+                    // Set active on load
+                    if (itemSkin === currentSkin) {
+                        item.classList.add('drop-custom-active');
+                        if (triggerImg && itemImg) triggerImg.setAttribute('src', itemImg);
+                        if (triggerLabel && itemText) triggerLabel.textContent = itemText;
+                    } else {
+                        item.classList.remove('drop-custom-active');
+                    }
+
+                    // Click handler
+                    item.addEventListener('click', function () {
+                        items.forEach(i => i.classList.remove('drop-custom-active'));
+                        this.classList.add('drop-custom-active');
+
+                        const newImg = this.querySelector('img')?.getAttribute('src');
+                        const newText = this.querySelector('span')?.textContent.trim();
+
+                        if (triggerImg && newImg) triggerImg.setAttribute('src', newImg);
+                        if (triggerLabel && newText) triggerLabel.textContent = newText;
+
+                        if (typeof layoutCustomizer !== 'undefined') {
+                            layoutCustomizer.changeSkin(itemSkin);
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <!-- Sidenav Menu Start -->
+        <div class="sidenav-menu">
+            <div class="scrollbar" data-simplebar>
+
+                <!-- User -->
+                <div class="sidenav-user text-nowrap border border-dashed rounded-3">
+                    <a href="#!" class="sidenav-user-name d-flex align-items-center">
+                        <img src="assets/images/users/user-2.jpg" width="36" class="rounded-circle me-2 d-flex" alt="user-image">
+                        <span>
+                            <h5 class="my-0 fw-semibold">Maxine Kennedy</h5>
+                            <h6 class="my-0 text-muted">Admin Head</h6>
+                        </span>
+                    </a>
+                </div>
+
+                <!--- Sidenav Menu -->
+                <ul class="side-nav">
+
+                    <li class="side-nav-item">
+                        <a href="index.html" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="circle-gauge"></i></span>
+                            <span class="menu-text" data-lang="dashboard">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="ton-ai.html" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="sparkles"></i></span>
+                            <span class="menu-text"> Ton AI </span>
+                            <span class="badge text-bg-primary">Hot</span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="calendar.html" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="calendar"></i></span>
+                            <span class="menu-text" data-lang="calendar"> Calendar </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="directory.html" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="book-user"></i></span>
+                            <span class="menu-text" data-lang="directory"> Directory </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-title mt-2" data-lang="pages-title">Custom Pages</li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="notebook-text"></i></span>
+                            <span class="menu-text" data-lang="pages"> Pages </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarPages">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="pages-pricing.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="pages-pricing">Pricing</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="pages-empty.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="pages-empty">Empty Page</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="pages-timeline.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="pages-timeline">Timeline</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="pages-terms-conditions.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="pages-terms-conditions">Terms & Conditions</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="pages-invoice.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="invoice">Invoice</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false" aria-controls="sidebarPagesAuth" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="fingerprint"></i></span>
+                            <span class="menu-text" data-lang="authentication"> Authentication </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarPagesAuth">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="auth-sign-in.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-sign-in">Sign In</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="auth-sign-up.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-sign-up">Sign Up</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="auth-reset-pass.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-reset-pass">Reset Password</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="auth-new-pass.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-new-pass">New Password</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="auth-two-factor.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-two-factor">Two Factor</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="auth-lock-screen.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="auth-lock-screen">Lock Screen</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="404.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="error-404">404 – Not Found</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarBaseUI" aria-expanded="false" aria-controls="sidebarBaseUI" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="pencil-ruler"></i></span>
+                            <span class="menu-text" data-lang="ui-components"> UI Components </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarBaseUI">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="ui-core.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="ui-core">Core Elements</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="ui-interactive.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="ui-interactive">Interactive Features</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="ui-menu-links.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="ui-menu-links">Menu & Links</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="ui-visual-feedback.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="ui-visual-feedback">Visual Feedback</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="ui-utilities.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="ui-utilities">Utilities</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="charts.html" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="chart-pie"></i></span>
+                            <span class="menu-text" data-lang="charts"> Charts </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarForms" aria-expanded="false" aria-controls="sidebarForms" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="square-pi"></i></span>
+                            <span class="menu-text" data-lang="forms">Forms</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarForms">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="form-elements.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-elements">Basic Elements</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="form-plugins.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-plugins">Plugins</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="form-validation.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-validation">Validation</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="form-wizard.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-wizard">Wizard</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="form-fileuploads.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-fileuploads">File Uploads</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="form-quill-editor.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="form-quilljs">Quilljs Editors</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarTables" aria-expanded="false" aria-controls="sidebarTables" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="table-2"></i></span>
+                            <span class="menu-text" data-lang="tables">Tables</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarTables">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="tables-static.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="tables-static">Static Tables</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarDataTables" aria-expanded="false" aria-controls="sidebarDataTables" class="side-nav-link">
+                                        <span class="menu-text" data-lang="datatables">DataTables</span>
+                                        <span class="badge bg-success">09</span>
+                                    </a>
+                                    <div class="collapse" id="sidebarDataTables">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-basic.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-basic">Basic</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-export-data.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-export-data">Export Data</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-select.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-select">Select</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-ajax.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-ajax">Ajax</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-javascript.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-javascript">Javascript Source</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-rendering.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-rendering">Data Rendering</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-columns.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-columns">Show & Hide Column</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-child-rows.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-child-rows">Child Rows</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="tables-datatables-checkbox-select.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="tables-datatables-checkbox-select">Checkbox Select</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarIcons" aria-expanded="false" aria-controls="sidebarIcons" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="layers-2"></i></span>
+                            <span class="menu-text" data-lang="icons">Icons</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarIcons">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="icons-tabler.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="icons-tabler">Tabler</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="icons-lucide.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="icons-lucide">Lucide</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="icons-flags.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="icons-flags">Flags</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false" aria-controls="sidebarMaps" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="map-pin"></i></span>
+                            <span class="menu-text" data-lang="maps">Maps</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarMaps">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a href="maps-vector.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="maps-vector">Vector Maps</span>
+                                    </a>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a href="maps-leaflet.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="maps-leaflet">Leaflet Maps</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-title mt-2" data-lang="items-title">Menu Items</li>
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarMenuLevels" aria-expanded="false" aria-controls="sidebarMenuLevels" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="command"></i></span>
+                            <span class="menu-text" data-lang="menu-levels"> Menu Levels </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarMenuLevels">
+                            <ul class="sub-menu">
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false" aria-controls="sidebarSecondLevel" class="side-nav-link">
+                                        <span class="menu-text" data-lang="second-level"> Second Level </span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="sidebarSecondLevel">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="javascript: void(0);" class="side-nav-link">
+                                                    <span class="menu-text">Item 2.1</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="javascript: void(0);" class="side-nav-link">
+                                                    <span class="menu-text">Item 2.2</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false" aria-controls="sidebarThirdLevel" class="side-nav-link">
+                                        <span class="menu-text" data-lang="third-level"> Third Level </span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="sidebarThirdLevel">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="javascript: void(0);" class="side-nav-link">Item 1</a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false" aria-controls="sidebarFourthLevel" class="side-nav-link">
+                                                    <span class="menu-text"> Item 2 </span>
+                                                    <span class="menu-arrow"></span>
+                                                </a>
+                                                <div class="collapse" id="sidebarFourthLevel">
+                                                    <ul class="sub-menu">
+                                                        <li class="side-nav-item">
+                                                            <a href="javascript: void(0);" class="side-nav-link">
+                                                                <span class="menu-text">Item 3.1</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="side-nav-item">
+                                                            <a href="javascript: void(0);" class="side-nav-link">
+                                                                <span class="menu-text">Item 3.2</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="#!" class="side-nav-link disabled">
+                            <span class="menu-icon"><i data-lucide="shield-ban"></i></span>
+                            <span class="menu-text" data-lang="disabled-menu"> Disabled Menu </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-collapse-box d-none d-xl-block">
+                <button class="button-collapse-toggle">
+                    <i data-lucide="square-chevron-left" class="align-middle flex-shrink-0"></i> <span>Collapse Menu</span>
+                </button>
+            </div>
+        </div>
+        <!-- Sidenav Menu End -->
+
+        <script>
+            // Note: If you do not want any of this logic here, you can remove it. It's already in app.js. This is for removing delays.
+
+            // Sidenav Icons
+            lucide.createIcons();
+
+            // Sidenav Link Activation
+            const currentUrlT = window.location.href.split(/[?#]/)[0];
+            const currentPageT = window.location.pathname.split("/").pop();
+            const sideNavT = document.querySelector('.side-nav');
+
+            document.querySelectorAll('.side-nav-link[href]').forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (!linkHref) return;
+
+                const match = linkHref === currentPageT || link.href === currentUrlT;
+
+                if (match) {
+                    // Mark link and its li active
+                    link.classList.add('active');
+                    const li = link.closest('li.side-nav-item');
+                    if (li) li.classList.add('active');
+
+                    // Expand all parent .collapse and set toggles
+                    let parentCollapse = link.closest('.collapse');
+                    while (parentCollapse) {
+                        parentCollapse.classList.add('show');
+
+                        const parentToggle = document.querySelector(`a[href="#${parentCollapse.id}"]`);
+                        if (parentToggle) {
+                            parentToggle.setAttribute('aria-expanded', 'true');
+                            const parentLi = parentToggle.closest('li.side-nav-item');
+                            if (parentLi) parentLi.classList.add('active');
+                        }
+
+                        parentCollapse = parentCollapse.parentElement.closest('.collapse');
+                    }
+                }
+            });
+        </script>
+
+
+        <!-- ============================================================== -->
+        <!-- Start Main Content -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+
+            <div class="container-fluid">
+                
+                
+                <div class="row justify-content-center py-5">
+                    <div class="col-xxl-5 col-xl-7 text-center">
+                        <span class="badge badge-default fw-normal shadow px-2 py-1 mb-2 fst-italic fs-xxs">
+                            <i data-lucide="loader-2" class="fs-sm me-1"></i> User Cues
+                        </span>
+                        <h3 class="fw-bold">
+                            Visual Feedback
+                        </h3>
+
+                        <p class="fs-md text-muted mb-0">
+                            Display loading states, progress indicators, carousels, and other UI elements that inform users of ongoing processes.
+                        </p>
+                    </div>
+                </div>
+                
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Progress Variations</h5>
+                                <div class="card-action">
+                                    <a href="#!" class="card-action-item" data-action="card-toggle"><i class="ti ti-chevron-up"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Examples </h5>
+
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Height </h5>
+
+                                        <div class="progress mb-2" style="height: 1px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2" style="height: 3px;">
+                                            <div class="progress-bar" role="progressbar" style="width: 25%; height: 20px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2 progress-sm">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2 progress-md">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress progress-lg mb-2">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress progress-xl">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 38%" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Multiple Bars </h5>
+
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Animated Stripes</h5>
+
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Labels </h5>
+
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                        </div>
+                                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar overflow-visible text-dark" style="width: 10%">Long label text for the progress bar, set to a dark color</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Backgrounds</h5>
+
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-dark" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Striped </h5>
+
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Steps</h5>
+
+                                        <div class="position-relative m-4">
+                                            <div class="progress" style="height: 2px;">
+                                                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-icon btn-primary rounded-pill">1</button>
+                                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-icon btn-primary rounded-pill">2</button>
+                                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-icon btn-light rounded-pill">3</button>
+                                        </div>
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Spinners Variations</h5>
+                                <div class="card-action">
+                                    <a href="#!" class="card-action-item" data-action="card-toggle"><i class="ti ti-chevron-up"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Border Spinner</h5>
+
+                                        <div class="spinner-border m-2" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Colors </h5>
+
+                                        <div>
+                                            <div class="spinner-border text-primary m-2" role="status"></div>
+                                            <div class="spinner-border text-secondary m-2" role="status"></div>
+                                            <div class="spinner-border text-success m-2" role="status"></div>
+                                            <div class="spinner-border text-danger m-2" role="status"></div>
+                                            <div class="spinner-border text-warning m-2" role="status"></div>
+                                            <div class="spinner-border text-info m-2" role="status"></div>
+                                            <div class="spinner-border text-light m-2" role="status"></div>
+                                            <div class="spinner-border text-dark m-2" role="status"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Alignment</h5>
+
+                                        <div class="d-flex align-items-center">
+                                            <strong>Loading...</strong>
+                                            <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <div class="spinner-border" role="status"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Buttons Spinner</h5>
+
+                                        <div class="row g-3">
+                                            <div class="col-lg-6">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <button class="btn btn-primary btn-icon" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-icon rounded-circle" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                        Loading...
+                                                    </button>
+                                                </div>
+                                            </div><!-- end col -->
+
+                                            <div class="col-lg-6">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <button class="btn btn-primary btn-icon" type="button" disabled>
+                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-icon rounded-circle" type="button" disabled>
+                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary" type="button" disabled>
+                                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="visually-hidden">Loading...</span>
+                                                    </button>
+                                                    <button class="btn btn-primary" type="button" disabled>
+                                                        <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+                                                        Loading...
+                                                    </button>
+                                                </div>
+                                            </div><!-- end col -->
+                                        </div> <!-- end row -->
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Growing Spinner</h5>
+
+                                        <div class="spinner-grow m-2" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <div class="spinner-border" role="status"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Color Growing Spinner</h5>
+
+                                        <div>
+                                            <div class="spinner-grow text-primary m-2" role="status"></div>
+                                            <div class="spinner-grow text-secondary m-2" role="status"></div>
+                                            <div class="spinner-grow text-success m-2" role="status"></div>
+                                            <div class="spinner-grow text-danger m-2" role="status"></div>
+                                            <div class="spinner-grow text-warning m-2" role="status"></div>
+                                            <div class="spinner-grow text-info m-2" role="status"></div>
+                                            <div class="spinner-grow text-light m-2" role="status"></div>
+                                            <div class="spinner-grow text-dark m-2" role="status"></div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Size</h5>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="spinner-border avatar-lg text-primary m-2" role="status"></div>
+                                                <div class="spinner-grow avatar-lg text-secondary m-2" role="status"></div>
+                                            </div><!-- end col -->
+
+                                            <div class="col-lg-6">
+                                                <div class="spinner-border avatar-md text-primary m-2" role="status"></div>
+                                                <div class="spinner-grow avatar-md text-secondary m-2" role="status"></div>
+                                            </div><!-- end col -->
+
+                                            <div class="col-lg-6">
+                                                <div class="spinner-border avatar-sm text-primary m-2" role="status"></div>
+                                                <div class="spinner-grow avatar-sm text-secondary m-2" role="status"></div>
+                                            </div><!-- end col -->
+
+                                            <div class="col-lg-6">
+                                                <div class="spinner-border spinner-border-sm m-2" role="status"></div>
+                                                <div class="spinner-grow spinner-grow-sm m-2" role="status"></div>
+                                            </div><!-- end col -->
+                                        </div><!--end row-->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+
+        
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Carousel Variations</h5>
+                                <div class="card-action">
+                                    <a href="#!" class="card-action-item" data-action="card-toggle"><i class="ti ti-chevron-up"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Slides Only</h5>
+
+                                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="carousel-item active">
+                                                    <!-- First slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-1.jpg" alt="First slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Second slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-2.jpg" alt="Second slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Third slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-3.jpg" alt="Third slide">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">With Controls</h5>
+
+                                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="carousel-item active">
+                                                    <!-- First slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-4.jpg" alt="First slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Second slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-5.jpg" alt="Second slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Third slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-6.jpg" alt="Third slide">
+                                                </div>
+                                            </div>
+
+                                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </a>
+                                        </div>
+                                    </div> <!-- end col-->
+
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">With Indicators </h5>
+
+                                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators">
+                                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                            </div>
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="carousel-item active">
+                                                    <!-- First slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-7.jpg" alt="First slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Second slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-1.jpg" alt="Second slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Third slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-2.jpg" alt="Third slide">
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">With Captions </h5>
+
+                                        <div id="carouselExampleCaption" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="carousel-item active">
+                                                    <!-- first slide  -->
+                                                    <img src="assets/images/stock/small-3.jpg" alt="..." class="d-block img-fluid">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h3 class="text-white">First slide label</h3>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- secound slide  -->
+                                                    <img src="assets/images/stock/small-4.jpg" alt="..." class="d-block img-fluid">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h3 class="text-white">Second slide label</h3>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- third slide  -->
+                                                    <img src="assets/images/stock/small-5.jpg" alt="..." class="d-block img-fluid">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h3 class="text-white">Third slide label</h3>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleCaption" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleCaption" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </a>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Crossfade</h5>
+
+                                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <!-- First slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-6.jpg" alt="First slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Second slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-7.jpg" alt="Second slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Third slide -->
+                                                    <img class="d-block img-fluid" src="assets/images/stock/small-1.jpg" alt="Third slide">
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </a>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Individual Interval</h5>
+
+                                        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" data-bs-interval="1000">
+                                                    <!-- First slide -->
+                                                    <img src="assets/images/stock/small-2.jpg" class="img-fluid d-block w-100" alt="First slide">
+                                                </div>
+                                                <div class="carousel-item" data-bs-interval="2000">
+                                                    <!-- Second slide -->
+                                                    <img src="assets/images/stock/small-3.jpg" class="img-fluid d-block w-100" alt="Second slide">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- Third slide -->
+                                                    <img src="assets/images/stock/small-4.jpg" class="img-fluid d-block w-100" alt="Third slide">
+                                                </div>
+                                            </div>
+                                            <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </a>
+                                        </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Dark Variant</h5>
+
+                                        <div id="carouselExampleDark" class="carousel carousel-dark slide">
+                                            <div class="carousel-indicators">
+                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                            </div>
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" data-bs-interval="10000">
+                                                    <!-- first slide  -->
+                                                    <img src="assets/images/stock/small-8.jpg" class="img-fluid" alt="Images">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h4 class="fw-bold">First slide label</h4>
+                                                        <p>Some representative placeholder content for the first slide.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" data-bs-interval="2000">
+                                                    <!-- secound slide  -->
+                                                    <img src="assets/images/stock/small-9.jpg" class="img-fluid" alt="Images">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h4 class="fw-bold">Second slide label</h4>
+                                                        <p>Some representative placeholder content for the second slide.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <!-- third slide  -->
+                                                    <img src="assets/images/stock/small-10.jpg" class="img-fluid" alt="Images">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h4 class="fw-bold">Third slide label</h4>
+                                                        <p>Some representative placeholder content for the third slide.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Placeholders Variations</h5>
+                                <div class="card-action">
+                                    <a href="#!" class="card-action-item" data-action="card-toggle"><i class="ti ti-chevron-up"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Examples </h5>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card border shadow-none mb-md-0">
+                                                    <!-- card-img-top -->
+                                                    <img src="assets/images/stock/small-1.jpg" class="card-img-top" alt="...">
+
+                                                    <div class="card-body">
+                                                        <h5 class="card-title mb-2">Card Title</h5>
+                                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                                                            content.</p>
+                                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                                    </div> <!-- end card-body-->
+                                                </div> <!-- end card-->
+                                            </div> <!-- end col-->
+
+                                            <div class="col-md-6">
+                                                <div class="card border shadow-none mb-0" aria-hidden="true">
+                                                    <svg class="card-img-top" width="100%" style="aspect-ratio: 16 / 10;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" viewBox="0 0 16 10">
+                                                        <title>Placeholder</title>
+                                                        <rect width="16" height="10" fill="#b1b2f8"></rect>
+                                                    </svg>
+
+                                                    <div class="card-body">
+                                                        <h5 class="card-title mb-2 placeholder-glow">
+                                                            <span class="placeholder col-6">&nbsp;</span>
+                                                        </h5>
+                                                        <p class="card-text placeholder-glow">
+                                                            <span class="placeholder col-7"></span>
+                                                            <span class="placeholder col-4"></span>
+                                                            <span class="placeholder col-4"></span>
+                                                            <span class="placeholder col-6"></span>
+                                                            <span class="placeholder col-3"></span>
+                                                        </p>
+                                                        <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"> <span class="invisible">Read Only</span></a>
+                                                    </div> <!-- end card-body-->
+                                                </div> <!-- end card-->
+                                            </div> <!-- end col-->
+                                        </div> <!-- end row-->
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Color </h5>
+
+                                        <span class="placeholder col-12"></span>
+                                        <span class="placeholder col-12 bg-primary"></span>
+                                        <span class="placeholder col-12 bg-secondary"></span>
+                                        <span class="placeholder col-12 bg-success"></span>
+                                        <span class="placeholder col-12 bg-danger"></span>
+                                        <span class="placeholder col-12 bg-warning"></span>
+                                        <span class="placeholder col-12 bg-info"></span>
+                                        <span class="placeholder col-12 bg-light"></span>
+                                        <span class="placeholder col-12 bg-dark"></span>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Width</h5>
+
+                                        <span class="placeholder col-6"></span>
+                                        <span class="placeholder w-75"></span>
+                                        <span class="placeholder" style="width: 25%;"></span>
+                                        <span class="placeholder" style="width: 10%;"></span>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Sizing</h5>
+
+                                        <span class="placeholder col-12 placeholder-lg"></span>
+                                        <span class="placeholder col-12"></span>
+                                        <span class="placeholder col-12 placeholder-sm"></span>
+                                        <span class="placeholder col-12 placeholder-xs"></span>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">How it works</h5>
+
+                                        <p aria-hidden="true">
+                                            <span class="placeholder col-6"></span>
+                                        </p>
+
+                                        <a href="#" class="btn btn-primary disabled placeholder col-4" aria-hidden="true"></a>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <h5 class="mb-2 pb-1">Animation</h5>
+
+                                        <p class="placeholder-glow">
+                                            <span class="placeholder col-12"></span>
+                                        </p>
+
+                                        <p class="placeholder-wave mb-0">
+                                            <span class="placeholder col-12"></span>
+                                        </p>
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end row -->
+
+            </div> <!-- container -->
+
+            <!-- Footer Start -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start">
+                            © <script>document.write(new Date().getFullYear())</script> Simple By <span class="fw-semibold">Coderthemes</span> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-end d-none d-md-block">
+                                59.5GB of <span class="fw-bold">200GB</span> Free.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End of Main Content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Theme Settings -->
+    <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
+        <div class="d-flex justify-content-between text-bg-primary gap-2 p-3" style="background-image: url(assets/images/user-bg-pattern.png);">
+            <div>
+                <h5 class="mb-1 fw-bold text-white text-uppercase">Admin Customizer</h5>
+                <p class="text-white text-opacity-75 fst-italic fw-medium mb-0">Easily configure layout, styles, and preferences for your admin interface.</p>
+            </div>
+
+            <div class="flex-grow-0">
+                <button type="button" class="d-block btn btn-sm bg-white bg-opacity-25 text-white rounded-circle btn-icon" data-bs-dismiss="offcanvas"><i class="ti ti-x fs-lg"></i></button>
+            </div>
+        </div>
+
+        <div class="offcanvas-body p-0 h-100" data-simplebar>
+
+            <div class="p-3 border-bottom border-dashed">
+                <h5 class="mb-3 fw-bold">Color Scheme</h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-check card-radio">
+                            <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-light" value="light">
+                            <label class="form-check-label p-0 w-100" for="layout-color-light">
+                                <img src="assets/images/layouts/light.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="text-center text-muted mt-2 mb-0">Light</h5>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-check card-radio">
+                            <input class="form-check-input" type="radio" name="data-bs-theme" id="layout-color-dark" value="dark">
+                            <label class="form-check-label p-0 w-100 overflow-hidden" for="layout-color-dark">
+                                <img src="assets/images/layouts/dark.svg" alt="layout-img" class="img-fluid overflow-hidden">
+                            </label>
+                        </div>
+                        <h5 class="text-center text-muted mt-2 mb-0">Dark</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-bottom border-dashed">
+                <h5 class="mb-3 fw-bold">Topbar Color</h5>
+
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="form-check card-radio">
+                            <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-light" value="light">
+                            <label class="form-check-label p-0 w-100" for="topbar-color-light">
+                                <img src="assets/images/layouts/topbar-light.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="text-center text-muted mt-2 mb-0">Light</h5>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-check card-radio">
+                            <input class="form-check-input" type="radio" name="data-topbar-color" id="topbar-color-dark" value="dark">
+                            <label class="form-check-label p-0 w-100" for="topbar-color-dark">
+                                <img src="assets/images/layouts/topbar-dark.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="fs-sm text-center text-muted mt-2 mb-0">Dark</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-bottom border-dashed">
+                <h5 class="mb-3 fw-bold">Sidenav Color</h5>
+
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="form-check sidebar-setting card-radio">
+                            <input class="form-check-input" type="radio" name="data-sidenav-color" id="sidenav-color-light" value="light">
+                            <label class="form-check-label p-0 w-100" for="sidenav-color-light">
+                                <img src="assets/images/layouts/light.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="fs-sm text-center text-muted mt-2 mb-0">Light</h5>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-check sidebar-setting card-radio">
+                            <input class="form-check-input" type="radio" name="data-sidenav-color" id="sidenav-color-dark" value="dark">
+                            <label class="form-check-label p-0 w-100" for="sidenav-color-dark">
+                                <img src="assets/images/layouts/sidenav-dark.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="fs-sm text-center text-muted mt-2 mb-0">Dark</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-bottom border-dashed">
+                <h5 class="mb-3 fw-bold">Sidebar Size</h5>
+
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="form-check sidebar-setting card-radio">
+                            <input class="form-check-input" type="radio" name="data-sidenav-size" id="sidenav-size-small-hover-active" value="default">
+                            <label class="form-check-label p-0 w-100" for="sidenav-size-small-hover-active">
+                                <img src="assets/images/layouts/light.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="mb-0 fs-base text-center text-muted mt-2">Default</h5>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="form-check sidebar-setting card-radio">
+                            <input class="form-check-input" type="radio" name="data-sidenav-size" id="sidenav-size-small-hover" value="collapse">
+                            <label class="form-check-label p-0 w-100" for="sidenav-size-small-hover">
+                                <img src="assets/images/layouts/sidebar-condensed.svg" alt="layout-img" class="img-fluid">
+                            </label>
+                        </div>
+                        <h5 class="mb-0 text-center text-muted mt-2">Collapse</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-bottom border-dashed">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Layout Position</h5>
+
+                    <div class="btn-group radio" role="group">
+                        <input type="radio" class="btn-check" name="data-layout-position" id="layout-position-fixed" value="fixed">
+                        <label class="btn btn-sm btn-soft-primary w-sm" for="layout-position-fixed">Fixed</label>
+
+                        <input type="radio" class="btn-check" name="data-layout-position" id="layout-position-scrollable" value="scrollable">
+                        <label class="btn btn-sm btn-soft-primary w-sm ms-0" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><label class="fw-bold m-0" for="sidebaruser-check">Sidebar User Info</label></h5>
+
+                    <div class="form-check form-switch fs-lg">
+                        <input type="checkbox" class="form-check-input" name="sidebar-user" id="sidebaruser-check">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="offcanvas-footer border-top p-3 text-center">
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" class="btn btn-light fw-semibold py-2 w-100" id="reset-layout">Reset</button>
+                </div>
+                <div class="col-6">
+                    <a href="#" target="_blank" class="btn btn-dark py-2 fw-semibold w-100">Buy Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor js -->
+    <script src="assets/js/vendors.min.js"></script>
+
+    <!-- App js -->
+    <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>
