@@ -37,7 +37,7 @@ header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 include '../config/user_session.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, Email, Username, Password, Location, Status FROM users ORDER BY Name ASC LIMIT 10") or die("Bad Query.");
+$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, User_Group, Email, Username, Password, Location, Status FROM users ORDER BY Name ASC LIMIT 10") or die("Bad Query.");
 
 mysqli_close($con);
 
@@ -58,6 +58,7 @@ fclose($fp);
 <tr>
 <th style="font-size:8px">STAFF ID</th>
 <th style="font-size:8px">NAME</th>
+<th style="font-size:8px">ROLE</th>
 <th style="font-size:8px">EMAIL</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">USERNAME</th>
@@ -75,6 +76,7 @@ foreach($json as $member){
 <tr style="font-size:8px">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
+<td ><?php echo $member->User_Group?></td>
 <td ><?php echo $member->Email?></td>
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Username?></td>
@@ -121,7 +123,7 @@ header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 include '../config/user_session.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, Email, Username, Password, Location, Status FROM users  WHERE Name LIKE '%$search%' OR Staff_ID LIKE '%$search%'
+$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, User_Group, Email, Username, Password, Location, Status FROM users  WHERE Name LIKE '%$search%' OR Staff_ID LIKE '%$search%'
 ORDER BY Name ASC LIMIT $maxRows") or die("Bad Query.");
 
 mysqli_close($con);
@@ -143,6 +145,7 @@ fclose($fp);
 <tr>
 <th style="font-size:8px">STAFF ID</th>
 <th style="font-size:8px">NAME</th>
+<th style="font-size:8px">ROLE</th>
 <th style="font-size:8px">EMAIL</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">USERNAME</th>
@@ -160,6 +163,7 @@ foreach($json as $member){
 <tr style="font-size:8px">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
+<td ><?php echo $member->User_Group?></td>
 <td ><?php echo $member->Email?></td>
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Username?></td>
@@ -206,7 +210,7 @@ header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 include '../config/user_session.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, Email, Username, Password, Location, Status FROM users  WHERE Name LIKE '%$search%' OR Staff_ID LIKE '%$search%'
+$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, User_Group, Email, Username, Password, Location, Status FROM users  WHERE Name LIKE '%$search%' OR Staff_ID LIKE '%$search%'
 ORDER BY Name ASC") or die("Bad Query.");
 
 mysqli_close($con);
@@ -228,6 +232,7 @@ fclose($fp);
 <tr>
 <th style="font-size:8px">STAFF ID</th>
 <th style="font-size:8px">NAME</th>
+<th style="font-size:8px">ROLE</th>
 <th style="font-size:8px">EMAIL</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">USERNAME</th>
@@ -245,6 +250,7 @@ foreach($json as $member){
 <tr style="font-size:8px">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
+<td ><?php echo $member->User_Group?></td>
 <td ><?php echo $member->Email?></td>
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Username?></td>
@@ -291,7 +297,7 @@ header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 include '../config/user_session.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, Email, Username, Password, Location, Status FROM users  ORDER BY Name ASC LIMIT $maxRows") or die("Bad Query.");
+$result = mysqli_query($con, "SELECT id, Staff_ID, Name, Branch, User_Group, Email, Username, Password, Location, Status FROM users  ORDER BY Name ASC LIMIT $maxRows") or die("Bad Query.");
 
 mysqli_close($con);
 
@@ -312,6 +318,7 @@ fclose($fp);
 <tr>
 <th style="font-size:8px">STAFF ID</th>
 <th style="font-size:8px">NAME</th>
+<th style="font-size:8px">ROLE</th>
 <th style="font-size:8px">EMAIL</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">USERNAME</th>
@@ -329,6 +336,7 @@ foreach($json as $member){
 <tr style="font-size:8px">
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
+<td ><?php echo $member->User_Group?></td>
 <td ><?php echo $member->Email?></td>
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Username?></td>
