@@ -54,7 +54,7 @@ setInterval(function(){
 include('../config/db.php') ;
 if (isset($_SESSION['Username'])) {
 $user = $_SESSION['Username'];
-$Query = "SELECT id, Staff_ID, Username, Location, Name, Password, Email, Branch, Branch_id, Question, Answer, User_Group, Checks,
+$Query = "SELECT id, Staff_ID, Username, Location, Name, Password, Email, Branch, Branch_id, Pin, User_Group, Checks,
 Address, Role_Categorys, Mapped, Status, Usertype, Phone, Zone, Zone_id, Country FROM users WHERE Username='$user'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);

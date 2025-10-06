@@ -92,7 +92,8 @@
 <div class="row">   
 <div class="col-sm-12"> 
 <label>Authentication Pin</label> 
-<input type="text" class="form-control form-control-md" required="required" name="ac" placeholder="Enter Authentication Pin">
+<input type="text" class="form-control form-control-md" value="<?php echo $row['id']; ?>" hidden required="required" name="id">
+<input type="text" class="form-control form-control-md" value="<?php echo $row['Pin']; ?>" required="required" name="pin" placeholder="Enter Authentication Pin">
 </div>
 </div>
 <br>
@@ -162,4 +163,56 @@ error: function(){
 }));
 });
 </script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function (e){
+$("#setAuth").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to about to set pin for admin account.?";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+$("#standard-modal").modal('hide');
+$("#please").show();
+$.ajax({
+url: "set_pin.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
+if(data == 1){
+setTimeout(function(){
+$("#please").hide();
+Swal.fire({
+toast: true,
+icon: 'success',
+title: 'Pin Successfully Set!',
+html: '<small style="color: rgba(255,255,255,0.9);">The admin account pin has been set</small>',
+position: 'top-end',
+showConfirmButton: false,
+timer: 4000,
+timerProgressBar: true,
+backdrop: false,  // No overlay/backdrop
+customClass: {
+popup: 'minimal-toast'
+}
+});
+}, 3000);
+//
+}else{
+alert('🚫' + data);
+}
+},
+error: function(){
+}
+});
+}
+}));
+});
+</script>
+
+
 <?php include '../footer.php'; ?>
