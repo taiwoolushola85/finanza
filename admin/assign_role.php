@@ -30,7 +30,7 @@ mysqli_close($con);
 </div>
 </div>
 <hr>
-<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</button>
+<button type="submit" class="btn btn-soft-info btn-sm"><i class="fa fa-eye"></i> View</button>
 </form>
 </div>
 </div>
