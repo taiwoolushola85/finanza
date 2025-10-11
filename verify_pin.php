@@ -1,20 +1,21 @@
 <?php
 session_start();
 include './config/db.php';
-$id = $_POST['usd_id'];// username id
+$user_id = $_POST['usd_id'];// username id
 $pin = $_POST['pin'];// pin 
-$sql="SELECT * FROM users WHERE Pin = '$pin' WHERE id ='$id'";
+$sql="SELECT Username, Usertype FROM users WHERE Pin = '$pin' AND id ='$user_id'";
 $result = mysqli_query($con, $sql);
 $row = mysqli_fetch_array($result);
-$user = $row['Username'];
-$Usertype = $row['Usertype'];
+$id = $row['id']; // username id
+$user = $row['Username'];// username
+$Usertype = $row['Usertype'];// usertype
 // check if user is admin
-if($Usertype == 'Admin' && $user == $id){
+if($Usertype == 'Admin' &&  $id == $id){
 $_SESSION["id"] = $id;
 $_SESSION["Username"] = $user;
 header("Location: ./admin/index.php");
-}elseif($Usertype == 'User' && $user == $id){
-$_SESSION["id"] = $id;
+}elseif($Usertype == 'User' &&  $id == $id){
+$_SESSION["id"] = $userid;
 $_SESSION["Username"] = $user;
 header("Location:./users/home.php");
 }else{

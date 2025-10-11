@@ -61,6 +61,8 @@ $row = mysqli_fetch_array($result);
 $usid = $row['id'];
 $User = $row['Username'];
 $loc = $row['Location'];
+$gr = $row['User_Group'];
+$ct = $row['Role_Categorys'];
 }
 ?>
 <!-- Begin page -->
@@ -429,68 +431,79 @@ layoutCustomizer.changeSkin(itemSkin);
 <img src="../assets/images/users/user-2.jpg" width="36" class="rounded-circle me-2 d-flex" alt="user-image">
 <span>
 <h5 class="my-0 fw-semibold"><?php echo $row['Name']; ?></h5>
-<h6 class="my-0 text-muted">Admin Head</h6>
+<h6 class="my-0 text-muted"><?php echo $row['User_Group']; ?></h6>
 </span>
 </a>
 </div>
 
 <!--- Sidenav Menu -->
 <ul class="side-nav">
-<li class="side-nav-item">
-<a href="index.php" class="side-nav-link page-link">
-<span class="menu-icon"><i data-lucide="layout-grid"></i></span>
-<span class="menu-text" data-lang="dashboard">Dashboard</span>
+<li class="side-nav-item" >
+<a href="home.php" class="side-nav-link page-link">
+<span class="menu-icon" ><i data-lucide="square" style="font-size: 10px"></i></span>
+<span class="menu-text" data-lang="dashboard" style="font-size: 10px">DASHBOARD</span>
 </a>
 </li>
+<?php
+
+include('../config/db.php');
+//Get branch Details
+$Query = "SELECT DISTINCT Tab FROM control WHERE Role_Categorys = '$ct' AND Groups = '$gr' ORDER BY Tab ASC";
+//echo $Query, "<br>";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$tab = $rows['Tab'];
+
+?>
 <li class="side-nav-item">
-<a href="assign_role.php" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="plus"></i></span>
-<span class="menu-text" data-lang="assign"> Assign Role </span>
-</a>
-</li>
-<li class="side-nav-item">
-<a href="branch.php" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="house"></i></span>
-<span class="menu-text" data-lang="branch"> Branch </span>
-</a>
-</li>
-<li class="side-nav-item">
-<a href="#" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="database"></i></span>
-<span class="menu-text" data-lang="database"> Database </span>
-</a>
-</li>
-<li class="side-nav-item">
-<a href="role_maintenance.php" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="cog"></i></span>
-<span class="menu-text" data-lang="role"> Role Maintenance </span>
-</a>
-</li>
-<li class="side-nav-item">
-<a href="user_group.php" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="user-plus"></i></span>
-<span class="menu-text" data-lang="group"> User Group </span>
-</a>
-</li>
-<li class="side-nav-item">
-<a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
-<span class="menu-icon"><i data-lucide="Users"></i></span>
-<span class="menu-text" data-lang="pages"> User Account </span>
+<a data-bs-toggle="collapse" href="#<?php echo $tab; ?>" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
+<span class="menu-icon"><i data-lucide="square" style="font-size: 10px"></i></span>
+<span class="menu-text" data-lang="pages" style="font-size: 10px"> <?php echo $tab; ?> </span>
 <span class="menu-arrow"></span>
 </a>
-<div class="collapse" id="sidebarPages">
+<div class="collapse" id="<?php echo $tab; ?>">
 <ul class="sub-menu">
 </li>
+<?php
+$Query = "SELECT role, Name FROM  control WHERE Tab = '$tab' AND Groups = '$gr' AND Role_Categorys = '$ct' ORDER BY Name ASC";
+$mresult = mysqli_query($con, $Query);
+$mCount = mysqli_num_rows($mresult);
+if ($mCount > 0) {
+for ($mj=0 ; $mj < $mCount; $mj++){
+$mrows = mysqli_fetch_array($mresult);
+$mroles = $mrows['role'];
+$name = $mrows['Name'];
+?>
 <li class="side-nav-item">
-<a href="manage_user.php" class="side-nav-link">
-<span class="menu-text" data-lang="pages-empty">Manage User</span>
+<a href="<?php echo $mroles; ?>.php" class="side-nav-link">
+<span class="menu-icon"><i data-lucide="dot"></i></span>
+<span class="menu-text" data-lang="pages-empty" style="font-size: 10px"> <?php echo $name; ?> </span>
 </a>
 </li>
+<?php
+}
+}
+?>
 </ul>
 </div>
 </li>
 
-<li class="side-nav-item">
+
+
+
+
+<?php  
+}
+}else {
+//$Available = false; 
+///echo" No Record Found  <br/> ";       
+
+}
+?>
+<li class="side-nav-item" hidden>
 <a href="admin_reset.php" class="side-nav-link">
 <span class="menu-icon"><i data-lucide="user-cog"></i></span>
 <span class="menu-text" data-lang="charts"> Admin Reset </span>
