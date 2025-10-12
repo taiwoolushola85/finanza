@@ -11,7 +11,7 @@ $data = mysqli_fetch_array($qry); // fetch data
 <div class="card">
 <div class="card-body">
 <center>
-<img src="<?php echo $data['Location']?>" width="150" height="150" class="rounded-circle d-flex" >
+<img src="<?php echo $data['Location']?>" width="150" height="150" class="rounded-circle d-flex">
 <br>
 <h4><b><?php echo $data['Name']?></b></h4>
 </center>
@@ -131,18 +131,42 @@ if($data['Status'] == "Activate"){
 <div class="tab-content">
 <div class="tab-pane show active" id="home-b2">
 <br>
+<form action="" method="POST" enctype="multipart/form-data" id="updateLogin">
 <div class="row">
 <div class="col-sm-6">
 <label>Username</label>
-<input type="text" class="form-control form-control-sm" value="<?php echo $data['Username']?>" required>
+<input type="text" class="form-control form-control-sm"  name="id" hidden value="<?php echo $data['id']?>" required>
+<input type="text" class="form-control form-control-sm" name="us" value="<?php echo $data['Username']?>" required>
 </div>
 <div class="col-sm-6">
 <label>Password</label>
-<input type="text" class="form-control form-control-sm" value="<?php echo $data['Password']?>" required>
+<input type="password" class="form-control form-control-sm" name="ps" value="<?php echo $data['Password']?>" required>
 </div>
 </div>
 <br>
-<button class="btn btn-outline-success btn-sm">Create Login</button>
+<div class="row">
+<div class="col-sm-2">
+<div id="btn">
+<?php 
+if($data['Username'] == 'NA'){
+?>
+<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
+<?php 
+}else{
+?>
+<button type="button" disabled class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
+<?php 
+}
+?>
+</div>
+</form>
+</div>
+<div class="col-sm-10">
+<span style="display:none" id="wait"> <img src="../loader/loader.gif" style="height:16px"> Creating Login ! Please wait..</span>  
+<span style="display:none; color:red" id="check"><i class="fa fa-exclamation-circle"></i> Username has already been taken by another staff, Please check..</span>  
+</div>
+</div>
+</form>
 </div>
 <div class="tab-pane" id="profile-b2">
 
@@ -386,6 +410,62 @@ error: function(){
 });
 </script>
 
+
+
+
+<script type="text/javascript">
+$(document).ready(function (e){
+$("#updateLogin").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to create login for this account.?";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+$("#wait").show();
+$.ajax({
+url: "create_login_dpetail.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
+if(data==1){
+setTimeout(function(){
+$("#wait").hide();
+$("#check").show();
+}, 3000);
+setTimeout(function(){
+$("#wait").hide();
+$("#check").hide();
+}, 5000);
+}else if(data == 2){
+$("#wait").hide();
+Swal.fire({
+toast: true,
+icon: 'success',
+title: 'Login Created Successfully!',
+html: '<small style="color: rgba(255,255,255,0.9);">The login details has been create</small>',
+position: 'top-end',
+showConfirmButton: false,
+timer: 4000,
+timerProgressBar: true,
+backdrop: false,  // No overlay/backdrop
+customClass: {
+popup: 'minimal-toast'
+}
+});
+$("#btn").load('view_user.php?id=<?php echo $data['id']; ?>' + " #btn");
+}else{
+$("#wait").hide();
+alert ("🚫" + data)
+}
+},
+error: function(){
+}
+});
+}
+}));
+});
+</script>
 
 
 

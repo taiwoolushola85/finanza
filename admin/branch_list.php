@@ -1,47 +1,35 @@
-<div>
-<?php 
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Origin: *");
-include '../config/db.php';
-include '../config/user_session.php';
-$d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Name, 
-(SELECT COUNT(*) FROM users WHERE Branch = Name) AS `cont`,
-Status FROM branch ORDER BY Name ASC LIMIT 10") or die("Bad Query.");
-
-mysqli_close($con);
-
-$results = array();
-while($row = mysqli_fetch_assoc($result)){
-$results[] = $row; 
+<html>
+<head>
+<!--Load the AJAX API-->
+<script type="text/javascript" src="../js/load.min.js"></script>
+<script type="text/javascript" src="../js/chart.min.js"></script>
+<script type="text/javascript">
+// Load the Visualization API and the piechart package.
+google.charts.load('current', {'packages':['corechart']});
+// Set a callback to run when the Google Visualization API is loaded.
+google.charts.setOnLoadCallback(column_chart);
+function column_chart() {
+var jsonData = $.ajax({
+url: 'branch_chart.php',
+dataType:"json",
+async: false,
+success: function(jsonData)
+{
+var data = new google.visualization.arrayToDataTable(jsonData);	
+var chart = new google.visualization.ColumnChart(document.getElementById('columnchart_values'));
+chart.draw(data);
+}	
+}).responseText;
 }
-$fp = fopen('../data/all_branch_list.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
-//echo json_encode($results);
-?>
-<br>
-<div class="table-reponsive">
+</script>
+</head>
+<body>
 <div class="row">
-<?php
-$url = '../data/all_branch_list.json';
-$data = file_get_contents($url);
-$json = json_decode($data);
-foreach($json as $member){
-?>
-<div class="col-4" style="margin-top: 4px; border:1px solid; font-size:10px">
-<b><?php echo $member->Name?></b>
-</div>
-<div class="col-4" style="margin-top: 4px; border:1px solid; font-size:10px">
-<?php echo $member->cont?>
-</div>
-<div class="col-4" style="margin-top: 4px; border:1px solid; font-size:10px">
-<i style="color:green"><?php echo $member->Status?></i>
-</div>
-
-<?php
-}
-?>
+<div class="col-sm-12">
+<!--Div that will hold the pie chart-->
+<div ><b>Branch Client Chart</b></div>
+<div id="columnchart_values" style="width:100%"></div>
 </div>
 </div>
+</body>
+</html>

@@ -7,8 +7,8 @@
 <div class="col-sm-8">
 <div class="row">
 <div class="col-sm-4" style="margin-top: 10px;">
-<select class="form-control form-control-sm">
-<option value="">Select Role</option>
+<select class="form-control form-control-sm" id="role" oninput="getRole()">
+<option value="0">All User Role</option>
 <?php
 include '../config/db.php';
 $Query = "SELECT  * FROM role ORDER BY Name ASC";
@@ -17,10 +17,10 @@ $Count = mysqli_num_rows($result);
 if ($Count > 0) {
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
-$id= $rows['id'];
+$roleid= $rows['id'];
 $name= $rows['Name'];
 ?>
-<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+<option value="<?php echo $roleid; ?>"><?php echo $name; ?></option>
 <?php
 }
 }
@@ -28,8 +28,8 @@ $name= $rows['Name'];
 </select>
 </div>
 <div class="col-sm-4" style="margin-top: 10px;">
-<select class="form-control form-control-sm">
-<option value="">Select Branch</option>
+<select class="form-control form-control-sm" id="branch" oninput="getBranch()">
+<option value="0">All Branch</option>
 <?php
 include '../config/db.php';
 $Query = "SELECT id, Name FROM Branch ORDER BY Name ASC";
@@ -50,7 +50,7 @@ $name= $rows['Name'];
 </div>
 <div class="col-sm-4" style="margin-top: 10px;">
 <div class="d-grid gap-2 mb-2">
-<button type="button" class="btn btn-soft-success btn-sm btn-block" data-bs-toggle="modal" data-bs-target="#addstaff"><i class="fa fa-user-plus"></i> Create Staff</button>
+<button type="button" class="btn btn-outline-success btn-sm btn-block" data-bs-toggle="modal" data-bs-target="#addstaff"><i class="fa fa-user-plus"></i> Create Staff</button>
 </div>
 </div>
 </div>
@@ -89,9 +89,24 @@ $name= $rows['Name'];
 
 
 
+
+
+<div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal-content">
+<div class="modal-header">
+<h6 class="modal-title" id="exampleModalLabel">ACCOUNT INFO</h6>
 </div>
-
-
+<div class="modal-body">
+<div id="profile"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 <!-- Top modal content -->
@@ -100,7 +115,6 @@ $name= $rows['Name'];
 <div class="modal-content">
 <div class="modal-header">
 <h4 class="modal-title" id="topModalLabel">Staff Onboarding Form</h4>
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
 <center>
@@ -128,9 +142,9 @@ $name= $rows['Name'];
 <div class="form-group col-md-6">
 <label class="form-label" for="add1">Sex</label>
 <select name="type" class="selectpicker form-control" data-style="py-0" name="gen" required="required">
-<option>Select</option>
-<option>Male</option>
-<option>Female</option>
+<option value="">Select Option</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
 </select>
 </div>
 <div class="form-group col-md-6">
@@ -203,7 +217,7 @@ $name= $rows['Name'];
 </div>
 </div>
 <br>
-<button type="submit" class="btn btn-soft-success btn-sm" onclick="data()"><i class="fa fa-check"></i> Create Account</button>
+<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-check"></i> Create Account</button>
 </form>
 
 </div>
@@ -297,6 +311,60 @@ $('#result').html(data);
 
 
 <script type="text/javascript">
+function getRole()  {
+$("#loader").show();
+$("result").hide();
+var role = document.getElementById("role").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "load_user_by_role_json.php",
+dataType: "html",  
+data: {
+'role': role
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+
+<script type="text/javascript">
+function getBranch()  {
+$("#loader").show();
+$("result").hide();
+var branch = document.getElementById("branch").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "load_user_by_branch_json.php",
+dataType: "html",  
+data: {
+'branch': branch
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+
+<script type="text/javascript">
 function load()  {
 $.ajax({
 method: "POST",
@@ -314,7 +382,7 @@ $('#result').html(data);
 <script type="text/javascript">
 $(document).ready(function (e){
 $("#uploadUser").on('submit',(function(e){ e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to send onboard this new staff..";
+WRN_PROFILE_DELETE = "You are about to onboard this new staff..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#addstaff").modal('hide');

@@ -152,12 +152,7 @@ mysqli_close($con);
 <div class="col-xl-4 col-md-4 col-sm-4">
 <div class="card" style="height:273px;">
 <div class="card-body">
-<b>
-<i data-lucide="xxx" class="fa fa-home"></i>
-Branch List
-</b>
-<div id="result"></div>
-
+<?php include 'branch_list.php'; ?>
 </div>
 </div>
 

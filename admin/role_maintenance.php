@@ -49,7 +49,7 @@ $(document).ready(function (e){
 $("#uploadRole").on('submit',(function(e){ e.preventDefault();
 var x = document.getElementById("ua").value;
 $("#result").hide();
-$("#please").show();
+$("#loader").show();
 $.ajax({
 url: "menu_configuration_bck.php?cu=" + x,
 type: "POST",
@@ -59,7 +59,7 @@ cache: false,
 processData:false,
 success: function(data){
 setTimeout(function(){
-$("#please").hide();
+$("#loader").hide();
 $("#result").show();
 $('#result').html(data);
 }, 3000);

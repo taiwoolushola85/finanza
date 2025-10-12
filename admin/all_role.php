@@ -505,19 +505,19 @@ Remittance <input type="checkbox" name="na[]" value="Money_Remitted">
 </div>
 <fieldset>
 <legend><h6><b>FIELD OPERATION ROLES</b></h6></legend><br><br>
-<h6><i style="color:red">*</i> <b>ACCOUNTS</b> <input type="checkbox" name="ta[]" value="ACCOUNTS"></h6>
+<h6><i style="color:red">*</i> <b>PORTFOLIO</b> <input type="checkbox" name="ta[]" value="PORTFOLIO"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Loan Accounts <input type="checkbox" name="na[]" value="Loan_Accounts">
+Loan Portfolio <input type="checkbox" name="na[]" value="Loan_Portfolio">
 </div>
 </div>
 </div>
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Saving Accounts <input type="checkbox" name="na[]" value="Saving_Accounts">
+Saving Portfolio <input type="checkbox" name="na[]" value="Saving_Portfolio">
 </div>
 </div>
 </div>
@@ -528,13 +528,20 @@ Saving Accounts <input type="checkbox" name="na[]" value="Saving_Accounts">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Transaction Posting <input type="checkbox" name="na[]" value="Transaction_Posting">
+Virtual Posting <input type="checkbox" name="na[]" value="Virtual_Posting">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Reciept Posting <input type="checkbox" name="na[]" value="Reciept_Posting">
 </div>
 </div>
 </div>
 </div>
 <br>
-<h6><i style="color:red">*</i> <b>GROUPS</b> <input type="checkbox" name="ta[]" value="GROUPS"></h6>
+<h6><i style="color:red">*</i> <b>GROUP</b> <input type="checkbox" name="ta[]" value="GROUP"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
@@ -556,7 +563,7 @@ Registration Form <input type="checkbox"  name="na[]" value="Registration_Form">
 </div>
 </div>
 <br>
-<h6><i style="color:red">*</i> <b>REGISTRATIONS</b> <input type="checkbox" name="ta[]" value="REGISTRATIONS"></h6>
+<h6><i style="color:red">*</i> <b>REGISTRATION</b> <input type="checkbox" name="ta[]" value="REGISTRATION"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">

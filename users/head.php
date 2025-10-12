@@ -628,3 +628,18 @@ document.write("Good Evening!: <span style='text-transform:capitalize'><?php ech
 </div>
 </div>
 </div>
+
+
+<div class="modal" id="view" tabindex="-1" aria-labelledby="verticallyCenteredModalLabel" aria-hidden="true" style="display: none;">
+<div class="modal-dialog modal-dialog-centered modal-sm">
+<div class="modal-content">
+<div class="modal-body">
+<center>
+<i>
+<img src="../loader/loader.gif" style="height:20px"> Loading Data ! Please wait...
+</i>
+</center>
+</div>
+</div>
+</div>
+</div>

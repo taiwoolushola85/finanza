@@ -587,6 +587,9 @@ document.write("Good Evening!: <span style='text-transform:capitalize'><?php ech
 
 
 
+
+
+
 <div class="modal" id="loader" tabindex="-1" aria-hidden="true" style="display: none;">
 <div class="modal-dialog modal-dialog-centered">
 <div class="modal-content">

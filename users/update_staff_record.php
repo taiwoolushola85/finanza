@@ -1,12 +1,13 @@
 <?php
 //DB Connection
 include '../config/db.php';
+$userid = $_POST['id'];//user id
 $nm = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['nm']); // name
 $gr = $_POST['gr'];//user group id
 $br = $_POST['br'];// branch id
 $em = $_POST['em'];// email
 $st = $_POST['st'];// city
-$gen = $_POST['gen'];// gender
+$gender = $_POST['gender'];// gender
 $ph = $_POST['ph'];// phone no
 $ad = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['ad']); // address
 $staffid = $_POST['staffid'];//staff id
@@ -64,30 +65,53 @@ $header = "From: " . $fin . "<". $eee.">\r\n";
 $mails = mail($to,$subject,$message,$header);
 */
 
-// checking if username already taken
-$Query = "SELECT * FROM users WHERE Email = '$em' OR Staff_ID = '$staffid'";
+// checking if email or staff id already taken
+$Query = "SELECT id, Email, Staff_ID FROM users WHERE id = '$userid'";
 $result = mysqli_query($con, $Query);
-$row = mysqli_num_rows($result);
-if($row != 0){
-echo 1;
+$data = mysqli_fetch_array($result);
+$uzer_id = $data['id'];
+$email = $data['Email'];
+$staff_id = $data['Staff_ID'];
+if($staff_id == $staffid && $email == $em && $uzer_id == $userid){
+// confirmation is correct
+}else{
+echo 1;// email or staff id belong to another staff
 exit();
 }
+//loan officer
 if($gr_name == 'Loan Officers'){
-$sql="INSERT INTO `users` (`Staff_ID`, `Name`, `Username`, `Password`, `Email`, `Gender`, `Role_id`, `User_Group`, `Role_Categorys`, `Usertype`, `Checks`, 
-`Status`, `Branch`, `Branch_id`, `Location`, `User`, `Phone`, `Address`, `Active`, `Town`, `Pin`, `Access_Code`, `Mapped`, `Zone`, `Zone_id`, `Country`, `Sale_Target`)
-VALUES ('$staffid', '$nm', 'NA', 'NA', '$em', '$gen', '$rol_id', '$gr_name', '$cat', 'User',  '0', 'Deactivate', '$br_name', '$br_id', '$path', 'Admin', '$ph', '$ad', 
-'Offline', '$st', 'NA', 'NA', 'No', '$zn_name', '$zn_id', '$cnt', '0')";
+$sql = "UPDATE users SET Staff_ID = '$staffid', Name = '$nm', Email = '$em', Gender = '$gender', Role_id = '$rol_id', User_Group = '$gr_name', Role_Categorys = '$cat',
+Usertype = 'User', Branch = '$br_name', Branch_id = '$br_id', Location = '$path', Phone= '$ph', Address = '$ad', Town = '$st' WHERE id = '$userid'";
 $row = mysqli_query($con, $sql);
 if($row == true){
 echo 2;
 }else{
 echo("Error description: " . mysqli_error($con));
 }
+// team leader update
+}else if($gr_name == 'Team_Leader'){
+$sql = "UPDATE users SET Staff_ID = '$staffid', Name = '$nm', Email = '$em', Gender = '$gender', Role_id = '$rol_id', User_Group = '$gr_name', Role_Categorys = '$cat',
+Usertype = 'User', Branch = '$br_name', Branch_id = '$br_id', Location = '$path', Phone= '$ph', Address = '$ad', Town = '$st' WHERE id = '$userid'";
+$row = mysqli_query($con, $sql);
+if($row == true){
+echo 2;
 }else{
-$sql="INSERT INTO `users` (`Staff_ID`, `Name`, `Username`, `Password`, `Email`, `Gender`, `Role_id`, `User_Group`, `Role_Categorys`, `Usertype`, `Checks`,
-`Status`, `Branch`, `Branch_id`, `Location`, `User`, `Phone`, `Address`, `Active`, `Town`, `Pin`, `Access_Code`, `Mapped`, `Zone`, `Zone_id`, `Country`, `Sale_Target`)
-VALUES ('$staffid', '$nm', 'NA', 'NA', '$em', '$gen', '$rol_id', '$gr_name', '$cat', 'User', '0', 'Deactivate', '$br_name', '$br_id', '$path', 'Admin', '$ph', '$ad', 
-'Offline', '$st', 'NA', 'NA', 'Not Required', '$zn_name', '$zn_id', '$cnt', 'NA')";
+echo("Error description: " . mysqli_error($con));
+}
+// admin
+}else if($gr_name == 'Admin'){
+$sql = "UPDATE users SET Staff_ID = '$staffid', Name = '$nm', Email = '$em', Gender = '$gender', Role_id = '$rol_id', User_Group = '$gr_name', Role_Categorys = '$cat',
+Usertype = 'Admin', Branch = '$br_name', Branch_id = '$br_id', Location = '$path', Phone= '$ph', Address = '$ad', Town = '$st' WHERE id = '$userid'";
+$row = mysqli_query($con, $sql);
+if($row == true){
+echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+//other users
+}else{
+$sql = "UPDATE users SET Staff_ID = '$staffid', Name = '$nm', Email = '$em', Gender = '$gender', Role_id = '$rol_id', User_Group = '$gr_name', Role_Categorys = '$cat',
+Usertype = 'User', Branch = '$br_name', Branch_id = '$br_id', Location = '$path', Phone= '$ph', Address = '$ad', Town = '$st' WHERE id = '$userid'";
 $row = mysqli_query($con, $sql);
 if($row == true){
 echo 2;

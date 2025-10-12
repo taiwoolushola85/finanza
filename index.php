@@ -88,7 +88,7 @@ integrity="sha256-XoaMnoYC5TH6/+ihMEnospgm0J1PM/nioxbOUdnM8HY=" crossorigin="ano
 <input class="form-check-input form-check-input-light fs-14" type="checkbox" id="rememberMe">
 <label class="form-check-label" for="rememberMe">Keep me signed in</label>
 </div>
-<a href="auth-reset-pass.html" class="text-decoration-underline link-offset-3 text-muted">Forgot Password?</a>
+<a href="#" class="text-decoration-underline link-offset-3 text-muted">Forgot Password?</a>
 </div>
 <div class="d-grid">
 <button type="submit" class="btn btn-primary fw-semibold py-2">

@@ -65,6 +65,7 @@ fclose($fp);
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">COUNTRY</th>
 <th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -73,8 +74,8 @@ $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
-<tr style="font-size:8px"  style="cursor: pointer;">
-<td ><img data-trigger-img src="<?php echo $member->Location?>" class="w-40 rounded me-2" height="20"></td>
+<tr style="font-size:8px">
+<td ><img data-trigger-img src="<?php echo $member->Location?>" class="rounded me-2" height="20" width="20"></td>
 <td ><?php echo $member->Staff_ID?></td>
 <td style="text-transform:capitalize"><?php echo $member->Name?></td>
 <td ><?php echo $member->Phone?></td>
@@ -83,6 +84,11 @@ foreach($json as $member){
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Country?></td>
 <td ><?php echo $member->Status?></td>
+<td >
+<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member->id?>">
+<button type="submit" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+</a>
+</td>
 </tr>
 <?php
 }
@@ -149,6 +155,7 @@ fclose($fp);
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">COUNTRY</th>
 <th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -167,6 +174,11 @@ foreach($json as $member){
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Country?></td>
 <td ><?php echo $member->Status?></td>
+<td >
+<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member->id?>">
+<button type="submit" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+</a>
+</td>
 </tr>
 <?php
 }
@@ -233,6 +245,7 @@ fclose($fp);
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">COUNTRY</th>
 <th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -251,6 +264,11 @@ foreach($json as $member){
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Country?></td>
 <td ><?php echo $member->Status?></td>
+<td >
+<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member->id?>">
+<button type="submit" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+</a>
+</td>
 </tr>
 <?php
 }
@@ -316,6 +334,7 @@ fclose($fp);
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">COUNTRY</th>
 <th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -334,6 +353,11 @@ foreach($json as $member){
 <td ><?php echo $member->Branch?></td>
 <td ><?php echo $member->Country?></td>
 <td ><?php echo $member->Status?></td>
+<td >
+<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member->id?>">
+<button type="submit" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+</a>
+</td>
 </tr>
 <?php
 }
@@ -347,3 +371,32 @@ foreach($json as $member){
 <?php
 }
 ?>
+
+
+
+<script>
+// to show data on a modal box
+$(document).ready(function() {
+$('.invks').on('click', function() {
+$("#updateModal").hide();
+$("#view").show();
+var id = $(this).attr('id');
+if(id) {
+$.ajax({
+url: 'view_account.php?id' + id,
+type: "GET",
+data: {'id':id},
+success:function(data) { 
+setTimeout(function(){
+$("#updateModal").show();
+$("#view").hide();
+$('#profile').html(data);
+}, 1000);
+}
+});
+}else{
+alert (data)
+}
+});
+});
+</script>
