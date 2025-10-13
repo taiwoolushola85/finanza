@@ -158,7 +158,7 @@ User ID: <?php echo $row['id']; ?>
 <div class="row">
 <div class="form-group col-md-6">
 <label class="form-label">User Role:</label>
-<select class="selectpicker form-control" data-style="py-0" name="gr" required="required">
+<select class="selectpicker form-control" data-style="py-0" disabled required="required">
 <option value="<?php echo $row['Role_id']; ?>" ><?php echo $row['User_Group']; ?> </option>
 <?php
 include '../config/db.php';

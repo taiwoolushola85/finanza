@@ -44,7 +44,7 @@ z-index: 1000;
 }
 #table-container {
       width: 100%;
-      height: 200px;
+      height: 400px;
       max-width: 100%;
       overflow-x: auto; /* horizontal scroll on mobile */
       border: 1px solid #ddd;
