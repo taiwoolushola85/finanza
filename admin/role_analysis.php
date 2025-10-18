@@ -425,6 +425,7 @@ WRN_PROFILE_DELETE = "You are about to delete this role from database";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#please").show();
+$("#tst1").css("display", "block");
 var id = $(this).attr('id');
 if(id) {
 $.ajax({
@@ -435,22 +436,13 @@ dataType: "json",
 success:function(data) { 
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Role Deleted Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The role has been deleted from database</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toasts").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toasts").hide();
 loadup();
-}, 4000);
+}, 7000);
 }
 });
 }else{

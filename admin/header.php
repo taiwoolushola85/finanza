@@ -461,6 +461,12 @@ layoutCustomizer.changeSkin(itemSkin);
 </a>
 </li>
 <li class="side-nav-item">
+<a href="product.php" class="side-nav-link">
+<span class="menu-icon"><i data-lucide="star"></i></span>
+<span class="menu-text" data-lang="role"> Product </span>
+</a>
+</li>
+<li class="side-nav-item">
 <a href="role_maintenance.php" class="side-nav-link">
 <span class="menu-icon"><i data-lucide="cog"></i></span>
 <span class="menu-text" data-lang="role"> Role Maintenance </span>

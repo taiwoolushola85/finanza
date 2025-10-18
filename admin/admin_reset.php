@@ -1,9 +1,46 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Reset Successfully
+</div>
+</div>
+</div>
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Pin Successfully Created
+</div>
+</div>
+</div>
+</div>
+
+
 <?php include 'header.php'; ?>
+
+
+
 <div class="card">
 <div class="card-body">
 <b>Reset Admin</b>
 <center>
-<img src="<?php echo $row['Location']?>" width="150" height="150" class="rounded-circle d-flex" id="output">
+<img src="<?php echo $row['Location']?>" width="90" height="90" class="rounded-circle d-flex" id="output">
 <br>
 <h4><b><?php echo $row['Name']?></b></h4>
 </center>
@@ -28,8 +65,8 @@
 </div>
 </div>
 <br>
-<button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-plus"></i> Reset Admin</button>
-<button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#standard-modal"><i class="fa fa-key"></i> Set Authentication</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;"><i class="fa fa-plus"></i> Reset Admin</button>
+<button type="button" class="btn btn-outline-info btn-sm" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#standard-modal"><i class="fa fa-key"></i> Set Authentication</button>
 </form>
 <hr>
 
@@ -81,6 +118,7 @@
 
 
 
+
 <div class="modal" id="standard-modal" tabindex="-1" aria-hidden="true" style="display: none;">
 <div class="modal-dialog modal-sm modal-dialog-centered">
 <div class="modal-content">
@@ -116,6 +154,16 @@ image.src = URL.createObjectURL(event.target.files[0]);
 
 
 
+
+
+
+
+
+</div>
+
+
+
+
 <script type="text/javascript">
 $(document).ready(function (e){
 $("#resetPass").on('submit',(function(e){ e.preventDefault();
@@ -134,24 +182,12 @@ success: function(data){
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Admin Reset Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The admin account has been reset</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast").show();
 }, 3000);
 setTimeout(function(){
+$("#toast").hide();
 window.location.href='../config/session.php';
-}, 5000);
+}, 7000);
 }else{
 alert('🚫' + data);
 }
@@ -186,21 +222,12 @@ success: function(data){
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Pin Successfully Set!',
-html: '<small style="color: rgba(255,255,255,0.9);">The admin account pin has been set</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast1").show();
 }, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toast1").hide();
+}, 7000);
 //
 }else{
 alert('🚫' + data);

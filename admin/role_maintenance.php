@@ -1,3 +1,18 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3" id="tst" style="display: none;">
+<!-- Then put toasts within -->
+<div class="toast bg-success" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Role Restricted Successfully
+</div>
+</div>
+</div>
+</div>
 <?php include 'header.php'; ?>
 <div class="card">
 <div class="card-body">
@@ -26,7 +41,7 @@ mysqli_close($con);
 ?>
 </select>
 <span class="input-group-append">
-<button type="submit" class="btn btn-outline-info btn-sm" name="uni" onclick="data()"><i class="fa fa-search"></i> GO!</button>
+<button type="submit" class="btn btn-outline-info btn-md" style="font-size: 10px;" name="uni" onclick="data()"><i class="fa fa-search"></i> GO!</button>
 </span>
 </div>
 </form>
@@ -40,7 +55,6 @@ mysqli_close($con);
 <div id="result"></div>
 
 </div>
-
 
 
 

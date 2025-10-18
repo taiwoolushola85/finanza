@@ -1,3 +1,34 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3" id="tst" style="display:none;">
+<!-- Then put toasts within -->
+<div class="toast bg-success" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Role Created Successfully
+</div>
+</div>
+</div>
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3" id="tst1" style="display:none;">
+<!-- Then put toasts within -->
+<div class="toast bg-success" role="alert" id="toasts" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Role Remove Successfully
+</div>
+</div>
+</div>
+</div>
 <?php include 'header.php'; ?>
 
 <div class="card border-0 mb-3 overflow-hidden bg-gray-800 text-white">
@@ -21,8 +52,10 @@
 </select>
 </div>
 </div>
+<br>
+<span style="display:none; color:red" id="exit"><i class="fa fa-exclamation-triangle"></i> User role already exist! please use another role name..</span>
 <hr>
-<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Add Role</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;"><i class="fa fa-plus"></i> Add Role</button>
 </form>
 </div>
 </div>
@@ -152,6 +185,7 @@ $("#uploadRole").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to send the request..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
+$("#tst").css("display", "block");
 $("#please").show();
 $.ajax({
 url: "create_role_bck.php",
@@ -166,22 +200,22 @@ $("#uploadRole")[0].reset();
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Role Created Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The role has been created and saved</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#exit").show();
+}, 3000); 
+setTimeout(function(){
+$("#please").hide();
+$("#exit").hide();
+}, 7000); 
+}else if(data == 2){
+setTimeout(function(){
+$("#please").hide();
+$("#toast").show();
+}, 3000);  
+setTimeout(function(){
+$("#please").hide();
+$("#toast").hide();
 load();
-}, 3000);
+}, 7000);  
 }else{
 $("#please").hide();
 alert ("🚫" + data)

@@ -1,3 +1,36 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative" >
+<div class="toast-container position-absolute top-0 end-0 p-3" id="tst" style="display: none;">
+<!-- Then put toasts within -->
+<div class="toast bg-success" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<span style="color: white;"><i class="fa fa-check"></i> Branch Created Successfully</span>
+</div>
+</div>
+</div>
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3" id="tst1" style="display: none;">
+<!-- Then put toasts within -->
+<div class="toast bg-success" role="alert" id="toast1" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<span style="color: white;"><i class="fa fa-check"></i> Branch Deleted Successfully</span>
+</div>
+</div>
+</div>
+</div>
+
 <?php include 'header.php'; ?>
 
 <div class="card border-0 mb-3 overflow-hidden bg-gray-800">
@@ -39,9 +72,13 @@ $name= $rows['Name'];// zone name
 <input type="text" class="form-control form-control-md" required="required" name="st" placeholder="Enter Branch State">
 </div>
 </div>
+<br>
+<span style="display:none; color:red" id="exit"><i class="fa fa-exclamation-triangle"></i> Branch name already exist! please use another name..</span>
+<span style="display:none; color:red" id="exits"><i class="fa fa-exclamation-triangle"></i> Zone name already exist! please use another name..</span>
+<span style="display:none; color:green" id="toasts"><i class="fa fa-check"></i> Branch zone successfully created. !!</span>
 <hr>
-<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Create Branch</button>
-<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#centermodal"><i class="fa fa-star"></i> Create Zone</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;"><i class="fa fa-plus"></i> Create Branch</button>
+<button type="button" class="btn btn-outline-info btn-sm" style="font-size: 10px;" data-bs-toggle="modal" data-bs-target="#centermodal"><i class="fa fa-star"></i> Create Zone</button>
 
 </form>
 </div>
@@ -93,12 +130,21 @@ $name= $rows['Name'];// zone name
 <label>Zone Title</label>
 <input type="text" class="form-control form-control-md" required="required" name="zn" placeholder="Enter Zone Title">
 <br>
-<button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Create Zone</button>
+<button type="submit" class="btn btn-outline-primary btn-sm" style="font-size: 10px;"><i class="fa fa-plus"></i> Create Zone</button>
 </form>
 </div>
 </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#tst").hide();// hide toast
+$("#tst1").hide();// hide toast
+});
+</script>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -202,41 +248,25 @@ success: function(data){
 $("#please").show();
 $("#uploadZone")[0].reset();
 if(data == 1){
+setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'error',
-title: 'Zone Already Exist!',
-html: '<small style="color: rgba(255,255,255,0.9);">The zone record already exist</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#exits").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#exits").hide();
+}, 7000);
 }else if(data == 2){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Zone Created Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The zone has been created and saved</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toasts").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toasts").hide();
 //load();
 $('#zone').load('branch.php #zone');// to reload zone without refreshing the page
-}, 3000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)
@@ -261,6 +291,7 @@ $("#uploadRole").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to send the request..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
+$("#tst").css("display", "block");
 $("#please").show();
 $.ajax({
 url: "add_branch_bck.php",
@@ -273,41 +304,26 @@ success: function(data){
 $("#please").show();
 $("#uploadRole")[0].reset();
 if(data == 1){
+setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'error',
-title: 'Branch Already Exist!',
-html: '<small style="color: rgba(255,255,255,0.9);">The branch record already exist</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#exit").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#exit").hide();
+}, 7000);
 }else if(data == 2){
 setTimeout(function(){
 $("#uploadRole")[0].reset();
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Branch Created Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The branch has been created and saved</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast").show();
 load();
 }, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toast").hide();
+load();
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)

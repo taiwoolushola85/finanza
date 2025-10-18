@@ -1,3 +1,105 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Activated Successfully
+</div>
+</div>
+</div>
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Deactivated Successfully
+</div>
+</div>
+</div>
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast2" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Login Successfully Created
+</div>
+</div>
+</div>
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast3" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Updated Successfully
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast4" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Group Role Updated Successfully
+</div>
+</div>
+</div>
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+<div class="toast-container position-absolute top-0 end-0 p-3">
+<!-- Then put toasts within -->
+<div class="toast" role="alert" id="toast4" aria-live="assertive" aria-atomic="true">
+<div class="toast-header">
+<small class="fa fa-bell"> </small>
+<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
+<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px">
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Deleted Successfully
+</div>
+</div>
+</div>
+</div>
+
+
 <?php include 'header.php'; ?>
 <?php 
 $id = $_GET['id'];// get id tbrough query string
@@ -74,7 +176,7 @@ if($data['Status'] == "Activate"){
 <form action="" method="POST" enctype="multipart/form-data" id="deactivateAccount">
 <div class="d-grid gap-2 mb-2">
 <input type="text" value="<?php echo $data['id']; ?>" hidden name="id"  required="required">
-<button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-exclamation-triangle"></i> Deactivate Account</button>
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Deactivate Account</button>
 </div>
 </form>
 <?php
@@ -83,7 +185,7 @@ if($data['Status'] == "Activate"){
 <form action="" method="POST" enctype="multipart/form-data" id="activateAccount">
 <div class="d-grid gap-2 mb-2">
 <input type="text" value="<?php echo $data['id']; ?>" hidden name="id"  required="required">
-<button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-check"></i> Activate Account</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size:10px;"><i class="fa fa-check"></i> Activate Account</button>
 </div>
 </form>
 <?php 
@@ -93,20 +195,20 @@ if($data['Status'] == "Activate"){
 </div>
 <div class="col-sm-3">
 <div class="d-grid gap-2 mb-2">
-<button class="btn btn-outline-warning btn-sm"><i class="fa fa-refresh"></i> Reset Account</button>
+<button class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-refresh"></i> Reset Account</button>
 </div>
 </div>
 <div class="col-sm-3">
 <form action="" method="POST" enctype="multipart/form-data" id="accountDelete">
 <div class="d-grid gap-2 mb-2">
 <input type="text" value="<?php echo $data['id']; ?>" hidden placeholder="User ID" name="id"  required="required">
-<button class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> Delete Account</button>
+<button class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-trash"></i> Delete Account</button>
 </div>
 </form>
 </div>
 <div class="col-sm-3">
 <div class="d-grid gap-2 mb-2">
-<button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#standard-modal"><i class="fa fa-edit"></i> Update Account</button>
+<button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#standard-modal" style="font-size:10px;"><i class="fa fa-edit"></i> Update Account</button>
 </div>
 </div>
 </div>
@@ -150,11 +252,11 @@ if($data['Status'] == "Activate"){
 <?php 
 if($data['Username'] == 'NA'){
 ?>
-<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size:10px;" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
 <?php 
 }else{
 ?>
-<button type="button" disabled class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
+<button type="button" disabled class="btn btn-outline-success btn-sm" style="font-size:10px;" onclick="data()"><i class="fa fa-edit"></i> Create Login</button>
 <?php 
 }
 ?>
@@ -198,7 +300,7 @@ mysqli_close($con);
 </div>
 </div>
 <hr>
-<button type="submit" class="btn btn-outline-info btn-sm" id="changes" onclick="data()" >Change User Role</button>
+<button type="submit" class="btn btn-outline-info btn-sm" style="font-size:10px;" id="changes" onclick="data()" >Change User Role</button>
 </form>
 
 </div>
@@ -297,7 +399,7 @@ Town
 </div>
 </div>
 <hr>
-<button type="submit" class="btn btn-outline-info btn-sm" id="butsave" onclick="data()">Update Account</button>
+<button type="submit" class="btn btn-outline-info btn-sm" style="font-size:10px;" id="butsave" onclick="data()">Update Account</button>
 </form>
 </div>
 </div>
@@ -325,25 +427,14 @@ success: function(data){
 if(data==1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Account Activated Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The account has been activated</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast").show();
 }, 3000);
 setTimeout(function(){
+$("#please").hide();
+$("#toast").hide();
 $("#btnCheck").load('view_user.php?id=<?php echo $data['id']; ?>' + " #btnCheck");
 $("#mydiv").load('view_user.php?id=<?php echo $data['id']; ?>' + " #mydiv");
-}, 4000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)
@@ -378,25 +469,14 @@ success: function(data){
 if(data==1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Account Deactivated Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The account has been deactivated</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast1").show();
 }, 3000);
 setTimeout(function(){
+$("#please").hide();
+$("#toast1").hide();
 $("#btnCheck").load('view_user.php?id=<?php echo $data['id']; ?>' + " #btnCheck");
 $("#mydiv").load('view_user.php?id=<?php echo $data['id']; ?>' + " #mydiv");
-}, 4000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)
@@ -421,7 +501,7 @@ var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#wait").show();
 $.ajax({
-url: "create_login_dpetail.php",
+url: "create_login_detail.php",
 type: "POST",
 data: new FormData(this),
 contentType: false, 
@@ -438,22 +518,15 @@ $("#wait").hide();
 $("#check").hide();
 }, 5000);
 }else if(data == 2){
+setTimeout(function(){
 $("#wait").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Login Created Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The login details has been create</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast2").show();
+}, 3000);
+setTimeout(function(){
+$("#wait").hide();
+$("#toast2").hide();
 $("#btn").load('view_user.php?id=<?php echo $data['id']; ?>' + " #btn");
+}, 7000);
 }else{
 $("#wait").hide();
 alert ("🚫" + data)
@@ -488,25 +561,13 @@ success: function(data){
 if(data==1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Account Updated Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The account has been updated</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast3").show();
 }, 3000);
 setTimeout(function(){
+$("#toast3").hide();
 $("#btnCheck").load('view_user.php?id=<?php echo $data['id']; ?>' + " #btnCheck");
 $("#mydiv").load('view_user.php?id=<?php echo $data['id']; ?>' + " #mydiv");
-}, 4000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)
@@ -542,24 +603,12 @@ success: function(data){
 if(data==1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Role Update Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The user role has been updated</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast4").show();
 }, 3000);
 setTimeout(function(){
+$("#toast4").hide();
 $("#mydiv").load('view_user.php?id=<?php echo $data['id']; ?>' + " #mydiv");
-}, 4000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)
@@ -594,24 +643,11 @@ success: function(data){
 if(data==1){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Account Deleted Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The account has been deleted</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast5").hide();
 }, 3000);
 setTimeout(function(){
 window.location.href='manage_user.php';
-}, 4000);
+}, 7000);
 }else{
 $("#please").hide();
 alert ("🚫" + data)

@@ -450,6 +450,7 @@ $('.indel').on('click', function() {
 WRN_PROFILE_DELETE = "You are about to delete this branch record from database";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
+$("#tst1").css("display", "block");// 
 $("#please").show();
 var id = $(this).attr('id');
 if(id) {
@@ -461,22 +462,13 @@ dataType: "json",
 success:function(data) { 
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Branch Deleted Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The branch has been deleted from database</small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast1").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toast1").hide();
 loadup();
-}, 4000);
+}, 7000);
 }
 });
 }else{

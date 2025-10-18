@@ -39,7 +39,7 @@ echo" No Roles Found  <br/> ";
 ?>
 
 <hr>
-<button type="submit" class="btn btn-soft-info btn-sm" style="float:right" name="restrict" onclick="data()"><i class="fa fa-edit"></i> Restrict Access</button>
+<button type="submit" class="btn btn-outline-info btn-sm" style="float:right; font-size:10px" name="restrict" onclick="data()"><i class="fa fa-edit"></i> Restrict Access</button>
 </form>
 </div>
 </div>
@@ -57,7 +57,7 @@ $("#uploadRec").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to restrict this user role.?";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
-$("#butsave").attr("disabled", "disabled");
+$("#tst").css("display", "block");
 $("#please").show();
 $.ajax({
 url: "restrict_bck.php",
@@ -69,22 +69,14 @@ processData:false,
 success: function(data){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Access Restricted !',
-html: '<small style="color: rgba(255,255,255,0.9);">The menu access has been restricted </small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast").show();
 load();
 }, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toast").hide();
+load();
+}, 6000);
 },
 error: function(){
 }

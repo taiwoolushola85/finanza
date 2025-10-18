@@ -63,6 +63,7 @@ $User = $row['Username'];
 $loc = $row['Location'];
 $gr = $row['User_Group'];
 $ct = $row['Role_Categorys'];
+$mapped = $row['Mapped'];
 }
 ?>
 <!-- Begin page -->

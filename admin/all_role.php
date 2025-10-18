@@ -357,7 +357,7 @@ Zone Table <input type="checkbox" name="na[]" value="Zone_Table">
 </div>
 <br>
 <br>
-<button type="submit" class="btn btn-outline-success btn-sm" name="access" onclick="data()">Grant Access</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;" name="access" onclick="data()">Grant Access</button>
 </form>
 
 
@@ -484,7 +484,7 @@ Remittance <input type="checkbox" name="na[]" value="Money_Remitted">
 </div>
 </div>
 <br>
-<button type="submit" class="btn btn-outline-success btn-sm" name="access" onclick="data()">Grant Access</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;" name="access" onclick="data()">Grant Access</button>
 </form>
 
 
@@ -672,7 +672,7 @@ Transportation Request <input type="checkbox" name="na[]" value="Transportation_
 <br>
 <br>
 </fieldset>
-<button type="submit" class="btn btn-soft-success btn-sm" name="access" onclick="data()">Grant Access</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="font-size: 10px;" name="access" onclick="data()">Grant Access</button>
 </form>
 
 
@@ -698,6 +698,7 @@ $("#uploadForm").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to activate this user role.?";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
+$("#tst").css("display", "block");
 $("#please").show();
 $.ajax({
 url: "add_roles.php",
@@ -709,22 +710,14 @@ processData:false,
 success: function(data){
 setTimeout(function(){
 $("#please").hide();
-Swal.fire({
-toast: true,
-icon: 'success',
-title: 'Access Granted Successfully!',
-html: '<small style="color: rgba(255,255,255,0.9);">The menu access has been granted </small>',
-position: 'top-end',
-showConfirmButton: false,
-timer: 4000,
-timerProgressBar: true,
-backdrop: false,  // No overlay/backdrop
-customClass: {
-popup: 'minimal-toast'
-}
-});
+$("#toast").show();
 $("#uploadForm")[0].reset();
 }, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#toast").hide();
+$("#uploadForm")[0].reset();
+}, 6000);
 },
 error: function(){
 }
