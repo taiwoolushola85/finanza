@@ -475,7 +475,7 @@ layoutCustomizer.changeSkin(itemSkin);
 <li class="side-nav-item">
 <a href="user_group.php" class="side-nav-link">
 <span class="menu-icon"><i data-lucide="user-plus"></i></span>
-<span class="menu-text" data-lang="group"> User Group </span>
+<span class="menu-text" data-lang="group"> User Role</span>
 </a>
 </li>
 <li class="side-nav-item">
