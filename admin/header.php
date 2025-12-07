@@ -1,0 +1,321 @@
+<?php
+session_start();// start session
+if( !isset( $_SESSION['Username'] )){
+session_destroy();
+header('location:../index.php');
+}else{
+$user = $_SESSION['Username'];
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Finanza | Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="description" content="Loan management system for all kinds of loans - personal, business, and more. Streamline your lending process with our user-friendly platform.">
+<meta name="keywords" content="loan management system, loan processing, lending platform, personal loans, business loans">
+<meta name="author" content="I-Create Software Technology">
+<!-- layout setup -->
+<!-- <script type="module" src="assets/js/layout-setup.js"></script> -->
+<!-- App favicon -->
+<link rel="shortcut icon" href="../assets/images/logo-sm.png">
+<!-- select2 -->
+<link href="../assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+<!-- Simplebar Css -->
+<link rel="stylesheet" href="../assets/libs/simplebar/simplebar.min.css">
+<!-- Bootstrap Css -->
+<link href="../assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+<!--icons css-->
+<link href="../assets/css/icons.min.css" rel="stylesheet" type="text/css">
+<!-- App Css-->
+<link href="../assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+<!-- my css -->
+<link href="../assets/css/mystyle.min.css" rel="stylesheet" type="text/css">
+<!-- my jquery -->
+<script src="../js/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+<!-- logout function start-->
+<script>
+$(document).ready(function() { 
+
+function redirect(){
+document.location = "lock.php?id=<?php echo $user; ?>&&resume=<?php echo $_SERVER["REQUEST_URI"];?>"
+}
+setInterval(function(){
+redirect();
+}, 40 * 60 * 1000);
+});
+
+</script>
+<?php
+include('../config/db.php') ;
+if (isset($_SESSION['Username'])) {
+$user = $_SESSION['Username'];
+$Query = "SELECT id, Staff_ID, Username, Location, Name, Password, Email, Branch, Branch_id, Pin, User_Group, Checks,
+Address, Role_Categorys, Mapped, Status, Usertype, Phone, Zone, Zone_id, Country FROM users WHERE Username='$user'";
+$result = mysqli_query($con, $Query);
+$row = mysqli_fetch_array($result);
+$usid = $row['id'];
+$User = $row['Username'];
+$loc = $row['Location'];
+}
+?>
+<!-- Begin page -->
+<div id="layout-wrapper">
+<!-- Start topbar -->
+<header id="page-topbar">
+<div class="navbar-header">
+<!-- Start Navbar-Brand -->
+<div class="navbar-logo-box">
+<a href="#" class="logo logo-dark">
+<span class="logo-sm">
+<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+</span>
+<span class="logo-lg">
+<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
+</span>
+</a>
+<a href="#" class="logo logo-light">
+<span class="logo-sm">
+<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+</span>
+<span class="logo-lg">
+<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
+</span>
+</a>
+<button type="button" class="btn btn-icon top-icon sidebar-btn" id="sidebar-btn" aria-label="Toggle navigation"><i class="mdi mdi-menu-open align-middle fs-17" style="margin-left:60px;"></i></button>
+<button type="button" class="btn btn-icon top-icon sidebar-horizontal-btn d-none" aria-label="Toggle navigation"><i class="mdi mdi-menu align-middle fs-17"></i></button>
+</div>
+<!-- Start menu -->
+<div class="d-flex justify-content-between menu-sm px-4 ms-auto">
+<div class="d-flex align-items-center gap-2">
+<div class="dropdown d-none d-lg-block">
+<button type="button" class="btn btn-primary dropdown-toggle btn-sm" hidden data-bs-toggle="dropdown" aria-expanded="false">Apps</button>
+<div class="dropdown-menu dropdown-menu-start dropdown-menu-animated">
+<a href="#!" class="dropdown-item">
+<span class="dropdown-content"><i class="mdi mdi-briefcase-outline me-2 text-muted fs-15 align-middle"></i>Inventory Manager</span>
+</a>
+<a href="#!" class="dropdown-item">
+<span class="dropdown-content"><i class="mdi mdi-file-document-remove-outline me-2 text-muted fs-15 align-middle"></i>Invoice</span>
+</a>
+<a href="pages-contact.html" class="dropdown-item">
+<span class="dropdown-content"><i class="mdi mdi-account-outline me-2 text-muted fs-15 align-middle"></i>My Account</span>
+</a>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center gap-3">
+<!--Start App Search-->
+<form class="app-search d-none d-lg-block me-2">
+<div class="position-relative">
+<input type="text" class="form-control" placeholder="Search...">
+<i data-eva="search-outline" class="align-middle"></i>
+</div>
+</form>
+
+<button type="button" class="btn btn-icon top-icon d-none d-md-block" id="light-dark-mode" aria-label="Toggle Light/Dark">
+<i class="mdi mdi-brightness-7 align-middle"></i>
+<i class="mdi mdi-white-balance-sunny align-middle"></i>
+</button>
+<!-- Start Notifications -->
+<div class="dropdown d-inline-block">
+<button type="button" class="btn btn-icon top-icon" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+<i class="mdi mdi-bell-ring-outline fs-17"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-md dropdown-menu-end dropdown-menu-animated p-0 " aria-labelledby="page-header-notifications-dropdown">
+<div class="p-4 border-bottom">
+<div class="row align-items-center">
+<div class="col">
+<h6 class="m-0"> <i class="mdi mdi-bell-ring-outline me-1 fs-15"></i> Notifications </h6>
+</div>
+<div class="col-auto">
+<a href="#!" class="badge bg-info-subtle text-info"> 8+</a>
+</div>
+</div>
+</div>
+<div data-simplebar style="max-height: 230px;">
+<a href="#!" class="text-reset notification-item">
+<div class="d-flex">
+<div class="avatar avatar-xs avatar-label-primary me-3">
+<span class="rounded fs-16">
+<i class="mdi mdi-file-document-outline"></i>
+</span>
+</div>
+<div class="flex-1">
+<h6 class="mb-1">New report has been recived</h6>
+<p class="mb-0 fs-12 text-muted"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
+</div>
+<i class="mdi mdi-chevron-right align-middle ms-2"></i>
+</div>
+</a>
+</div>
+<div class="p-2 border-top">
+<div class="d-grid">
+<a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+<i class="mdi mdi-arrow-right-circle me-1"></i> View More..
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Start Profile -->
+<div class="dropdown d-inline-block ps-3 ms-2 border-start admin-user-info">
+<button type="button" aria-label="profile" class="btn btn-sm p-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<span class="avatar avatar-xs p-1 d-inline-block">
+<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid" style="border-radius:5px; height:30px">
+</span>
+<span class="d-none d-xl-inline-block ms-1 fw-semibold fs-14 admin-name"><?php echo $row['Name']; ?></span>
+<i class="mdi mdi-chevron-down align-middle fs-16 d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end dropdown-menu-animated overflow-hidden py-0">
+<div class="card mb-0">
+<div class="card-header">
+<div class="rich-list-item w-100 p-0">
+<div class="rich-list-prepend">
+<span class="rounded avatar-sm p-1 bg-body d-flex">
+<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid">
+</span>
+</div>
+<div class="rich-list-content">
+<h3 class="rich-list-title fs-13 mb-1"><?php echo $row['Name']; ?></h3>
+<span class="rich-list-subtitle"><?php echo $row['User_Group']; ?></span>
+</div>
+<div class="rich-list-append"><span class="badge badge-label-primary fs-6">6+</span></div>
+</div>
+</div>
+<br>
+<div class="container">
+<div class="row">
+<div class="col-6">
+<a href="lock.php?id=<?php echo $row['Username']; ?>&&resume=<?php echo $_SERVER["REQUEST_URI"];?>" >
+<div class="d-grid gap-2">
+<button class="btn btn-outline-info btn-block"><i class="fas fa-lock"></i> Lockscreen</button>
+</div>
+</a>
+</div>
+<div class="col-6">
+<a href="../config/session.php">
+<div class="d-grid gap-2">
+<button class="btn btn-outline-danger btn-block"><i class="fas fa-power-off"></i> Sign-Out</button>
+</div>
+</a>
+</div>
+</div>
+<br>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- End menu -->
+</div>
+</header>
+<!-- End topbar -->
+<!-- ========== Left Sidebar Start ========== -->
+<div class="sidebar-left">
+<div class="sidebar-slide h-100" data-simplebar>
+<!--- Sidebar-menu -->
+<div id="sidebar-menu">
+<!-- Left Menu Start -->
+<ul class="left-menu list-unstyled" id="side-menu">
+<li>
+<a href="index.php">
+<i class=" fas fa-border-all"></i>
+<span>Dashboard</span>
+</a>
+</li>
+<li class="menu-title">Menu List</li>
+<li>
+<a href="assign_role.php">
+<i class="fas fa-plus"></i>
+<span>Assign Role</span>
+</a>
+</li>
+<li>
+<a href="branch.php">
+<i class="fas fa-city"></i>
+<span>Branch</span>
+</a>
+</li>
+<li>
+<a href="#">
+<i class="fas fa-database"></i>
+<span>Database</span>
+</a>
+</li>
+<li>
+<a href="product.php">
+<i class="fas fa-star"></i>
+<span>Product</span>
+</a>
+</li>
+<li>
+<a href="role_maintenance.php">
+<i class="fas fa-cog"></i>
+<span>Role Maintenance</span>
+</a>
+</li>
+<li>
+<a href="user_group.php">
+<i class="fas fa-user-plus"></i>
+<span>User Role</span>
+</a>
+</li>
+<li>
+<a href="user_account.php">
+<i class="fas fa-users"></i>
+<span>User Account</span>
+</a>
+</li>
+<li>
+<a href="admin_reset.php">
+<i class="fas fa-user-cog"></i>
+<span>Admin Reset</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- Sidebar -->
+</div>
+</div>
+
+
+
+
+
+<div class="modal" id="loader" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<center>
+<br>
+<i>
+<img src="../loader/loader.gif" style="height:20px"> Loading Data ! Please wait...
+</i>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal" id="please" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<center>
+<br>
+<i>
+<img src="../loader/loader.gif" style="height:20px"> Waiting For Response ! Please wait...
+</i>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+

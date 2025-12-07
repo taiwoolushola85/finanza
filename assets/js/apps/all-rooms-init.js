@@ -1,0 +1,1 @@
+"use strict";$((function(){var o="rtl"===$("html").attr("dir")?"rtl":"ltr";$("#paymentOption").select2({dir:o,dropdownAutoWidth:!0,dropdownParent:$("#bookRoomModal")}),$("#admissionDate").datepicker({container:"#bookRoomModal"})}));

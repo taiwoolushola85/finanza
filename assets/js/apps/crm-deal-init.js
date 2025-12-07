@@ -1,0 +1,1 @@
+"use strict";$((function(){var t="rtl"===$("html").attr("dir")?"rtl":"ltr";$("#dealStage").select2({dir:t,dropdownAutoWidth:!0,dropdownParent:$("#addDealModal")}),$("#dealDate").datepicker({container:"#addDealModal"})}));

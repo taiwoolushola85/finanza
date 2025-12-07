@@ -1,0 +1,1 @@
+"use strict";$((function(){$("html").attr("dir");$("#touchspin-1").TouchSpin()}));

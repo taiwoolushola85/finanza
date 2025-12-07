@@ -1,0 +1,1 @@
+"use strict";$((function(){var t="rtl"===$("html").attr("dir")?"rtl":"ltr";$("#patientGender").select2({dir:t,dropdownAutoWidth:!0}),$("#patient-Marital").select2({dir:t,dropdownAutoWidth:!0}),$("#patientBloodgroup").select2({dir:t,dropdownAutoWidth:!0}),$("#patient-Country").select2({dir:t,dropdownAutoWidth:!0}),$("#dateOfBirth-Patient").datepicker({})}));

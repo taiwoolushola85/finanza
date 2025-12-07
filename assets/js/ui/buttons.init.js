@@ -1,0 +1,1 @@
+document.querySelectorAll(".publish-btn").forEach((e=>{const t=e.querySelector(".progress-bar");e.addEventListener("click",(()=>{e.classList.contains("completed")||(t.style.width="100%",setTimeout((()=>{e.classList.add("completed")}),1150))}))}));

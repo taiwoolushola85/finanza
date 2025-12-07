@@ -1,0 +1,1 @@
+const inputs=document.querySelectorAll(".otp-input");inputs.forEach(((t,e)=>{t.addEventListener("input",(t=>{1===t.target.value.length&&e<inputs.length-1&&inputs[e+1].focus()})),t.addEventListener("keydown",(t=>{"Backspace"===t.key&&!t.target.value&&e>0&&inputs[e-1].focus()}))}));

@@ -1,0 +1,1 @@
+document.addEventListener("click",(function(e){if(e.target.closest(".badge-close")){e.preventDefault();const t=e.target.closest(".badge");t&&t.remove()}}));

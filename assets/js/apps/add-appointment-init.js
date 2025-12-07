@@ -1,0 +1,1 @@
+"use strict";$((function(){var t="rtl"===$("html").attr("dir")?"rtl":"ltr";$("#appointmentGender").select2({dir:t,dropdownAutoWidth:!0}),$("#appointment-Doctor").select2({dir:t,dropdownAutoWidth:!0}),$("#appointment-Department").select2({dir:t,dropdownAutoWidth:!0}),$("#appointmentDate").datepicker({})}));

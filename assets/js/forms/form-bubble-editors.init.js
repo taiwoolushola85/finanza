@@ -1,0 +1,1 @@
+tinymce.init({selector:"#bubble-editor",inline:!0,menubar:!1,toolbar:!1,branding:!1,plugins:"quickbars link lists",quickbars_selection_toolbar:"bold italic underline | link | bullist numlist | blockquote",quickbars_insert_toolbar:"quickimage quicktable hr",contextmenu:!1,content_css:!1,license_key:"gpl"});

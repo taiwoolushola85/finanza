@@ -1,0 +1,1 @@
+"use strict";$((function(){var t="rtl"===$("html").attr("dir")?"rtl":"ltr";$("#city").select2({dir:t,dropdownAutoWidth:!0,placeholder:"Select multiple"}),$("#state").select2({dir:t,dropdownAutoWidth:!0,placeholder:"Select multiple"}),$("#language").select2({dir:t,dropdownAutoWidth:!0,placeholder:"Select multiple"})}));
