@@ -10,14 +10,14 @@ mysqli_close($con);
 ?></b>
 <br><br>
 </small>
-<div style="overflow-y:auto; height:200px">
+<div style="overflow-y:auto; height:330px">
 
 <?php 
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
-$result = mysqli_query($con, "SELECT Officer_Name, Loan_Officer,
+$result = mysqli_query($con, "SELECT Officer_Name, Loan_Officer, Branch,
 (SELECT COALESCE(SUM(Amount), 0) FROM history WHERE User = Loan_Officer AND Status = 'Waiting For Approval') AS `rep`,
 (SELECT COALESCE(SUM(Savings), 0) FROM history WHERE User = Loan_Officer AND Status = 'Waiting For Approval' AND Post_Method = 'Basic Posting') AS `saving`,
 (SELECT Location FROM users WHERE Username = Loan_Officer) AS `img`
@@ -38,13 +38,14 @@ fclose($fp);
 <table>
 <thead>
 <tr>
-<th style="font-size:9px;">Img</th>
 <th style="font-size:9px;">Name</th>
+<th style="font-size:9px;">Branch</th>
 <th style="font-size:9px;">Repayments</th>
 <th style="font-size:9px;">Savings</th>
 <th style="font-size:9px;">Total</th>
 <th style="font-size:9px;">Action</th>
 </tr>
+</thead>
 <tbody>
 <?php
 $url = '../data/credit_officer.json';
@@ -53,12 +54,8 @@ $json = json_decode($data);
 foreach($json as $member){
 ?>
 <tr>
-<td style="font-size:9px;">
-<a href="#!" class="avatar avatar-sm avatar-circle">
-<img src="<?php echo $member->img; ?>" class="size-7" >
-</a>
-</td>
 <td style="font-size:9px;"><?php echo $member->Officer_Name?></td>
+<td style="font-size:9px;"><?php echo $member->Branch?></td>
 <td style="font-size:9px;"><?php echo number_format($member->rep,2)?></td>
 <td style="font-size:9px;"><?php echo number_format($member->saving,2)?></td>
 <td style="font-size:9px;"><?php echo number_format($member->rep +  $member->saving,2)?></td>

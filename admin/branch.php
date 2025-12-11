@@ -1,6 +1,6 @@
 <!-- TOP RIGHT (original) -->
 <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display: none;">
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
 <small class="fa fa-bell"></small>
 <strong class="me-auto" style="margin-left:8px;">Finanza</strong>
@@ -8,7 +8,7 @@
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
-<i class="fa fa-check"></i>  Branch Created Successfully
+<i class="fa fa-check"></i> Branch Successfully Created
 </div>
 </div>
 </div>
@@ -16,7 +16,7 @@
 
 <!-- TOP RIGHT (original) -->
 <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display: none;">
+<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
 <small class="fa fa-bell"></small>
 <strong class="me-auto" style="margin-left:8px;">Finanza</strong>
@@ -24,7 +24,7 @@
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
-<i class="fa fa-check"></i>  Branch Deleted Successfully
+<i class="fa fa-check"></i> Branch Successfully Deleted
 </div>
 </div>
 </div>

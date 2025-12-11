@@ -341,4 +341,5 @@ $('#results').html(data);
 <?php 
 }
 ?>
+
 <?php include '../footer.php'; ?>

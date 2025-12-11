@@ -1,103 +1,94 @@
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true">
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
 <i class="fa fa-check"></i> Account Activated Successfully
 </div>
 </div>
 </div>
-</div>
 
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true">
+
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast1" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
 <i class="fa fa-check"></i> Account Deactivated Successfully
 </div>
 </div>
 </div>
-</div>
 
 
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast2" aria-live="assertive" aria-atomic="true">
+
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast2" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
 <i class="fa fa-check"></i> Login Successfully Created
 </div>
 </div>
 </div>
-</div>
 
 
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast3" aria-live="assertive" aria-atomic="true">
+
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast3" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
 <i class="fa fa-check"></i> Account Updated Successfully
 </div>
 </div>
 </div>
-</div>
 
 
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast4" aria-live="assertive" aria-atomic="true">
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast4" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
 <i class="fa fa-check"></i> Group Role Updated Successfully
 </div>
 </div>
 </div>
-</div>
 
 
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-<div class="toast-container position-absolute top-0 end-0 p-3">
-<!-- Then put toasts within -->
-<div class="toast" role="alert" id="toast4" aria-live="assertive" aria-atomic="true">
-<div class="toast-header">
-<small class="fa fa-bell"> </small>
-<strong class="me-auto" style="margin-left:8px;"> Finanza</strong>
-<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px">
-</div>
-<div class="toast-body">
-<i class="fa fa-check"></i> Account Deleted Successfully
-</div>
-</div>
-</div>
-</div>
+
+
+
+
+
+
+
+
+
 
 
 <?php include 'header.php'; ?>

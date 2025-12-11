@@ -151,6 +151,7 @@ $loc = $row['Location'];
 $gr = $row['User_Group'];
 $ct = $row['Role_Categorys'];
 $mapped = $row['Mapped'];
+$brss = $row['Branch'];
 }
 ?>
 <!-- Begin page -->

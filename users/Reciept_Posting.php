@@ -15,7 +15,9 @@
 
 <?php include 'head.php'; ?>
 
-
+<?php 
+if($gr == 'Loan_Officers'){
+?>
 <!-- MAIN CONTENT -->
 <div class="main-content">
 <div class="page-content">
@@ -111,5 +113,85 @@ $("#result").html(
 }
 </script>
 
+
+
+<?php 
+}else if ($gr == 'Recovery'){
+?>
+
+
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+<div class="page-content">
+<div class="container-fluid">
+
+<!-- PAGE TITLE -->
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h3 class="mb-sm-0">Receipt Posting</h3>
+<nav aria-label="breadcrumb" class="page-title-right">
+<ol class="breadcrumb border-0">
+<li class="breadcrumb-item">
+<a href="#!">
+<i class="mdi mdi-home-outline fs-18 lh-1"></i>
+<span class="visually-hidden">Posting</span>
+</a>
+</li>
+<li class="breadcrumb-item"><a href="#!">Posting</a></li>
+<li class="breadcrumb-item active" aria-current="page">Receipt Posting</li>
+</ol>
+</nav>
+</div>
+</div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="card">
+<div class="card-body">
+<div id="results"></div>
+</div>
+</div>
+
+</div>
+</div>
+</div> <!-- END MAIN CONTENT -->
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#loader").show();
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "load_recovery_list.php",
+dataType: "html",  
+success:function(data){
+setTimeout(function(){
+$("#loader").hide();
+$('#results').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+});
+</script>
+
+
+
+
+
+
+<?php 
+}else{
+
+}
+?>
 
 <?php include '../footer.php'; ?>

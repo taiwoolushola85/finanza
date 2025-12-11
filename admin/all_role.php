@@ -20,19 +20,41 @@ if ($ct == 'Managements'){
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <input class="form-control" id="exampleInputEmail1"  name="gr" required="required" hidden = "hidden" value = "<?php echo $role_title; ?>">
 <input class="form-control" id="exampleInputEmail1"  name="ct" required="required" hidden = "hidden" value = "<?php echo $ct; ?>">
+<span><i style="color:red">*</i> <b>ACCOUNTING</b> <input type="checkbox" name="ta[]" value="ACCOUNTING" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Financial Report <input type="checkbox" name="na[]" value="Financial_Report">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+General Ledger <input type="checkbox" name="na[]" value="General_Ledger">
+</div>
+</div>
+</div>
+</div>
+<br>
+<span><i style="color:red">*</i> <b>AUDITING</b> <input type="checkbox" name="ta[]" value="AUDITING" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Loan Auditing <input type="checkbox" name="na[]" value="Loan_Auditing">
+</div>
+</div>
+</div>
+</div>
+<br>
 <span><i style="color:red">*</i> <b>BANK</b> <input type="checkbox" name="ta[]" value="BANK" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Account Management <input type="checkbox" name="na[]" value="Account_Management">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Account Statement <input type="checkbox" name="na[]" value="Account Statement">
+Bank List <input type="checkbox" name="na[]" value="Bank_List">
 </div>
 </div>
 </div>
@@ -160,26 +182,23 @@ Saving Portfolio <input type="checkbox" name="na[]" value="Saving_Portfolio">
 </div>
 </div>
 <br>
+<span><i style="color:red">*</i> <b>REPORT</b> <input type="checkbox" name="ta[]" value="REPORT" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Report List <input type="checkbox" name="na[]" value="Report_List">
+</div>
+</div>
+</div>
+</div>
+<br>
 <span><i style="color:red">*</i> <b>MAPPING</b> <input type="checkbox" name="ta[]" value="MAPPING" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
 Users Mapping <input type="checkbox" name="na[]" value="Users_Mapping">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Unmapping Users <input type="checkbox" name="na[]"  value="Unmapping_Users">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Users Switching <input type="checkbox" name="na[]"  value="Users_Switching">
 </div>
 </div>
 </div>
@@ -198,27 +217,6 @@ All Groups <input type="checkbox" name="na[]"  value="All_Groups">
 <br>
 <span><i style="color:red">*</i> <b>TRANSFER</b> <input type="checkbox" name="ta[]" value="TRANSFER" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Clients <input type="checkbox" name="na[]" value="Clients">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Group <input type="checkbox" name="na[]"  value="Group">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Loan Officer <input type="checkbox" name="na[]"  value="Loan_Officers">
-</div>
-</div>
-</div>
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
@@ -372,21 +370,7 @@ Other Request <input type="checkbox" name="na[]" value="Other_Requests">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Zone Mapping <input type="checkbox" name="na[]" value="Zone_Mapping">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Zone Switching <input type="checkbox" name="na[]" value="Zone_Switching">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Zone Table <input type="checkbox" name="na[]" value="Zone_Table">
+Zone List <input type="checkbox" name="na[]" value="Zone_Lists">
 </div>
 </div>
 </div>
@@ -664,17 +648,6 @@ Loan Verification <input type="checkbox" name="na[]" value="Loan_Verification">
 </div>
 </div>
 <br>
-<h6><i style="color:red">*</i> <b>DOCUMENT</b> <input type="checkbox" name="ta[]" value="DOCUMENT"></h6>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Document List <input type="checkbox" name="na[]" value="Document_List">
-</div>
-</div>
-</div>
-</div>
-<br>
 <h6><i style="color:red">*</i> <b>KYC</b> <input type="checkbox" name="ta[]" value="KYC"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
@@ -696,31 +669,6 @@ BVN Validation <input type="checkbox" name="na[]" value="BVN Validation">
 <br>
 <br>
 <legend><h6><b><i class="fa fa-star"></i> RECOVERY OFFICERS ROLE PERMISSION</b></h6></legend><br><br>
-<span><i style="color:red">*</i> <b>LOAN</b> <input type="checkbox" name="ta[]" value="LOAN" style="margin-left:20px" id="tab"></span><br>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Expired Loan <input type="checkbox" name="na[]" value="Expired_Loan">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Loan Book <input type="checkbox" name="na[]" value="Loan_Book">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Loan Monitor <input type="checkbox" name="na[]" value="Loan_Monitor">
-</div>
-</div>
-</div>
-</div>
-<br>
 <span><i style="color:red">*</i> <b>POSTING</b><input type="checkbox" name="ta[]" value="POSTING" style="margin-left:20px"></span><br><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
@@ -734,17 +682,6 @@ Virtual Posting <input type="checkbox" name="na[]" value="Virtual_Posting">
 <div class="card">
 <div class="card-body">
 Reciept Posting <input type="checkbox" name="na[]" value="Reciept_Posting">
-</div>
-</div>
-</div>
-</div>
-<br>
-<h6><i style="color:red">*</i> <b>CUSTOMER</b> <input type="checkbox" name="ta[]" value="CUSTOMER"></h6>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">  
-Customer Data <input type="checkbox" name="na[]" value="Customer_Data">
 </div>
 </div>
 </div>

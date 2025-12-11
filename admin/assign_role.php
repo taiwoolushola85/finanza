@@ -1,6 +1,6 @@
 <!-- TOP RIGHT (original) -->
 <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
-<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display: none;">
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
 <div class="toast-header">
 <small class="fa fa-bell"></small>
 <strong class="me-auto" style="margin-left:8px;">Finanza</strong>
@@ -12,7 +12,6 @@
 </div>
 </div>
 </div>
-
 
 
 <!--  Modal content for the menu -->

@@ -34,6 +34,96 @@ $user = $_SESSION['Username'];
 <link href="../assets/css/mystyle.min.css" rel="stylesheet" type="text/css">
 <!-- my jquery -->
 <script src="../js/jquery-2.2.0.min.js"></script>
+<style>
+
+/* Toast Container */
+.toast{
+    min-width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid #28a745;
+    overflow: hidden;
+}
+
+/* Toast Header */
+.toast-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.toast-header .fa-bell {
+    color: #28a745;
+    font-size: 16px;
+}
+
+.toast-header strong {
+    color: #333;
+    font-size: 14px;
+}
+
+.toast-header .btn-close {
+    padding: 0;
+    margin-left: auto;
+}
+
+/* Toast Body */
+.toast-body {
+    padding: 16px;
+    background-color: #d4edda;
+    color: #155724;
+    font-size: 14px;
+    border-top: 1px solid #c3e6cb;
+}
+
+.toast-body .fa-check {
+    color: #28a745;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Animation */
+.toast.show {
+    display: block !important;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast.hide {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Hover Effect */
+.toast:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+</style>
 </head>
 <body>
 <!-- logout function start-->
