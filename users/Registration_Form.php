@@ -50,8 +50,7 @@
 
 
 
-<div class="card">
-<div class="card-body">
+
 <div class="container">
 <div id="first">
 
@@ -295,9 +294,10 @@ $name= $rows['Name'];
 
 
 
+<br>
+<br>
+<br>
 
-</div>
-</div>
 
 
 

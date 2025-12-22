@@ -10,7 +10,6 @@ mysqli_close($con);
 ?></b>
 <br><br>
 </small>
-<div style="overflow-y:auto; height:330px">
 
 <?php 
 header("Access-Control-Allow-Headers: Content-Type");
@@ -34,7 +33,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-responsive">
+<div id="table-container" style="overflow-y:auto; height:330px">
 <table>
 <thead>
 <tr>
@@ -72,7 +71,6 @@ foreach($json as $member){
 </table>
 </div>
 </div>
-</div> 
 
 
 

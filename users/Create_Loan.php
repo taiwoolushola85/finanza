@@ -59,9 +59,10 @@
 </div>
 <!-- end page title -->
 
+<br>
+<br>
+<br>
 
-<div class="card">
-<div class="card-body">
 <div class="row">
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div class="" style="float:right; width:320px">
@@ -73,11 +74,7 @@
 </div>
 </form>
 </div>
-</div>
-</div>
 
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
@@ -101,8 +98,7 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
+
 
 
 

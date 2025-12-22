@@ -1,6 +1,6 @@
 <?php
 include '../config/db.php';
-$r_id = $_POST['id']; // user id
+$savid = $_POST['id']; // 
 $sav = $_POST['sav']; // savings account no
 $amt = $_POST['amt']; //  amount to withdraw
 $acct = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['acct']);// client active loan no for the reciever
@@ -33,7 +33,7 @@ $prt_id = $row['Product_id'];
 $tem_id = $row['Team_id'];
 
 /// details of the savings account holder [sender]
-$result = mysqli_query($con, "SELECT * FROM repayments WHERE Loan_Account_No = '$loan'");
+$result = mysqli_query($con, "SELECT * FROM savings WHERE id = '$savid'");
 $row= mysqli_fetch_array($result);
 $id = $row['id'];
 $reg_id = $row['Reg_id'];
@@ -45,7 +45,7 @@ $md = $row['Middlename'];
 $ln = $row['Lastname'];
 $un = $row['Unions'];
 $un_id = $row['Union_id'];
-$la = $row['Total_Loan'];
+$la = $row['Loan_Amount'];
 $us = $row['User'];
 $us_id = $row['User_id'];
 $tm = $row['Team_Leader'];
@@ -66,7 +66,7 @@ echo 9;
 exit();
 }
 // if loan acct entered is invalid
-$Query = "SELECT * FROM repayments WHERE Loan_Account_No = '$acct'";
+$Query = "SELECT * FROM repayments WHERE Loan_Account_No = '$acct' AND Status = 'Active'";
 $result = mysqli_query($con, $Query);
 $invalid = mysqli_num_rows($result);
 if($invalid == 0){

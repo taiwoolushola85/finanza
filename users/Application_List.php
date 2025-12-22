@@ -93,12 +93,13 @@
 </div>
 </div>
 <!-- end page title -->
+<br>
+<br>
+<br>
 
 <?php 
 if($gr == 'Loan Officers'){
 ?>
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
@@ -122,8 +123,6 @@ if($gr == 'Loan Officers'){
 <br>
 <div id="result"></div>
 
-</div>
-</div>
 
 
 <?php 
@@ -162,8 +161,6 @@ if($gr == 'Loan Officers'){
 </div>
 </div>
 
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
@@ -187,8 +184,6 @@ if($gr == 'Loan Officers'){
 <br>
 <div id="results"></div>
 
-</div>
-</div>
 
 
 

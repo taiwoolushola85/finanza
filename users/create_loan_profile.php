@@ -62,7 +62,25 @@ $name= $rows['Product_Name'];// product
 <div class="row">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Bank Name</label>
-<input type="text" class="form-control form-control-md" placeholder="Bank Name" name="bn" required="required">
+<select type="text" class="form-control form-control-md" name="bn" required="required">
+<option value="">Select Bank</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Bank_Name FROM bank ORDER BY Bank_Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$pp= $rows['id']; // product id
+$name= $rows['Bank_Name'];// product
+?>
+<option value="<?php echo $name; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Account No</label>

@@ -16,7 +16,7 @@
 <?php include 'head.php'; ?>
 
 <?php 
-if($gr == 'Loan_Officers'){
+if($gr == 'Loan Officers'){
 ?>
 <!-- MAIN CONTENT -->
 <div class="main-content">
@@ -74,8 +74,6 @@ mysqli_stmt_close($stmt);
 </div>
 </div>
 
-<div class="card">
-<div class="card-body">
 
 <p id="not">
 <i class="fa fa-bell" style="color:red;"></i> Note: Please select the group you want to post repayment for.
@@ -83,8 +81,6 @@ mysqli_stmt_close($stmt);
 
 <div id="result"></div>
 
-</div>
-</div>
 
 </div>
 </div>

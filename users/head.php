@@ -32,9 +32,32 @@ $user = $_SESSION['Username'];
 <link href="../assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
 <!-- my css -->
 <link href="../assets/css/mystyle.min.css" rel="stylesheet" type="text/css">
+<!-- Include SheetJS library from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- my jquery -->
 <script src="../js/jquery-2.2.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
+
+input:valid {
+  border-color: hsl(120, 76%, 50%);
+}
+input:invalid {
+  border-color: red;
+}
+select:valid {
+  border-color: hsl(120, 76%, 50%);
+}
+select:invalid {
+  border-color: red;
+}
+textarea:valid {
+  border-color: hsl(120, 76%, 50%);
+}
+textarea:invalid {
+  border-color: red;
+}
 
 /* Toast Container */
 .toast{
@@ -121,6 +144,8 @@ $user = $_SESSION['Username'];
 .toast:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
+
+
 </style>
 </head>
 <body>

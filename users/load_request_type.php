@@ -51,8 +51,6 @@ echo $total1 + $total2;
 
 <br>
 <br>
-<div class="card">
-<div class="card-body">
 <?php
 //
 if($types == "Withdraw"){
@@ -212,8 +210,7 @@ foreach($json as $member){
 echo "<i style='color:red'>No request selected from the option provided</i>"; 
 }
 ?>
-</div>
-</div>
+
 
 
 

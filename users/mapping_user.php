@@ -57,7 +57,7 @@ mysqli_close($con);
 Total Record: <?php echo $total; ?>
 </small>
 <br><br>
-<div id="table-container" style="height:330px;">
+<div id="table-container" style="height:380px;">
 <table>
 <thead>
 <tr>

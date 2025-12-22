@@ -46,7 +46,7 @@
 </div>
 </div>
 <h6 class="mb-1">ACTIVE CUSTOMER</h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -56,7 +56,7 @@ $rows = mysqli_fetch_array($result);
 $total = $rows[0];
 echo $total;
 ?>
-</h6>
+</h5>
                    
         
 </div>
@@ -76,7 +76,7 @@ echo $total;
 </div>
 </div>
 <h6 class="mb-1">LOAN PORTFOLIO </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -86,7 +86,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -105,7 +105,7 @@ echo number_format($total,2);
 </div>
 </div>
 <h6 class="mb-1">LOAN OUTSTANDING </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -115,7 +115,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -137,7 +137,7 @@ echo number_format($total,2);
 </div>
 </div>
 <h6 class="mb-1">EXPIRED LOAN </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -147,7 +147,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -166,7 +166,7 @@ echo number_format($total,2);
 </div>
 </div>
 <h6 class="mb-1">EXPRESS SAVING </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -175,7 +175,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -193,7 +193,7 @@ echo number_format($total,2);
 </div>
 </div>
 <h6 class="mb-1">FLEXI SAVING </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -204,7 +204,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -225,7 +225,7 @@ echo number_format($total,2);
 </div>
 </div>
 <h6 class="mb-1">MONTHLY DISBURSEMENT </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -236,7 +236,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -250,11 +250,11 @@ echo number_format($total,2);
 <i class="fa fa-wallet avatar avatar-sm avatar-label mb-6"></i>
 </div>
 <div class="col-3">
-<span class="badge badge-label-primary float-end">Earned Income</span>
+<span class="badge badge-label-primary float-end">Disbursement Target</span>
 </div>
 </div>
-<h6 class="mb-1">EARNED INCOME MONTHLY</h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h6 class="mb-1">OVERALL TARGET</h6>
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -265,7 +265,7 @@ $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -279,11 +279,11 @@ echo number_format($total,2);
 <i class="fa fa-wallet avatar avatar-sm avatar-label mb-6"></i>
 </div>
 <div class="col-3">
-<span class="badge badge-label-primary float-end">Other Income</span>
+<span class="badge badge-label-primary float-end">Disbursement Achieve</span>
 </div>
 </div>
-<h6 class="mb-1">OTHER INCOME MONTHLY </h6>
-<h6 class="text mb-5" style="margin-top:10px;">Total: 
+<h6 class="mb-1">TARGET ACHIEVE </h6>
+<h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -307,7 +307,7 @@ $total1 = $row[0];
 
 echo number_format($totalm + $totalup + $totalman + $total1,2);
 ?>
-</h6>
+</h5>
 
 </div>
 </div>
@@ -496,7 +496,7 @@ echo number_format($total,2);
 <i class="fa fa-file"></i>
 </div>
 </div>
-<h5 class="mb-2 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:30px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -507,7 +507,7 @@ $total = $row[0];
 echo $total;
 ?>
 </h5>
-<p class="text-muted mb-0" style="margin-left:15px;">Pending Loan</p>
+<p class="text-muted mb-0" style="margin-left:5px;">Pending Loan</p>
 </div>
 
 <div class="col-4">
@@ -521,7 +521,7 @@ echo $total;
 <i class="fa fa-folder"></i>
 </div>
 </div>
-<h5 class="mb-2 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:30px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -547,7 +547,7 @@ echo $total;
 <i class="fa fa-wallet"></i>
 </div>
 </div>
-<h5 class="mb-2 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:30px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');

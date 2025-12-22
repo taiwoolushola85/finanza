@@ -1,4 +1,34 @@
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toast" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
+<div class="toast-header">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Loan successfully closed
+</div>
+</div>
+</div>
 
+
+
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toasts" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
+<div class="toast-header">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Loan successfully reversed
+</div>
+</div>
+</div>
 
 <?php include 'head.php'; ?>
 
@@ -12,7 +42,7 @@
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Auditing</h3>
+<h3 class="mb-sm-0">Loan Auditing</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">
@@ -59,20 +89,60 @@ $name= $rows['Branches'];
 </select>
 </div>
 </div><br>
-<div class="card">
-<div class="card-body">
 <br>
 <div id="result"></div>
+
+
+
+
+
+
+<!-- reciept Modal -->
+<div class="modal" id="updateReciept" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="width:300px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h6 class="modal-title" id="exampleModalLabel">RECIEPT GALLERY</h6>
+</div>
+<div class="modal-body">
+<center>
+<img src="" alt="" id="recip" style="height:400px" width="400px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" id="bck" class="btn btn-light btn-sm">Back</button>
 </div>
 </div>
+</div>
+</div>
+</div>
+<!--end modal-->
 
 
-
-
-
-
-
-
+<script type="text/javascript">
+function myStatus()  {
+$("#please").show();
+$("#result").hide();
+var br = document.getElementById("br").value;
+// ajax function start here
+$.ajax({
+method: "GET",
+url: "check_close_loan.php?br=" + br,
+dataType: "html",  
+data: {
+'br': br
+},
+success:function(data){
+setTimeout(function(){
+$("#please").hide();
+$("#result").show();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
 
 
 

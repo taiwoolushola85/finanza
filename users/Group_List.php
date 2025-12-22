@@ -56,33 +56,30 @@
 <div class="page-content">
 <div class="container-fluid">
 <!-- start page title -->
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Loan Review</h3>
+<h3 class="mb-sm-0">Group</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">
 <a href="#!">
 <i class="mdi mdi-home-outline fs-18 lh-1"></i>
-<span class="visually-hidden">Home</span>
+<span class="visually-hidden">Group</span>
 </a>
 </li>
-<li class="breadcrumb-item"><a href="#!">Home</a></li>
-<li class="breadcrumb-item active" aria-current="page">Loan Review</li>
+<li class="breadcrumb-item"><a href="#!">Group</a></li>
+<li class="breadcrumb-item active" aria-current="page">Group List</li>
 </ol>
 </nav>
 </div>
 </div>
 </div>
-</div>
-</div>
 <!-- end page title -->
-
-<div class="card">
-<div class="card-body">
+<br>
+<br>
+<br>
+<br>
 <div class="row">
 <div class="col-sm-2">
 
@@ -106,8 +103,7 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
+
 
 
 
@@ -115,7 +111,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal-dialog modal-dialog-centered modal-sm" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">GROUP PROFILE</h5>

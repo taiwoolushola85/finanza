@@ -69,7 +69,7 @@ if($amt <= $bl){
 </form>
 </div>
 </center>
-<div class="row" style="font-size:10px">
+<div class="row" style="font-size:12px">
 <div class="col-12 col-sm-12 col-md-6">
 <div class="card">
 <div class="card-body">

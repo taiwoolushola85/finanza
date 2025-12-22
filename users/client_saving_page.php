@@ -58,7 +58,7 @@ $up = $reg['Upfront'];
 
 <div class="row">
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Balance:</b> <span id="mydivs"><?php echo number_format($row['Balance'],2); ?></span></span>
+<span style="margin-left:8px;"><b>Balance:</b> <span id="mydivs"><?php echo number_format($saving_bal,2); ?></span></span>
 </div>
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Phone:</b> <?php echo $row['Phone']; ?></span>
@@ -197,7 +197,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Savings) AS overs FROM save WHERE Saving_Account = '$sv' AND Status = 'Paid' AND User = '$User' ";
+$sql = "SELECT SUM(Savings) AS overs FROM save WHERE Saving_Account = '$sv' AND Status = 'Paid' ";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -226,7 +226,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM save WHERE Saving_Account = '$sv' AND Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM save WHERE Saving_Account = '$sv' AND Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -272,7 +272,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Amount_Withdraw) AS overs FROM withdraw WHERE Saving_Account_No = '$sv' AND Status = 'Paid' AND User = '$User' ";
+$sql = "SELECT SUM(Amount_Withdraw) AS overs FROM withdraw WHERE Saving_Account_No = '$sv' AND Status = 'Paid'  ";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -300,7 +300,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM withdraw  WHERE Saving_Account_No = '$sv' AND  Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM withdraw  WHERE Saving_Account_No = '$sv' AND  Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -345,7 +345,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Amount) AS overs FROM saving_rep WHERE Saving_Account_No = '$sv' AND Status = 'Paid' AND User = '$User'";
+$sql = "SELECT SUM(Amount) AS overs FROM saving_rep WHERE Saving_Account_No = '$sv' AND Status = 'Paid' ";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -374,7 +374,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM saving_rep  WHERE Saving_Account_No = '$sv' AND Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM saving_rep  WHERE Saving_Account_No = '$sv' AND Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -419,7 +419,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Amount) AS overs FROM transfers WHERE Saving_Account_No = '$sv' AND Status = 'Paid' AND User = '$User'";
+$sql = "SELECT SUM(Amount) AS overs FROM transfers WHERE Saving_Account_No = '$sv' AND Status = 'Paid'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -448,7 +448,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM transfers WHERE Saving_Account_No = '$sv' AND Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM transfers WHERE Saving_Account_No = '$sv' AND Status ='Paid'  ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -493,7 +493,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Amount) AS overs FROM credit WHERE Reciever_Account = '$sv' AND Status = 'Paid' AND User = '$User'";
+$sql = "SELECT SUM(Amount) AS overs FROM credit WHERE Reciever_Account = '$sv' AND Status = 'Paid' ";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -522,7 +522,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM credit WHERE Reciever_Account = '$sv' AND Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM credit WHERE Reciever_Account = '$sv' AND Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -568,7 +568,7 @@ Total:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Amount) AS overs FROM saving_upfront WHERE Saving_Account_No = '$sv' AND Status = 'Paid' AND User = '$User'";
+$sql = "SELECT SUM(Amount) AS overs FROM saving_upfront WHERE Saving_Account_No = '$sv' AND Status = 'Paid'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -596,7 +596,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM saving_upfront WHERE Saving_Account_No = '$sv' AND  Status ='Paid' AND User = '$User' ORDER BY id ASC";
+$Query = "SELECT * FROM saving_upfront WHERE Saving_Account_No = '$sv' AND  Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -662,15 +662,51 @@ echo"<span style='margin-left:10px'> No Record Found  </small> ";
 <span><b>Savings Withdraw Form</b></span><hr>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-3">
 <input type="text" name="id" class="form-control" hidden value="<?php echo $id;?>" required="required">
 <input type="text" name="ln" class="form-control" hidden value="<?php echo $loan;?>" required="required">
-<input type="text" class="form-control" hidden placeholder="Amount" name="sav" value="<?php echo $sv;?>" required="required">
 <input type="text" class="form-control" hidden placeholder="Amount" name="bl" value="<?php echo $saving_bal;?>" required="required">
 <label>Amount</label><br>
 <input type="number" class="form-control" placeholder="Amount" name="am"  required="required">
 </div>
-</div><br>
+<div class="col-sm-3">
+<label>Bank</label><br>
+<select type="text" class="form-control form-control-md" name="bnk" required="required">
+<option value="">Select Bank</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Bank_Name FROM bank ORDER BY Bank_Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$pp= $rows['id']; // product id
+$name= $rows['Bank_Name'];// product
+?>
+<option value="<?php echo $name; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
+<div class="col-sm-3">
+<label>Acoount No</label><br>
+<input type="number" class="form-control" placeholder="Account No" name="acct"  required="required">
+</div>
+<div class="col-sm-3">
+<label>Acoount Name</label><br>
+<input type="text" class="form-control" placeholder="Account Name" name="actname"  required="required">
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<label>Reason For Withdrawal</label><br>
+<textarea class="form-control" placeholder="State reason for withdrawal" name="reason" required="required"></textarea>
+</div>
+</div>
+<br>
 <?php 
 if($status == 'Active'){
 ?>
@@ -758,7 +794,7 @@ x.style.display = 'none';
 
 <script type="text/javascript">
 $(document).ready(function(){
-setInterval(function(){
+setTimeout(function () {
 // ajax function start here to load table data
 $.ajax({
 method: "GET",
@@ -766,10 +802,9 @@ url: "gens.php?id=<?php echo $id; ?>",
 dataType: "html",
 success:function(data){
 $("#mydivs").load("client_saving_page.php?id=<?php echo $id; ?>" + " #mydivs");
-//$("#mydiv").html(data);
 }
 });
-}, 1000);
+}, 100);
 // ajax function ends here
 });
 </script>
@@ -820,7 +855,7 @@ $("#please").hide();
 alert(" 🚫  Sql error found");
 }else{
 $("#please").hide();
-alert("🚫  Error found" + data);
+alert("🚫" + data);
 $("#updateModal").modal('show');
 }
 },

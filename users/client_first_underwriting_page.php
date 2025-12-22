@@ -21,7 +21,6 @@ $id = $rows['id'];
 <button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
 <button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-briefcase"></i> Business Image</button>
 <button class="btn btn-light" onclick="updateLoan()"><i class="fa fa-plus"></i> Update Loan Amount</button>
-<button class="btn btn-light" onclick="updateCrc()"><i class="fa fa-file"></i> Customer CRC Data </button>
 <button class="btn btn-light" onclick="updateUpfront()"><i class="fa fa-money-bill"></i> Upfront Payment </button>
 <button class="btn btn-light" onclick="updateRemark()"><i class="fa fa-comment"></i> Remark & Approval</button>
 </div>

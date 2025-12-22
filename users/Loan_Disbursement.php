@@ -75,16 +75,15 @@
 <!-- end page title -->
 
 
+<br>
+<br>
 
 
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
 </div>
 </div>
-<br>
 <div class="row">
 <div class="col-sm-10" style="margin-top: 10px;">
 <label>Show Entries</label>
@@ -102,8 +101,7 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
+
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">

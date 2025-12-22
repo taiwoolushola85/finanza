@@ -28,7 +28,7 @@
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Transfer</h3>
+<h3 class="mb-sm-0">Portfolio Transfer</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">
@@ -38,7 +38,7 @@
 </a>
 </li>
 <li class="breadcrumb-item"><a href="#!">Portfolio</a></li>
-<li class="breadcrumb-item active" aria-current="page">Portfolio</li>
+<li class="breadcrumb-item active" aria-current="page">Portfolio Transfer</li>
 </ol>
 </nav>
 </div>
@@ -49,8 +49,6 @@
 
 
 <br><br>
-<div class="card" style="margin:auto">
-<div class="card-body">
 <h6>Portfolio Transfer Form</h6><hr>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadPort">
 <div class="row">
@@ -114,8 +112,7 @@ $uz= $rows['id'];
 </div>
 </div>
 
-</div>
-</div>
+
 </section>
 
 

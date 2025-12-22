@@ -174,9 +174,11 @@ case IMAGETYPE_GIF:
 imagegif($destination, $path);
 break;
 }
+/*
 // Free memory
 imagedestroy($source);
 imagedestroy($destination);
+*/
 } else {
 echo json_encode(['status' => 'error', 'code' => 22, 'message' => 'Receipt image is required']);
 exit();

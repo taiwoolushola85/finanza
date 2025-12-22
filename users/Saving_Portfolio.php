@@ -14,6 +14,22 @@
 </div>
 
 
+<!-- TOP RIGHT (original) -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+<div class="toast" role="alert" id="toasts" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" style="display:none;">
+<div class="toast-header">
+<small class="fa fa-bell"></small>
+<strong class="me-auto" style="margin-left:8px;">Finanza</strong>
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+<i class="fa fa-check"></i> Account Successfully Merged
+</div>
+</div>
+</div>
+
+
 <?php include 'head.php'; ?>
 
 <!-- ============================================================== -->
@@ -49,17 +65,21 @@
 if($gr == "Loan Officers"){
 ?>
 
+<br>
+<div class="col-sm-2">
+<select class="form-control form-control-sm" id="types" oninput="savingType()">
+<option value="Express">Express Saving</option>
+<option value="Flexi">Flexi Saving</option>
+</select>
+</div>
+<br>
+<br>
 
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
 </div>
 </div>
-<br><br>
-<b><i class="fa fa-table"></i> Saving Portfolio Table List</b>
-<br><br>
 <div class="row">
 <div class="col-sm-10" style="margin-top: 10px;">
 <label>Show Entries</label>
@@ -77,13 +97,11 @@ if($gr == "Loan Officers"){
 <br>
 <div id="result"></div>
 
-</div>
-</div>
 
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -125,13 +143,15 @@ function getEntry()  {
 $("#loader").show();
 $("result").hide();
 var maxRows = document.getElementById("maxRows").value;
+var types = document.getElementById("types").value;
 // ajax function start here
 $.ajax({
 method: "POST",
 url: "load_saving_list.php",
 dataType: "html",  
 data: {
-'maxRows': maxRows
+'maxRows': maxRows,
+'types': types
 },
 success:function(data){
 $("result").show();
@@ -151,13 +171,15 @@ $('#result').html(data);
 $(document).ready(function(){
 $("#search").keydown(function(){
 var search = document.getElementById("search").value;
+var types = document.getElementById("types").value;
 // ajax function start here
 $.ajax({
 method: "POST",
 url: "load_saving_list.php",
 dataType: "html",  
 data: {
-'search': search
+'search': search,
+'types': types
 },
 success:function(data){
 $('#result').html(data);
@@ -169,6 +191,30 @@ $('#result').html(data);
 </script>
 
 
+<script type="text/javascript">
+function savingType()  {
+$("#loader").show();
+$("results").hide();
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "load_saving_list.php",
+dataType: "html",  
+data: {
+'types': types
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
 
 
 <script type="text/javascript">
@@ -193,17 +239,20 @@ $('#result').html(data);
 ?>
 
 
-
-<div class="card">
-<div class="card-body">
+<br>
+<div class="col-sm-2">
+<select class="form-control form-control-sm" id="types" oninput="savingType()">
+<option value="Express">Express Saving</option>
+<option value="Flexi">Flexi Saving</option>
+</select>
+</div>
+<br>
+<br>
 <div class="row">
 <div class="col-sm-2">
 
 </div>
 </div>
-<br><br>
-<b><i class="fa fa-table"></i> Saving Portfolio Table List</b>
-<br><br>
 <div class="row">
 <div class="col-sm-10" style="margin-top: 10px;">
 <label>Show Entries</label>
@@ -221,13 +270,12 @@ $('#result').html(data);
 <br>
 <div id="results"></div>
 
-</div>
-</div>
+
 
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -269,13 +317,15 @@ function getEntry()  {
 $("#loader").show();
 $("results").hide();
 var maxRows = document.getElementById("maxRows").value;
+var types = document.getElementById("types").value;
 // ajax function start here
 $.ajax({
 method: "POST",
 url: "team_saving_list.php",
 dataType: "html",  
 data: {
-'maxRows': maxRows
+'maxRows': maxRows,
+'types': types
 },
 success:function(data){
 $("result").show();
@@ -295,13 +345,15 @@ $('#results').html(data);
 $(document).ready(function(){
 $("#search").keydown(function(){
 var search = document.getElementById("search").value;
+var types = document.getElementById("types").value;
 // ajax function start here
 $.ajax({
 method: "POST",
 url: "team_saving_list.php",
 dataType: "html",  
 data: {
-'search': search
+'search': search,
+'types': types
 },
 success:function(data){
 $('#results').html(data);
@@ -313,6 +365,31 @@ $('#results').html(data);
 </script>
 
 
+
+<script type="text/javascript">
+function savingType()  {
+$("#loader").show();
+$("results").hide();
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "team_saving_list.php",
+dataType: "html",  
+data: {
+'types': types
+},
+success:function(data){
+$("results").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#results').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
 
 
 <script type="text/javascript">
@@ -336,6 +413,176 @@ $('#results').html(data);
 }else{
 ?>
 
+
+
+<br>
+<div class="col-sm-2">
+<select class="form-control form-control-sm" id="types" oninput="savingType()">
+<option value="Express">Express Saving</option>
+<option value="Flexi">Flexi Saving</option>
+</select>
+</div>
+<br>
+<br>
+<div class="row">
+<div class="col-sm-2">
+
+</div>
+</div>
+<div class="row">
+<div class="col-sm-10" style="margin-top: 10px;">
+<label>Show Entries</label>
+<select class="form-control form-control-sm" id="maxRows" style="width:50px;" oninput="getEntry()">
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select>
+</div>
+<div class="col-sm-2" style="margin-top: 10px;">
+<input type="search" class="form-control form-control-sm"  id="search" placeholder="search..." style="margin-top:10px">
+</div>
+</div>
+<br>
+<div id="results"></div>
+
+
+
+
+
+<div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
+</div>
+<div class="modal-body">
+<div id="profile"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#loader").show();
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "select_saving_type.php",
+dataType: "html",  
+success:function(data){
+setTimeout(function(){
+$("#loader").hide();
+$('#results').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+});
+</script>
+
+
+<script type="text/javascript">
+function getEntry()  {
+$("#loader").show();
+$("results").hide();
+var maxRows = document.getElementById("maxRows").value;
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "select_saving_type.php",
+dataType: "html",  
+data: {
+'maxRows': maxRows,
+'types': types
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#results').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#search").keydown(function(){
+var search = document.getElementById("search").value;
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "select_saving_type.php",
+dataType: "html",  
+data: {
+'search': search,
+'types': types
+
+},
+success:function(data){
+$('#results').html(data);
+}
+});
+// ajax function ends here
+});
+});
+</script>
+
+
+
+<script type="text/javascript">
+function savingType()  {
+$("#loader").show();
+$("results").hide();
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "select_saving_type.php",
+dataType: "html",  
+data: {
+'types': types
+},
+success:function(data){
+$("results").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#results').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+<script type="text/javascript">
+function loads()  {
+$.ajax({
+method: "POST",
+url: "select_saving_type.php",
+dataType: "html",
+success:function(data){
+setTimeout(function(){
+$('#results').html(data);
+}, 1000);
+}
+});
+}
+</script> 
 
 
 <?php 

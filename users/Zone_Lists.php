@@ -43,7 +43,7 @@
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Zone</h3>
+<h3 class="mb-sm-0">Zone Lists</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">
@@ -71,8 +71,8 @@
 <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#updateModals"><i class="fa fa-history"></i> Switch Zone</button>
 </div>
 <br><br>
-<div class="card">
-<div class="card-body">
+<br>
+
 <b><i class="fa fa-list"></i> Zone Branch List</b>
 <div class="row">
 <div class="col-sm-10" style="margin-top:10px">
@@ -99,8 +99,7 @@ Search</b>
 <br>
 <div id="result"></div>
 </div>
-</div>
-</div>
+
 
 
 

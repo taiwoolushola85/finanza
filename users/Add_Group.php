@@ -43,8 +43,7 @@
 </div>
 <!-- end page title -->
 
-<div class="card border-0 mb-3 overflow-hidden bg-gray-800">
-<div class="card-body">
+
 
 <b>Create Group </b>
 <hr>
@@ -87,16 +86,11 @@ if($mapped != 'No'){
 ?>
 </div>
 </div>
-</div>
-</div>
 
 
 
-<div class="card border-0 mb-3 overflow-hidden bg-gray-800">
-<div class="card-body">
+
 <div id="not"></div>
-</div>
-</div>
 
 
 

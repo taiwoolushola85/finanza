@@ -19,10 +19,10 @@ $params = [];
 $types = '';
 
 if (!empty($search)) {
-$searchCondition = " WHERE Name LIKE ? OR Staff_ID LIKE ?";
+$searchCondition = " WHERE Name LIKE ? OR Staff_ID LIKE ? OR Branch LIKE ? OR User_Group LIKE ?";
 $searchParam = "%{$search}%";
-$params = [$searchParam, $searchParam];
-$types = 'ss';
+$params = [$searchParam, $searchParam, $searchParam, $searchParam];
+$types = 'ssss';
 }
 
 // Get total count

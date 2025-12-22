@@ -52,7 +52,7 @@
 <span class="visually-hidden">Home</span>
 </a>
 </li>
-<li class="breadcrumb-item"><a href="#!">Home</a></li>
+<li class="breadcrumb-item"><a href="#!">Directory</a></li>
 <li class="breadcrumb-item active" aria-current="page">Staff Directory</li>
 </ol>
 </nav>
@@ -77,8 +77,6 @@
 </div>
 
 <br>
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-sm-2">
 
@@ -102,8 +100,7 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
+
 
 
 
@@ -111,7 +108,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:700px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h6 class="modal-title" id="exampleModalLabel">ACCOUNT INFO</h6>
@@ -130,7 +127,7 @@
 
 <!-- Top modal content -->
 <div id="addstaff" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered" style="display:none; width:700px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h4 class="modal-title" id="topModalLabel">Staff Onboarding Form</h4>

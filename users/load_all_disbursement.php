@@ -41,7 +41,7 @@ foreach ($results as $member):
 <strong class="text-body">Disbursement:</strong>
 <a href="#!" class="text-body fw-medium">
 <?= htmlspecialchars($member['Firstname'] . " " . $member['Middlename']) ?><br>
-</a>has been successfully recieved [ <?= number_format($member['Loan_Amount'], 2) ?> ]<br>
+</a>has successfully recieved [ <?= number_format($member['Loan_Amount'], 2) ?> ]<br>
 <span class="badge badge-label-info"><?= htmlspecialchars($member['Status']) ?></span><br>
 <span class="rich-list-subtitle mb-2">
 <?= htmlspecialchars($member['Date_Disbursed']) ?> · 

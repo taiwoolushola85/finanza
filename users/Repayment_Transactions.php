@@ -143,11 +143,9 @@ echo number_format($total1 + $total2,2);
 
      
 
-<div class="card">
-<div class="card-body">
+
 <div id="list"></div>
-</div>
-</div>
+
 
 
 

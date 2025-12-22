@@ -139,12 +139,12 @@ Loan Disbursement <input type="checkbox" name="na[]" value="Loan_Disbursement">
 </div>
 </div>
 <br>
-<span><i style="color:red">*</i> <b>DATABASE</b> <input type="checkbox" name="ta[]" value="DATABASE" style="margin-left:20px" id="tab"></span><br>
+<span><i style="color:red">*</i> <b>MANAGER</b> <input type="checkbox" name="ta[]" value="MANAGER" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Manage Record <input type="checkbox" name="na[]" value="Manage_Record">
+Client Manager <input type="checkbox" name="na[]" value="Client_Manager">
 </div>
 </div>
 </div>
@@ -158,7 +158,7 @@ Loan Manager <input type="checkbox" name="na[]" value="Loan_Manager">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Account Manager <input type="checkbox" name="na[]" value="Account_Manager">
+Saving Manager <input type="checkbox" name="na[]" value="Saving_Manager">
 </div>
 </div>
 </div>
@@ -233,7 +233,18 @@ Portfolio <input type="checkbox" name="na[]"  value="Portfolio">
 </div>
 </div>
 <br>
-<span><i style="color:red">*</i> <b>LOAN</b> <input type="checkbox" name="ta[]" value="LOANS" style="margin-left:20px" id="tab"></span><br>
+<span><i style="color:red">*</i> <b>TRANSACTION</b> <input type="checkbox" name="ta[]" value="TRANSACTION" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Transaction Monitor <input type="checkbox" name="na[]"  value="Transaction_Monitor">
+</div>
+</div>
+</div>
+</div>
+<br>
+<span><i style="color:red">*</i> <b>LOAN</b> <input type="checkbox" name="ta[]" value="LOAN" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
@@ -313,14 +324,28 @@ Document List <input type="checkbox" name="na[]" value="Document_List">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-CRC Checker <input type="checkbox" name="na[]" value="CRC_Check">
+Account Verification <input type="checkbox" name="na[]" value="Account_Verification">
 </div>
 </div>
 </div>
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-BVN Validation <input type="checkbox" name="na[]" value="BVN Validation">
+CRC Verification <input type="checkbox" name="na[]" value="CRC_Verification">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+BVN Verification <input type="checkbox" name="na[]" value="BVN_Verification">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+NIN Verification <input type="checkbox" name="na[]" value="NIN_Verification">
 </div>
 </div>
 </div>
@@ -331,35 +356,7 @@ BVN Validation <input type="checkbox" name="na[]" value="BVN Validation">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Blacklist Request <input type="checkbox" name="na[]" value="Blacklist_Requests">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Savings Request <input type="checkbox" name="na[]" value="Savings_Request">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Withdrawal List <input type="checkbox" name="na[]" value="Withdrawal_List">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Manage Request <input type="checkbox" name="na[]" value="Manage_Request">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Other Request <input type="checkbox" name="na[]" value="Other_Requests">
+Request Manager <input type="checkbox" name="na[]" value="Request_Manager">
 </div>
 </div>
 </div>

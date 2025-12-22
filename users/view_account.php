@@ -7,112 +7,85 @@ $Query = "SELECT * FROM users WHERE id = '$id' ORDER BY id ASC LIMIT 1";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $id = $row['id'];
+$users = $row['Username'];
 ?>
-
-
 <div id="info" style="display:block;">
+<hr>
+
+<div class="row">
+<div class="col-sm-4">
 <center>
-<img src="<?php echo $row['Location']; ?>" alt="" id="output" class="rounded-circle" width="150" height="150px">
+<img src="<?php echo $row['Location']; ?>" alt="" id="output" class="rounded-circle" width="200" height="200px">
 </center>
 <br>
-<div class="row">
-<div class="col-sm-12" style="font-size:10px;">
-<div class="row">
+</div>
 <div class="col-sm-8">
-Account Status: 
-[ <b><?php 
-if($row['Status'] == 'Activate'){
-echo "<i style='color:green'>".$row['Status']. "</i>";
-}else{
-echo "<i style='color:red'>".$row['Status']. "</i>";
-}
+<div class="row">
+<div class="col-8">
+<b><i class="fa fa-star"></i> PROFILE INFO</b>
+</div>
+<div class="col-4">
+<a onclick="myInfo()" class="btn btn-primary btn-sm w-100"><i class="fa fa-edit"></i>Update Info</a>
+</div>
+</div>
 
-?></b> ]
-</div>
-<div class="col-sm-2">
-User ID: <?php echo $row['id']; ?>
-</div>
-<div class="col-sm-2">
-<button  class="btn btn-outline-info btn-sm" onclick="myInfo()"  style="font-size: 9px;" id="showinfo"><i class="fa fa-edit"></i> Update Info</button>
-</div>
-</div>
+<div class="card border-primary border border-dashed" style="margin-top: 10px;">
 <br>
 <div class="row">
 <div class="col-sm-6">
-<div class="card">
-<div class="card-body">
-<br>
-<b><i class="fa fa-star"></i> PROFILE INFO</b><br><br>
+<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Name']; ?></span>
+</div>
+<div class="col-sm-6">
+<span style="margin-left:8px;"><b>Email:</b> <?php echo $row['Email']; ?></span>
+</div>
+</div>
+
 <div class="row">
 <div class="col-sm-6">
-<span><b>Name:</b> <?php echo $row['Name']; ?></span>
+<span style="margin-left:8px;"><b>Phone:</b> <?php echo $row['Phone']; ?></span>
 </div>
 <div class="col-sm-6">
-<span><b>Email:</b> <?php echo $row['Email']; ?></span>
+<span style="margin-left:8px;"><b>Role:</b> <?php echo $row['User_Group']; ?></span>
 </div>
 </div>
+
 <div class="row">
 <div class="col-sm-6">
-<span><b>Phone:</b> <?php echo $row['Phone']; ?></span>
+<span style="margin-left:8px;"><b>Staff ID:</b> <?php echo $row['Staff_ID']; ?></span>
 </div>
 <div class="col-sm-6">
-<span><b>Role:</b> <?php echo $row['User_Group']; ?></span>
+<span style="margin-left:8px;"><b>Branch:</b> <?php echo $row['Branch']; ?></span>
 </div>
 </div>
+
+
+<div class="row">
+<div class="col-sm-6">
+<span style="margin-left:8px;"><b>Town:</b> <?php echo $row['Town']; ?></span>
+</div>
+<div class="col-sm-6">
+<span style="margin-left:8px;"><b>Zone:</b> <?php echo $row['Zone']; ?></span>
+</div>
+</div>
+
+
 <div class="row">
 <div class="col-sm-12">
-<span><b>Address:</b> <?php echo $row['Address']; ?></span>
+<span style="margin-left:8px;"><b>Address:</b> <?php echo $row['Address']; ?></span>
 </div>
 </div>
-<br><br>
-
-</div>
-</div>
-</div>
-<div class="col-sm-6">
-<div class="card">
-<div class="card-body">
 <br>
-<b><i class="fa fa-star"></i> PROFILE INFO</b><br><br>
-<div class="row">
-<div class="col-sm-6">
-<span><b>Staff ID:</b> <?php echo $row['Staff_ID']; ?></span>
-</div>
-<div class="col-sm-6">
-<span><b>Branch:</b> <?php echo $row['Branch']; ?></span>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-6">
-<span><b>Town:</b> <?php echo $row['Town']; ?></span>
-</div>
-<div class="col-sm-6">
-<span><b>Zone:</b> <?php echo $row['Zone']; ?></span>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
-<span><b>Country:</b> <?php echo $row['Country']; ?></span>
-</div>
-</div>
-<br><br>
-</div>
-
 </div>
 </div>
 
-</div>
-</div>
+<hr>
 </div>
 
 </div>
+
 <!-- edit info modal -->
 <div id="edit" style="display: none;">
-<center>
-<img src="<?php echo $row['Location']; ?>" alt="" id="outputs" class="rounded-circle" width="150" height="150px"><br><br>
-<button  class="btn btn-outline-primary btn-sm" onclick="myView()" style="font-size: 9px; display:none;" id="viewinfo">
-<i class="fa fa-eye"></i> View Customer Info</button>
-</center>
+
 <div class="alert alert-success alert-dismissible fade show" role="alert" id="up" style="display:none">
 <center><i class="fa fa-check"></i> <?php echo $row['Name']?> Record has been updated.! </center>
 </div>
@@ -185,22 +158,24 @@ $name= $rows['Name'];
 </div>
 <br>
 <div class="row">
-<div class="col-sm-2">
-<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()"><i class="fa fa-edit"></i> Update</button>
+<div class="col-sm-3">
+<button type="submit" class="btn btn-outline-success btn-sm w-100" onclick="data()"><i class="fa fa-edit"></i> Update</button>
 </form>
 </div>
-<div class="col-sm-10">
+<div class="col-sm-3">
+<button type="button" class="btn btn-outline-info btn-sm w-100" onclick="myView()"><i class="fa fa-eye"></i> View Profile</button>
+</div>
+<div class="col-sm-6">
 <span style="display:none" id="wait"> <img src="../loader/loader.gif" style="height:16px"> Record Updating ! Please wait..</span>  
-<span style="display:none; color:red" id="check"><i class="fa fa-exclamation-circle"></i> Email OR Staff ID has already been taken by another staff, Please check..</span>  
+<small style="display:none; color:red" id="check"><i class="fa fa-exclamation-circle"></i>
+Email OR Staff ID has already been taken by another staff, Please check..</small>  
 </div>
 </div>
 </div>
 
 
-</div>
 
 </div>
-</div>
 
 
 
@@ -213,11 +188,6 @@ $name= $rows['Name'];
 
 
 
-
-
-
-
-</div>
 
 <script>
 var loadUp = function(event) {
@@ -230,15 +200,11 @@ image.src = URL.createObjectURL(event.target.files[0]);
 //
 function myInfo(){
 document.getElementById('info').style.display = 'none';
-document.getElementById('showinfo').style.display = 'none';
-document.getElementById('viewinfo').style.display = 'block';
 document.getElementById('edit').style.display = 'block';
 }
 //
 function myView(){
 document.getElementById('info').style.display = 'block';
-document.getElementById('showinfo').style.display = 'block';
-document.getElementById('viewinfo').style.display = 'none';
 document.getElementById('edit').style.display = 'none';
 }
 </script>

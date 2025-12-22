@@ -92,8 +92,9 @@
 
 
 
-<div class="card">
-<div class="card-body">
+<br>
+<br>
+
 <div class="row">
 <div class="col-sm-2">
 
@@ -117,8 +118,6 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
