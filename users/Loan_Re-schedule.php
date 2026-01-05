@@ -54,12 +54,12 @@
 
 <form action="" method="post" id="uploadRole">
 <div class="row">
-<div class="col-sm-4">
+<div class="col-sm-3">
 <label><i style="color:red">*</i> Enter Active Loan Account No</label>
 <div class="input-group mb-3">
 <input type="number" class="form-control form-control-sm"  id="lon" placeholder="Enter Active Loan Account" required>
 <span class="input-group-append">
-<button type="submit" class="btn btn-outline-primary btn-sm" onclick="data()"><i class="fa fa-search"></i> Search Record</button>
+<button type="submit" class="btn btn-outline-primary btn-sm" onclick="data()"><i class="fa fa-search"></i> Search</button>
 </span>
 </div>
 </form>

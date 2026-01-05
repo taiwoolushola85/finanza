@@ -61,6 +61,28 @@ $name= $rows['Name'];
 <label>Maturity Date</label>
 <input type="date" class="form-control form-control-sm" id="date" oninput="getDate()" required>
 </div>
+<div class="col-sm-3">
+<label>Loan Officer</label>
+<select type="text" class="form-control form-control-sm" name="lo" id="lo" oninput="getOfficer()" required>
+<option value="">Select Loan Officer</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Name FROM users WHERE Status = 'Activate' AND User_Group = 'Loan Officers' ORDER BY Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$nx= $rows['id']; // union id
+$name= $rows['Name'];
+?>
+<option value="<?php echo $nx; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
 </div>
 <br>
 <div class="row">
@@ -200,6 +222,33 @@ url: "expired_by_date.php",
 dataType: "html",  
 data: {
 'date': date
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+
+<script type="text/javascript">
+function getOfficer()  {
+$("#loader").show();
+$("result").hide();
+var lo = document.getElementById("lo").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "loan_officer_expired.php",
+dataType: "html",  
+data: {
+'lo': lo
 },
 success:function(data){
 $("result").show();

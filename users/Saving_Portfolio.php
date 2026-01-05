@@ -118,6 +118,37 @@ if($gr == "Loan Officers"){
 </div>
 
 
+
+<div class="modal" id="updateRec" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:300px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">PAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" id="recp" style="width:300px; height:400px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" id="openModal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+$('#openModal').on('click', function () {
+$('#updateRec').modal('hide');
+$('#updateModal').modal('show');
+});
+});
+</script>
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 $("#loader").show();
@@ -291,6 +322,34 @@ $('#result').html(data);
 </div>
 </div>
 
+
+<div class="modal" id="updateRec" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:300px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">PAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" id="recp" style="width:300px; height:400px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" id="openModal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+$(document).ready(function () {
+$('#openModal').on('click', function () {
+$('#updateRec').modal('hide');
+$('#updateModal').modal('show');
+});
+});
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -466,6 +525,36 @@ $('#results').html(data);
 </div>
 </div>
 </div>
+
+
+<div class="modal" id="updateRec" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:300px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">PAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" id="recp" style="width:300px; height:400px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" id="openModal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+$('#openModal').on('click', function () {
+$('#updateRec').modal('hide');
+$('#updateModal').modal('show');
+});
+});
+</script>
 
 
 <script type="text/javascript">

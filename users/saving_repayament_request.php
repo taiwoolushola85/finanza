@@ -4,7 +4,7 @@ $savid = $_POST['id']; //
 $sav = $_POST['sav']; // savings account no
 $amt = $_POST['amt']; //  amount to withdraw
 $acct = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['acct']);// client active loan no for the reciever
-$bl = round($_POST['bl']); //  savings bal
+$balance = round($_POST['bal']); //  savings bal
 $loan = $_POST['ln']; //  client sender loan account no
 // details of the loan account holder to recieves savings as repayments [reciever]
 $result = mysqli_query($con, "SELECT * FROM repayments WHERE Loan_Account_No = '$acct'");
@@ -82,7 +82,7 @@ echo 6;
 exit();
 }
 
-if($amt > $bl){
+if($amt > $balance){
 echo 1;
 exit();
 } 

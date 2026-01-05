@@ -55,9 +55,9 @@ $grid = $row['id'];
 </div>
 
 <div class="btn-group">
-<a class="approve" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-success"><i class="fa fa-check"></i> Approve</button></a>
-<a class="decline" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-warning"><i class="fa fa-exclamation-triangle"></i> Deactivate</button></a>
-<a class="delete" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button></a>
+<a class="approve" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-light"><i class="fa fa-check"></i> Approve</button></a>
+<a class="decline" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-light"><i class="fa fa-exclamation-triangle"></i> Deactivate</button></a>
+<a class="delete" href="#!" data-id="<?php echo htmlspecialchars($row['id']); ?>"><button class="btn btn-light"><i class="fa fa-trash"></i> Delete</button></a>
 </div>
 
 

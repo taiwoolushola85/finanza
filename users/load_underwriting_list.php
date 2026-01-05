@@ -76,47 +76,55 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$bvn = htmlspecialchars($member['BVN']);
-$firstname = htmlspecialchars($member['Firstname']);
-$middlename = htmlspecialchars($member['Middlename']);
-$lastname = htmlspecialchars($member['Lastname']);
-$phone = htmlspecialchars($member['Phone']);
-$gender = htmlspecialchars($member['Gender']);
-$branch = htmlspecialchars($member['Branch']);
-$officer = htmlspecialchars($member['Officer_Name']);
-$status = htmlspecialchars($member['Status']);
-$dateReg = htmlspecialchars($member['Date_Reg']);
-$timeReg = htmlspecialchars($member['Time_Reg']);
-$id = (int)$member['id'];
-// Status badge
-$badgeClass = 'badge-soft-success';
-if ($status == 'Under Review') {
-$badgeClass = 'badge-soft-info';
-} elseif ($status == 'Declined') {
-$badgeClass = 'badge-soft-danger';
-}
-?>
-<tr style="font-size:8px">
-<td><?php echo $bvn; ?></td>
-<td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-<td><?php echo $phone; ?></td>
-<td><?php echo $gender; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $officer; ?></td>
-<td>
-<span class=''><?php echo $status; ?></span>
-</td>
-<td><?php echo $dateReg; ?></td>
-<td><?php echo $timeReg; ?></td>
-<td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
-</tr>
-<?php
+if (!empty($results)) {
+    foreach($results as $member) {
+        // Escape output for XSS protection
+        $bvn = htmlspecialchars($member['BVN']);
+        $firstname = htmlspecialchars($member['Firstname']);
+        $middlename = htmlspecialchars($member['Middlename']);
+        $lastname = htmlspecialchars($member['Lastname']);
+        $phone = htmlspecialchars($member['Phone']);
+        $gender = htmlspecialchars($member['Gender']);
+        $branch = htmlspecialchars($member['Branch']);
+        $officer = htmlspecialchars($member['Officer_Name']);
+        $status = htmlspecialchars($member['Status']);
+        $dateReg = htmlspecialchars($member['Date_Reg']);
+        $timeReg = htmlspecialchars($member['Time_Reg']);
+        $id = (int)$member['id'];
+
+        // Status badge
+        $badgeClass = 'badge-soft-success';
+        if ($status == 'Under Review') {
+            $badgeClass = 'badge-soft-info';
+        } elseif ($status == 'Declined') {
+            $badgeClass = 'badge-soft-danger';
+        }
+        ?>
+        <tr style="font-size:8px">
+            <td><?php echo $bvn; ?></td>
+            <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
+            <td><?php echo $phone; ?></td>
+            <td><?php echo $gender; ?></td>
+            <td><?php echo $branch; ?></td>
+            <td><?php echo $officer; ?></td>
+            <td><span class='<?php echo $badgeClass; ?>'><?php echo $status; ?></span></td>
+            <td><?php echo $dateReg; ?></td>
+            <td><?php echo $timeReg; ?></td>
+            <td>
+                <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
+                    <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+                </a>
+            </td>
+        </tr>
+        <?php
+    }
+} else {
+    // Display no records found
+    ?>
+    <tr>
+        <td colspan="10" style="text-align:center; font-size:8px;">No records found</td>
+    </tr>
+    <?php
 }
 ?>
 </tbody>

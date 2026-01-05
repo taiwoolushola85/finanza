@@ -1,384 +1,445 @@
-
-
 <?php
-// Sanitize inputs
-$d = date('Y-m-d');
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? intval($_POST['maxRows']) : 0;
+// Set CORS headers at the top
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: text/html; charset=UTF-8");
 
-// Database connection
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
+
 include '../config/db.php';
-?>
+include '../config/user_session.php';
 
-<div class="row">
-<div class="col-sm-3">
-<small><b>Total: 
-<?php 
-$count_query = "SELECT COUNT(*) as total FROM repayments WHERE Status = 'Active' AND ? > Maturity_Date";
-$stmt = mysqli_prepare($con, $count_query);
-mysqli_stmt_bind_param($stmt, "s", $d);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($result);
-echo $row['total'];
-mysqli_stmt_close($stmt);
-?>
-</b></small>
-</div>
-<div class="col-sm-3">
-<b>Total Loan Amt: <span id="totalLoan"></span></b>
-</div>
-<div class="col-sm-3">
-<b>Total Outstanding: <span id="totalOutstanding"></span></b>
-</div>
-<div class="col-sm-3">
-<b>Total Overdue: <span id="totalOverdue"></span></b>
-</div>
-<div class="col-sm-3">
-</div>
-</div>
-<br>
-<button type="button" class="btn btn-outline-primary btn-sm btn-flat" style="float:right; margin:5px" onclick="exportTableToExcel()">
-<i class="fa fa-download"></i> Export Data
-</button>
-<br clear="all">
+$d = date('Y-m-d');
 
-<!-- Include SheetJS library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+// Sanitize and validate inputs
+$search = isset($_POST['search']) ? trim($_POST['search']) : '';
+$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 100; // Default to 100
 
-<div style="overflow-y:auto; height:370px">
-<?php
-// Build query based on conditions
-$base_query = "SELECT id, Disbursement_No, Loan_Account_No, Firstname, Middlename, Lastname, Branch, Phone, Product, Total_Loan, Paid, Total_Bal, Expected_Amount, 
-Maturity_Status, Status, Savings_Bal, Frequency, Officer_Name, Date_Disbursed, Maturity_Date, Duration 
-FROM repayments WHERE Status = 'Active' AND ? > Maturity_Date";
+// Build WHERE clause
+$whereClause = "Status = 'Active'";
+$params = [];
+$types = '';
 
-// Determine query based on conditions
 if (!empty($search)) {
-    // Search query
-$search_term = "%{$search}%";
-$query = $base_query . " AND (
-Firstname LIKE ? OR 
-Lastname LIKE ? OR 
-Middlename LIKE ? OR 
-Phone LIKE ? OR 
-Branch LIKE ? OR 
-Officer_Name LIKE ? OR 
-Loan_Account_No LIKE ? OR 
-Disbursement_No LIKE ?
-) ORDER BY Firstname ASC";
-$stmt = mysqli_prepare($con, $query);
-mysqli_stmt_bind_param($stmt, "sssssssss", $d, $search_term, $search_term, $search_term, 
-$search_term, $search_term, $search_term, $search_term, $search_term);
-$json_file = '../data/all_expired_search.json';
-} elseif ($maxRows > 0 && $maxRows != 10) {
-// All records
-$query = $base_query . " ORDER BY Firstname ASC";
-$stmt = mysqli_prepare($con, $query);
-mysqli_stmt_bind_param($stmt, "s", $d);
-$json_file = '../data/all_expired_book.json';
+    $searchParam = "%$search%";
+    $whereClause .= " AND (BVN LIKE ? OR Account_Number LIKE ? OR Loan_Account_No LIKE ? 
+    OR Disbursement_No LIKE ? OR Transaction_id LIKE ? OR Savings_Account_No LIKE ? 
+    OR Unions LIKE ? OR Firstname LIKE ? OR Middlename LIKE ? OR Lastname LIKE ? 
+    OR Branch LIKE ? OR Officer_Name LIKE ? OR Phone LIKE ?)";
+    
+    // Add search parameter 13 times for all LIKE clauses
+    for ($i = 0; $i < 13; $i++) {
+        $params[] = $searchParam;
+        $types .= 's';
+    }
+}
+
+// Count query
+if (!empty($search)) {
+    $countQuery = "SELECT COUNT(*) as total FROM repayments WHERE $whereClause";
+    $stmt = mysqli_prepare($con, $countQuery);
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
 } else {
-// Limited to 12 records
-$query = $base_query . " ORDER BY Firstname ASC LIMIT 12";
-$stmt = mysqli_prepare($con, $query);
-mysqli_stmt_bind_param($stmt, "s", $d);
-$json_file = '../data/expired_book.json';
+    $countQuery = "SELECT COUNT(*) as total FROM repayments WHERE $whereClause";
+    $stmt = mysqli_prepare($con, $countQuery);
+}
+
+mysqli_stmt_execute($stmt);
+$countResult = mysqli_stmt_get_result($stmt);
+$row = mysqli_fetch_assoc($countResult);
+$total = $row['total'];
+mysqli_stmt_close($stmt);
+
+// Data query with Frequency field added
+$dataQuery = "SELECT id, Loan_Account_No, Firstname, Lastname, Middlename, Product, Branch, Phone,
+    Total_Loan, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Officer_Name,
+    Status, Total_Bal, Duration, Frequency, Savings_Bal, Disbursement_No 
+    FROM repayments WHERE $whereClause ORDER BY Firstname ASC";
+
+if ($maxRows > 0) {
+    $dataQuery .= " LIMIT ?";
+    $tempParams = $params;
+    $tempParams[] = $maxRows;
+    $tempTypes = $types . 'i';
+} else {
+    $tempParams = $params;
+    $tempTypes = $types;
+}
+
+$stmt = mysqli_prepare($con, $dataQuery);
+
+if (!empty($tempParams)) {
+    mysqli_stmt_bind_param($stmt, $tempTypes, ...$tempParams);
 }
 
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
-if (!$result) {
-die("Query Error: " . mysqli_error($con));
-}
 
-// Store results in array
+// Fetch results and calculate values
 $results = array();
-while ($row = mysqli_fetch_assoc($result)) {
-$results[] = $row;
+$totalOverdue = 0;
+$totalOutstanding = 0;
+
+// PAR calculations
+$par30_count = 0;
+$par30_amount = 0;
+$par60_count = 0;
+$par60_amount = 0;
+$par90_count = 0;
+$par90_amount = 0;
+
+while($row = mysqli_fetch_assoc($result)) {
+    $expectedAmt = (float)($row['Expected_Amount'] ?? 0);
+    $paid = (float)($row['Paid'] ?? 0);
+    $dateDisbursed = $row['Date_Disbursed'] ?? null;
+    $maturityDate  = $row['Maturity_Date'] ?? null;
+    $duration = (int)($row['Duration'] ?? 0);
+    $frequency = $row['Frequency'] ?? 'Daily';
+    $totalBal = (float)($row['Total_Bal'] ?? 0);
+
+    $overdueAmt  = 0;
+    $daysOverdue = 0;
+    $tenureUsed = 0;
+    $tenureRemain = 0;
+    $expectedDueAmt = 0;
+    $overdueDays = 0;
+
+    if ($dateDisbursed && $maturityDate) {
+        try {
+            $start = new DateTime($dateDisbursed);
+            $end   = new DateTime($maturityDate);
+            $today = new DateTime($d);
+
+            // Calculate tenure used based on frequency
+            if ($frequency == 'Daily') {
+                $tenureUsed = $start->diff($today)->days;
+                $tenureRemain = max(0, $duration - $tenureUsed);
+                
+                if ($duration > $tenureUsed) {
+                    $expectedDueAmt = $expectedAmt * $tenureUsed;
+                    $overdueAmt = max(0, $expectedDueAmt - $paid);
+                    if ($overdueAmt > 0) {
+                        $overdueDays = round($overdueAmt / $expectedAmt);
+                    }
+                } else {
+                    $expectedDueAmt = $row['Total_Loan'];
+                    $overdueAmt = $totalBal;
+                    $overdueDays = round($totalBal / $expectedAmt);
+                    $tenureRemain = 0;
+                }
+                
+            } elseif ($frequency == 'Weekly') {
+                $daysElapsed = $start->diff($today)->days;
+                $tenureUsed = round($daysElapsed / 7);
+                $tenureRemain = max(0, $duration - $tenureUsed);
+                
+                if ($tenureUsed == 0) {
+                    $expectedDueAmt = 0;
+                    $overdueAmt = 0;
+                    $overdueDays = 0;
+                } elseif ($duration > $tenureUsed) {
+                    $expectedDueAmt = $expectedAmt * $tenureUsed;
+                    $overdueAmt = max(0, $expectedDueAmt - $paid);
+                    if ($overdueAmt > 0) {
+                        // Convert weeks to days for overdue period
+                        $overdueDays = round(($overdueAmt / $expectedAmt) * 7);
+                    }
+                } else {
+                    $expectedDueAmt = $row['Total_Loan'];
+                    $overdueAmt = $totalBal;
+                    // Convert weeks to days for overdue period
+                    $overdueDays = round(($totalBal / $expectedAmt) * 7);
+                    $tenureRemain = 0;
+                }
+                
+            } else { // Monthly
+                $daysElapsed = $start->diff($today)->days;
+                $tenureUsed = round($daysElapsed / 30);
+                $tenureRemain = max(0, $duration - $tenureUsed);
+                
+                if ($tenureUsed == 0) {
+                    $expectedDueAmt = 0;
+                    $overdueAmt = 0;
+                    $overdueDays = 0;
+                } elseif ($duration > $tenureUsed) {
+                    $expectedDueAmt = $expectedAmt * $tenureUsed;
+                    $overdueAmt = max(0, $expectedDueAmt - $paid);
+                    if ($overdueAmt > 0) {
+                        // Convert months to days for overdue period
+                        $overdueDays = round(($overdueAmt / $expectedAmt) * 30);
+                    }
+                } else {
+                    $expectedDueAmt = $row['Total_Loan'];
+                    $overdueAmt = $totalBal;
+                    // Convert months to days for overdue period
+                    $overdueDays = round(($totalBal / $expectedAmt) * 30);
+                    $tenureRemain = 0;
+                }
+            }
+
+            // Calculate days overdue from maturity date
+            if ($today > $end) {
+                $daysOverdue = $end->diff($today)->days;
+            }
+            
+            // Calculate PAR categories based on days past maturity
+            if ($daysOverdue >= 30 && $overdueAmt > 0) {
+                $par30_count++;
+                $par30_amount += $totalBal;
+            }
+            if ($daysOverdue >= 60 && $overdueAmt > 0) {
+                $par60_count++;
+                $par60_amount += $totalBal;
+            }
+            if ($daysOverdue >= 90 && $overdueAmt > 0) {
+                $par90_count++;
+                $par90_amount += $totalBal;
+            }
+            
+        } catch (Exception $e) {
+            $overdueAmt  = 0;
+            $daysOverdue = 0;
+            $tenureUsed = 0;
+        }
+    }
+
+    $row['Overdue_Amount'] = round($overdueAmt, 2);
+    $row['Days_Overdue'] = $daysOverdue;
+    $row['Tenure_Used'] = $tenureUsed;
+    $row['Tenure_Remain'] = $tenureRemain;
+    $row['Expected_Due_Amount'] = round($expectedDueAmt, 2);
+    $row['Overdue_Days_Count'] = $overdueDays;
+    $row['Repayment_Percent'] = $row['Total_Loan'] > 0 ? round(($paid / $row['Total_Loan']) * 100) : 0;
+    
+    $totalOverdue += $row['Overdue_Amount'];
+    $totalOutstanding += $totalBal;
+
+    $results[] = $row; 
 }
+mysqli_stmt_close($stmt);
 
 // Save to JSON file
-if (!is_dir('../data')) {
-mkdir('../data', 0755, true);
+$jsonData = json_encode($results, JSON_PRETTY_PRINT);
+if ($jsonData !== false) {
+    $filePath = '../data/overdue_portfolio_list.json';
+    $dirPath = dirname($filePath);
+    if (!is_dir($dirPath)) {
+        mkdir($dirPath, 0755, true);
+    }
+    file_put_contents($filePath, $jsonData);
 }
-$fp = fopen($json_file, 'w');
-fwrite($fp, json_encode($results));
-fclose($fp);
 
-mysqli_stmt_close($stmt);
 mysqli_close($con);
-
-// Helper function to calculate tenure metrics
-function calculateTenureMetrics($member, $d) {
-$metrics = array();
-if ($member->Frequency == 'Daily') {
-$now = time();
-$start_date = strtotime($member->Date_Disbursed);
-$days_diff = round(($now - $start_date) / (60 * 60 * 24));
-$metrics['used'] = $days_diff . " Days";
-$metrics['remaining'] = ($member->Duration > $days_diff) 
-? round($member->Duration - $days_diff) . " Days" 
-: "Exceeded";
-$metrics['expected_due'] = ($member->Duration > $days_diff)
-? round($member->Expected_Amount * $days_diff)
-: $member->Total_Loan;
-$metrics['overdue_amt'] = ($member->Duration > $days_diff)
-? ($member->Expected_Amount * $days_diff) - $member->Paid
-: $member->Total_Bal;
-$metrics['overdue_days'] = ($member->Duration > $days_diff)
-? round((($member->Expected_Amount * $days_diff) - $member->Paid) / $member->Expected_Amount) . " Days"
-: round($member->Total_Bal / $member->Expected_Amount) . " Days";
-} elseif ($member->Frequency == 'Weekly') {
-$date1 = new DateTime($member->Date_Disbursed);
-$date2 = new DateTime($d);
-$weeks_used = round($date1->diff($date2)->days / 7);
-$metrics['used'] = $weeks_used . " Weeks";
-$metrics['remaining'] = ($member->Duration > $weeks_used)
-? round($member->Duration - $weeks_used) . " Weeks"
-: "Exceeded";
-$metrics['expected_due'] = ($weeks_used == 0) ? 0 : (
-($member->Duration > $weeks_used)
-? round($member->Expected_Amount * $weeks_used)
-: $member->Total_Loan
-);
-$metrics['overdue_amt'] = ($weeks_used == 0) ? 0 : (
-($member->Duration > $weeks_used)
-? ($member->Expected_Amount * $weeks_used) - $member->Paid
-: $member->Total_Bal
-);
-$metrics['overdue_days'] = ($weeks_used == 0) ? "0 Weeks" : (
-($member->Duration > $weeks_used)
-? round((($member->Expected_Amount * $weeks_used) - $member->Paid) / $member->Expected_Amount) . " Weeks"
-: round($member->Total_Bal / $member->Expected_Amount) . " Weeks"
-);
-} else { // Monthly
-$date1 = new DateTime($member->Date_Disbursed);
-$date2 = new DateTime($d);
-$months_used = round($date1->diff($date2)->days / 30);
-$metrics['used'] = $months_used . " Months";
-$metrics['remaining'] = ($member->Duration > $months_used)
-? round($member->Duration - $months_used) . " Months"
-: "Exceeded";
-$metrics['expected_due'] = ($months_used == 0) ? 0 : (
-($member->Duration > $months_used)
-? round($member->Expected_Amount * $months_used)
-: $member->Total_Loan
-);
-$metrics['overdue_amt'] = ($months_used == 0) ? 0 : (
-($member->Duration > $months_used)
-? ($member->Expected_Amount * $months_used) - $member->Paid
-: $member->Total_Bal
-);
-$metrics['overdue_days'] = ($months_used == 0) ? "0 Months" : (
-($member->Duration > $months_used)
-? round((($member->Expected_Amount * $months_used) - $member->Paid) / $member->Expected_Amount) . " Months"
-: round($member->Total_Bal / $member->Expected_Amount) . " Months"
-);
-}
-return $metrics;
-}
 ?>
 
-<div id="table-container" style="height:370px;">
-<table id="myTable">
+
+
+<div class="row mb-3">
+    <div class="col-sm-10">
+        <div class="stat-summary">
+            <small style="opacity: 0.9;"><b>Total Active Loans:</b></small>
+            <strong><?php echo number_format($total); ?></strong>
+            <?php if (!empty($search)): ?>
+                <small style="margin-left: 10px; opacity: 0.7;">(Showing <?php echo number_format(count($results)); ?> results)</small>
+            <?php elseif ($maxRows > 0 && $total > $maxRows): ?>
+                <small style="margin-left: 10px; opacity: 0.7;">(Showing first <?php echo number_format($maxRows); ?>)</small>
+            <?php endif; ?>
+            <?php if ($total > 0): ?>
+                <small style="margin-left: 15px; opacity: 0.9;"><b>Total Outstanding:</b></small>
+                <strong><?php echo number_format($totalOutstanding, 2); ?></strong>
+                <small style="margin-left: 15px; opacity: 0.9;"><b>Total Overdue:</b></small>
+                <strong><?php echo number_format($totalOverdue, 2); ?></strong>
+            <?php endif; ?>
+        </div>
+        </div>
+        
+
+    <div class="col-sm-2">
+        <button type="button" class="btn btn-outline-primary btn-sm btn-flat w-100" onclick="tableToExcel()">
+            <i class="fa fa-download"></i> Export to Excel
+        </button>
+    </div>
+</div>
+
+<?php if (empty($results) && !empty($search)): ?>
+<div class="alert alert-warning" style="display:none;">
+    <i class="fa fa-search"></i> No results found for "<strong><?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?></strong>"
+</div>
+<?php elseif (empty($results)): ?>
+<div class="alert alert-success" style="display:none;">
+    <i class="fa fa-check-circle"></i> No overdue loans found!
+</div>
+<?php endif; ?>
+
+<div id="table-container" style="height:360px;">
+<table id="expiredLoansTable" style="font-size: 8px;">
 <thead>
-<tr style="font-size:8px">
-<th>DISBURSEMENT NO</th>
-<th>LOAN ACCT</th>
-<th>NAME</th>
-<th>BRANCH</th>
-<th>PHONE</th>
-<th>PRODUCT</th>
-<th>LOAN AMT</th>
-<th>AMT PAID</th>
-<th>OUTSTANDING</th>
-<th>EXPD AMT</th>
-<th>SAVINGS</th>
-<th>REPAYMENT %</th>
-<th>TENURE</th>
-<th>TENURE USED</th>
-<th>TENURE REMAIN</th>
-<th>EXPECTED DUE AMT</th>
-<th>OVERDUE AMT</th>
-<th>OVERDUE DAY</th>
-<th>CREDIT OFFICER</th>
-<th>DATE DISBURSED</th>
-<th>DUE DATE</th>
-<th>STATUS</th>
-</tr>
-</thead>
-<tbody>
-<?php
-if (file_exists($json_file)) {
-$data = file_get_contents($json_file);
-$json = json_decode($data);
-if ($json && count($json) > 0) {
-foreach ($json as $member) {
-$metrics = calculateTenureMetrics($member, $d);
-$repayment_percent = ($member->Total_Loan > 0) 
-? round(($member->Paid / $member->Total_Loan) * 100) 
-: 0;
-?>
-<tr style="font-size:8px">
-<td><?php echo htmlspecialchars($member->Disbursement_No ?? ''); ?></td>
-<td><?php echo htmlspecialchars($member->Loan_Account_No ?? ''); ?></td>
-<td style="text-transform:uppercase">
-<?php echo htmlspecialchars(trim(($member->Firstname ?? '') . " " . ($member->Middlename ?? '') . " " . ($member->Lastname ?? ''))); ?>
-</td>
-<td><?php echo htmlspecialchars($member->Branch ?? ''); ?></td>
-<td><?php echo htmlspecialchars($member->Phone ?? ''); ?></td>
-<td><?php echo htmlspecialchars($member->Product ?? ''); ?></td>
-<td><?php echo number_format($member->Total_Loan ?? 0, 2); ?></td>
-<td><?php echo number_format($member->Paid ?? 0, 2); ?></td>
-<td><?php echo number_format($member->Total_Bal ?? 0, 2); ?></td>
-<td><?php echo number_format($member->Expected_Amount ?? 0, 2); ?></td>
-<td><?php echo number_format($member->Savings_Bal ?? 0, 2); ?></td>
-<td><?php echo $repayment_percent; ?>%</td>
-<td><?php echo htmlspecialchars($member->Duration ?? ''); ?></td>
-<td><?php echo $metrics['used']; ?></td>
-<td><?php echo $metrics['remaining']; ?></td>
-<td><?php echo number_format($metrics['expected_due'], 2); ?></td>
-<td><?php echo number_format($metrics['overdue_amt'], 2); ?></td>
-<td><?php echo $metrics['overdue_days']; ?></td>
-<td><?php echo htmlspecialchars($member->Officer_Name ?? ''); ?></td>
-<td><?php echo !empty($member->Date_Disbursed) ? date("d-M-Y", strtotime($member->Date_Disbursed)) : ''; ?></td>
-<td><?php echo !empty($member->Maturity_Date) ? date("d-M-Y", strtotime($member->Maturity_Date)) : ''; ?></td>
-<td style="color:red">Overdue</td>
-</tr>
-<?php
-}
-} else {
-echo '<tr><td colspan="22" style="text-align:center;">No overdue loans found</td></tr>';
-}
-}
-?>
-</tbody>
-</table>
+<tr>
+                <th>DISBURSEMENT NO</th>
+                <th>LOAN ACCT</th>
+                <th>NAME</th>
+                <th>BRANCH</th>
+                <th>PHONE</th>
+                <th>PRODUCT</th>
+                <th>TOTAL LOAN</th>
+                <th>AMT PAID</th>
+                <th>OUTSTANDING</th>
+                <th>EXPD AMT</th>
+                <th>SAVINGS</th>
+                <th>REPAYMENT %</th>
+                <th>TENURE</th>
+                <th>TENURE USED</th>
+                <th>TENURE REMAIN</th>
+                <th>EXPECTED DUE AMT</th>
+                <th>OVERDUE AMT</th>
+                <th>OVERDUE DAY</th>
+                <th>DAYS PAST DUE</th>
+                <th>PAR STATUS</th>
+                <th>CREDIT OFFICER</th>
+                <th>DATE DISBURSED</th>
+                <th>DUE DATE</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        if (!empty($results)) {
+            foreach($results as $member) {
+                $disbursementNo = htmlspecialchars($member['Disbursement_No'] ?? '', ENT_QUOTES, 'UTF-8');
+                $loanAcct = htmlspecialchars($member['Loan_Account_No'] ?? '', ENT_QUOTES, 'UTF-8');
+                $firstname = htmlspecialchars($member['Firstname'] ?? '', ENT_QUOTES, 'UTF-8');
+                $middlename = htmlspecialchars($member['Middlename'] ?? '', ENT_QUOTES, 'UTF-8');
+                $lastname = htmlspecialchars($member['Lastname'] ?? '', ENT_QUOTES, 'UTF-8');
+                $ph = htmlspecialchars($member['Phone'] ?? '', ENT_QUOTES, 'UTF-8');
+                $branch = htmlspecialchars($member['Branch'] ?? '', ENT_QUOTES, 'UTF-8');
+                $product = htmlspecialchars($member['Product'] ?? '', ENT_QUOTES, 'UTF-8');
+                $duration = (int)($member['Duration'] ?? 0);
+                $frequency = htmlspecialchars($member['Frequency'] ?? 'Daily', ENT_QUOTES, 'UTF-8');
+                $tenureUsed = (int)($member['Tenure_Used'] ?? 0);
+                $tenureRemain = (int)($member['Tenure_Remain'] ?? 0);
+                $totalloan = (float)($member['Total_Loan'] ?? 0);
+                $paid = (float)($member['Paid'] ?? 0);
+                $exp = (float)($member['Expected_Amount'] ?? 0);
+                $totalbal = (float)($member['Total_Bal'] ?? 0);
+                $savingsBal = (float)($member['Savings_Bal'] ?? 0);
+                $overdueamt = (float)($member['Overdue_Amount'] ?? 0);
+                $expectedDueAmt = (float)($member['Expected_Due_Amount'] ?? 0);
+                $overdueDaysCount = (int)($member['Overdue_Days_Count'] ?? 0);
+                $repaymentPercent = (int)($member['Repayment_Percent'] ?? 0);
+                $datedisburse = htmlspecialchars($member['Date_Disbursed'] ?? '', ENT_QUOTES, 'UTF-8');
+                $maturitydate = htmlspecialchars($member['Maturity_Date'] ?? '', ENT_QUOTES, 'UTF-8');
+                $ofn = htmlspecialchars($member['Officer_Name'] ?? '', ENT_QUOTES, 'UTF-8');
+                
+                $daysOverdue = (int)($member['Days_Overdue'] ?? 0);
+
+                // Determine PAR status
+                $parStatus = '';
+                $parColor = '';
+                if ($daysOverdue >= 90) {
+                    $parStatus = 'PAR 90+';
+                    $parColor = '#dc3545';
+                } elseif ($daysOverdue >= 60) {
+                    $parStatus = 'PAR 60+';
+                    $parColor = '#ff9800';
+                } elseif ($daysOverdue >= 30) {
+                    $parStatus = 'PAR 30+';
+                    $parColor = '#ffc107';
+                } elseif ($daysOverdue > 0) {
+                    $parStatus = 'PAR 1-29';
+                    $parColor = '#28a745';
+                } else {
+                    $parStatus = 'Current';
+                    $parColor = '#17a2b8';
+                }
+
+                $overdueClass = '';
+                if ($daysOverdue > 90) {
+                    $overdueClass = 'style="background-color:#f8d7da;"';
+                } elseif ($daysOverdue > 60) {
+                    $overdueClass = 'style="background-color:#ffe6e6;"';
+                } elseif ($daysOverdue > 30) {
+                    $overdueClass = 'style="background-color:#fff3cd;"';
+                }
+
+                $frequencyLabel = $frequency == 'Daily' ? 'Days' : ($frequency == 'Weekly' ? 'Weeks' : 'Months');
+        ?>
+                <tr <?php echo $overdueClass; ?>>
+                    <td><?php echo $disbursementNo; ?></td>
+                    <td><?php echo $loanAcct; ?></td>
+                    <td style="text-transform:capitalize"><?php echo trim("$firstname $middlename $lastname"); ?></td>
+                    <td><?php echo $branch; ?></td>
+                    <td><?php echo $ph; ?></td>
+                    <td><?php echo $product; ?></td>
+                    <td><?php echo number_format($totalloan, 2); ?></td>
+                    <td><?php echo number_format($paid, 2); ?></td>
+                    <td><strong style="color: #dc3545;"><?php echo number_format($totalbal, 2); ?></strong></td>
+                    <td><?php echo number_format($exp, 2); ?></td>
+                    <td><?php echo number_format($savingsBal, 2); ?></td>
+                    <td><?php echo $repaymentPercent; ?>%</td>
+                    <td><?php echo $duration; ?></td>
+                    <td><strong><?php echo $tenureUsed . ' ' . $frequencyLabel; ?></strong></td>
+                    <td><?php echo ($tenureRemain > 0) ? $tenureRemain . ' ' . $frequencyLabel : '<span style="color:red;">Exceeded</span>'; ?></td>
+                    <td><?php echo number_format($expectedDueAmt, 2); ?></td>
+                    <td><strong style="color: #d9534f; background: #ffe6e6; padding: 2px 6px; border-radius: 3px;"><?php echo number_format($overdueamt, 2); ?></strong></td>
+                    <td><?php echo $overdueDaysCount . ' days'; ?></td>
+                    <td><strong><?php echo $daysOverdue; ?> days</strong></td>
+                    <td><span style="background: <?php echo $parColor; ?>; color: white; padding: 3px 8px; border-radius: 3px; font-weight: 600; font-size: 9px;"><?php echo $parStatus; ?></span></td>
+                    <td><?php echo $ofn; ?></td>
+                    <td><?php echo !empty($datedisburse) ? date('d-M-Y', strtotime($datedisburse)) : 'N/A'; ?></td>
+                    <td><?php echo !empty($maturitydate) ? date('d-M-Y', strtotime($maturitydate)) : 'N/A'; ?></td>
+                    <td>
+                        <?php 
+                        if($d > $maturitydate){
+                            echo "<span style='color:red; font-weight:600;'>Expired</span>";
+                        }else{
+                            echo "<span style='color:green; font-weight:600;'>Active</span>";
+                        }
+                        ?>
+                    </td>
+                </tr>
+        <?php
+            }
+        } else {
+            echo '<tr><td colspan="20" style="text-align:center;  color: #6c757d;">No overdue loan records found</td></tr>';
+        }
+        ?>
+        </tbody>
+    </table>
 </div>
-</div>
+
+<!-- Include XLSX library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
-$(document).ready(function () {
-function getColumnTotal(headerText) {
-let columnIndex = -1;
-let total = 0;
-// Find column index by header name
-$('#myTable thead th').each(function (index) {
-if ($(this).text().trim().toUpperCase() === headerText.toUpperCase()) {
-columnIndex = index;
+function tableToExcel() {
+    try {
+        let table = document.getElementById('expiredLoansTable');
+        if (!table) {
+            alert('Table not found');
+            return;
+        }
+        let workbook = XLSX.utils.table_to_book(table, {sheet: "Overdue Loans"});
+        let filename = "Overdue_Loans_PAR_Report_" + new Date().toISOString().split('T')[0] + ".xlsx";
+        XLSX.writeFile(workbook, filename);
+        console.log('Excel file exported successfully');
+    } catch (error) {
+        console.error('Export error:', error);
+        alert('Failed to export data: ' + error.message);
+    }
 }
-});
-if (columnIndex === -1) {
-console.warn('Column not found:', headerText);
-return 0;
-}
-// Sum column values
-$('#myTable tbody tr').each(function () {
-let value = $(this).find('td').eq(columnIndex).text();
-// Remove commas, currency symbols, spaces
-value = value.replace(/[^0-9.-]+/g, '');
-total += parseFloat(value) || 0;
-});
-return total;
-}
-// Example usage
-let overdueTotal = getColumnTotal('OVERDUE AMT');
-console.log('Total Overdue:', overdueTotal);
-// Display somewhere
-//$('#totalOverdue').text(overdueTotal.toLocaleString());
-$('#totalOverdue').text(overdueTotal.toFixed(2));
-});
-</script>
 
-
-<script>
-$(document).ready(function () {
-function getColumnTotal(headerText) {
-let columnIndex = -1;
-let total = 0;
-// Find column index by header name
-$('#myTable thead th').each(function (index) {
-if ($(this).text().trim().toUpperCase() === headerText.toUpperCase()) {
-columnIndex = index;
+function resetSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('maxRowsSelect').value = '100';
+    document.getElementById('searchForm').submit();
 }
-});
-if (columnIndex === -1) {
-console.warn('Column not found:', headerText);
-return 0;
-}
-// Sum column values
-$('#myTable tbody tr').each(function () {
-let value = $(this).find('td').eq(columnIndex).text();
-// Remove commas, currency symbols, spaces
-value = value.replace(/[^0-9.-]+/g, '');
-total += parseFloat(value) || 0;
-});
-return total;
-}
-// Example usage
-let outstandingAmt = getColumnTotal('OUTSTANDING');
-console.log('Total Outstanding:', outstandingAmt);
-// Display somewhere
-//$('#totalOverdue').text(overdueTotal.toLocaleString());
-$('#totalOutstanding').text(outstandingAmt.toFixed(2));
-});
-</script>
 
-
-
-<script>
-$(document).ready(function () {
-function getColumnTotal(headerText) {
-let columnIndex = -1;
-let total = 0;
-// Find column index by header name
-$('#myTable thead th').each(function (index) {
-if ($(this).text().trim().toUpperCase() === headerText.toUpperCase()) {
-columnIndex = index;
-}
+// Auto-submit on limit change
+document.getElementById('maxRowsSelect').addEventListener('change', function() {
+    document.getElementById('searchForm').submit();
 });
-if (columnIndex === -1) {
-console.warn('Column not found:', headerText);
-return 0;
-}
-// Sum column values
-$('#myTable tbody tr').each(function () {
-let value = $(this).find('td').eq(columnIndex).text();
-// Remove commas, currency symbols, spaces
-value = value.replace(/[^0-9.-]+/g, '');
-total += parseFloat(value) || 0;
-});
-return total;
-}
-// Example usage
-let loanAmt = getColumnTotal('LOAN AMT');
-console.log('Total Loan Amt:', loanAmt);
-// Display somewhere
-//$('#totalOverdue').text(overdueTotal.toLocaleString());
-$('#totalLoan').text(loanAmt.toFixed(2));
-});
-</script>
-
-
-
-<script type="text/javascript">
-function exportTableToExcel() {
-const table = document.getElementById('demo1');
-const rows = table.querySelectorAll('tr');
-const data = [];
-// Extract data from table
-rows.forEach(row => {
-const rowData = [];
-const cells = row.querySelectorAll('th, td');
-cells.forEach(cell => rowData.push(cell.textContent.trim()));
-data.push(rowData);
-});
-// Create workbook and worksheet
-const wb = XLSX.utils.book_new();
-const ws = XLSX.utils.aoa_to_sheet(data);
-XLSX.utils.book_append_sheet(wb, ws, "Overdue Loans");
-// Download with timestamp
-const filename = "overdue_loan_report_" + new Date().toISOString().slice(0,10) + ".xlsx";
-XLSX.writeFile(wb, filename);
-}
 </script>

@@ -87,7 +87,7 @@ mysqli_close($con);
 Total Record: <?php echo htmlspecialchars($total); ?>
 </small>
 <br><br>
-<div id="table-container" style="overflow:auto; height:350px;">
+<div id="table-container" style="overflow:auto; height:380px;">
 <div class="table-responsive">
 <table>
 <thead>
@@ -104,47 +104,51 @@ Total Record: <?php echo htmlspecialchars($total); ?>
 </tr>
 </thead>
 <tbody>
-<?php
-if (!empty($results)) {
-foreach($results as $member) {
-// Escape output for XSS protection
-$vrt = htmlspecialchars($member['Virtual_Account'] ?? '');
-$firstname = htmlspecialchars($member['Firstname'] ?? '');
-$middlename = htmlspecialchars($member['Middlename'] ?? '');
-$lastname = htmlspecialchars($member['Lastname'] ?? '');
-$bvn = htmlspecialchars($member['BVN'] ?? '');
-$phone = htmlspecialchars($member['Phone'] ?? '');
-$gender = htmlspecialchars($member['Gender'] ?? '');
-$branch = htmlspecialchars($member['Branch'] ?? '');
-$ofn = htmlspecialchars($member['Officer_Name'] ?? '');
-$status = htmlspecialchars($member['Status'] ?? '');
-$id = (int)$member['id'];
-?>
-<tr style="font-size:8px">
-<td><?php echo $vrt; ?></td>
-<td><?php echo $bvn; ?></td>
-<td style="text-transform:capitalize"><?php echo trim("$firstname $middlename $lastname"); ?></td>
-<td><?php echo $phone; ?></td>
-<td><?php echo $gender; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $ofn; ?></td>
-<td><span><?php echo $status; ?></span></td>
-<td>
-<a class="invks" href="#" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
-</tr>
-<?php
-}
-} else {
-?>
-<tr>
-<td colspan="9" style="text-align:center; font-size:8px">No records found</td>
-</tr>
-<?php
-}
-?>
+<?php if (count($results) > 0): ?>
+    <?php foreach ($results as $member): 
+        $vrt = htmlspecialchars($member['Virtual_Account'] ?? '');
+        $firstname = htmlspecialchars($member['Firstname'] ?? '');
+        $middlename = htmlspecialchars($member['Middlename'] ?? '');
+        $lastname = htmlspecialchars($member['Lastname'] ?? '');
+        $bvn = htmlspecialchars($member['BVN'] ?? '');
+        $phone = htmlspecialchars($member['Phone'] ?? '');
+        $gender = htmlspecialchars($member['Gender'] ?? '');
+        $branch = htmlspecialchars($member['Branch'] ?? '');
+        $ofn = htmlspecialchars($member['Officer_Name'] ?? '');
+        $status = htmlspecialchars($member['Status'] ?? '');
+        $id = (int)$member['id'];
+    ?>
+    <tr style="font-size:8px">
+        <td><?= $vrt ?></td>
+        <td><?= $bvn ?></td>
+        <td style="text-transform:capitalize">
+            <?= trim("$firstname $middlename $lastname") ?>
+        </td>
+        <td><?= $phone ?></td>
+        <td><?= $gender ?></td>
+        <td><?= $branch ?></td>
+        <td><?= $ofn ?></td>
+        <td><span><?= $status ?></span></td>
+        <td>
+            <a class="invks" href="#" data-bs-toggle="modal"
+               data-bs-target="#updateModal" data-id="<?= $id ?>">
+                <button type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        style="font-size:7px">
+                    Details
+                </button>
+            </a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="9"
+            style="text-align:center; font-size:8px; color:#999;">
+            No records found
+        </td>
+    </tr>
+<?php endif; ?>
 </tbody>
 </table>
 </div>

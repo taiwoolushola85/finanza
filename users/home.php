@@ -1,4 +1,5 @@
 <?php include "head.php"; ?>
+<br>
 
 <?php
 
@@ -9,6 +10,12 @@ include 'loan_officer_dashboard.php';
 include 'team_lead_dashboard.php';
 }else if($gr == 'Credit Analyst'){ // verification officer dashboard
 include 'verification_dashboard.php';
+}else if($gr == 'Recovery'){ // verification officer dashboard
+include 'recovery_dashboard.php';
+}else if($gr == 'Head Of Recovery'){ // head of recovery dashboard
+include 'head_of_recovery_dashboard.php';
+}else if($gr == 'Credit Monitoring Officer'){ // Credit Monitoring Officer dashboard
+include 'credit_monitoring_dashboard.php';
 }else{
 include 'general_dashboard.php';
 }

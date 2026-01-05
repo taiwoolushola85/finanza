@@ -35,7 +35,7 @@ $up = $reg['Upfront'];
 <div class="btn-group">
 <button class="btn btn-light" onclick="clickDash()"><i class="fa fa-star"></i> Profile</button>
 <button class="btn btn-light" onclick="clickHis()"><i class="fa fa-list"></i> History</button>
-<button class="btn btn-light" onclick="clickReq()"><i class="fa fa-plus"></i> Account Marging</button>
+<button class="btn btn-light" onclick="clickReq()" style="display:none;"><i class="fa fa-plus"></i> Account Marging</button>
 </div>
 </center>
 <br><br>
@@ -307,7 +307,7 @@ $Count = mysqli_num_rows($result);
 if ($Count > 0) {
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
-$cl_id= $rows['Register_id'];
+$cl_id= $rows['Reg_id'];
 $nnm= $rows['Firstname']. " ".$rows['Middlename']." ".$rows['Lastname'];
 $unn= $rows['Unions'];
 $lan= $rows['Loan_Account_No'];

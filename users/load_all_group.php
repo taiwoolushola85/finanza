@@ -74,7 +74,7 @@ fclose($fp);
 <br><br>
 
 
-<div  id="table-container" style="height:350px;">
+<div  id="table-container" style="height:370px;">
 <table>
 <thead>
 <tr>
@@ -89,25 +89,30 @@ fclose($fp);
 </tr>
 </thead>
 <tbody>
-<?php foreach ($results as $member): ?>
-<tr style="font-size:8px">
-<td><?php echo htmlspecialchars($member['id']); ?></td>
-<td style="text-transform:capitalize">
-<?php echo htmlspecialchars($member['Name']); ?>
-</td>
-<td><?php echo htmlspecialchars($member['Branch']); ?></td>
-<td><?php echo htmlspecialchars($member['Officer_Name']); ?></td>
-<td><?php echo htmlspecialchars($member['Team_Name']); ?></td>
-<td><?php echo htmlspecialchars($member['Date_Register']); ?></td>
-<td><?php echo htmlspecialchars($member['Status']); ?></td>
-<td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo htmlspecialchars($member['id']); ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
-</tr>
-<?php endforeach; ?>
+<?php if (!empty($results)): ?>
+    <?php foreach ($results as $member): ?>
+    <tr style="font-size:8px">
+        <td><?php echo htmlspecialchars($member['id']); ?></td>
+        <td style="text-transform:capitalize"><?php echo htmlspecialchars($member['Name']); ?></td>
+        <td><?php echo htmlspecialchars($member['Branch']); ?></td>
+        <td><?php echo htmlspecialchars($member['Officer_Name']); ?></td>
+        <td><?php echo htmlspecialchars($member['Team_Name']); ?></td>
+        <td><?php echo htmlspecialchars($member['Date_Register']); ?></td>
+        <td><?php echo htmlspecialchars($member['Status']); ?></td>
+        <td>
+            <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo htmlspecialchars($member['id']); ?>">
+                <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+            </a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="8" style="text-align:center; font-size:8px">No records found</td>
+    </tr>
+<?php endif; ?>
 </tbody>
+
 </table>
 </div>
 

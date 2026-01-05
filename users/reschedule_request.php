@@ -10,7 +10,7 @@ $pd = $_POST['pd'];// amount paid
 $d = date('Y-m-d');
 $s = date('h:m:sa');
 //
-$Query = "SELECT Product, Frequency FROM product_list WHERE Product_id='$pr'";
+$Query = "SELECT Product, Frequency FROM product_list WHERE Product_id = '$pr'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $pr_name = $row['Product'];
@@ -26,7 +26,7 @@ $dailyt_loan = $lum + 0;
 $dailyrnd_tloan = round($dailyt_loan);// rounding up total loan
 // inserting the customer information
 $sql = "UPDATE repayments SET Product = '$pr_name', Product_id = '$pr', Duration = '$ten', Frequency = '$frq', Rate = '$rt', Loan_Amount = '$lum',
-Total_Bal = $lum - $pd, Interest_Amt = '0', Expected_Amount = '$dailyrnd_rep', Total_Loan = '$dailyrnd_tloan', Reschedule_Status = 'Yes' WHERE id = '$repid'";
+Total_Bal = $dailyrnd_tloan - $pd, Interest_Amt = '0', Expected_Amount = '$dailyrnd_rep', Total_Loan = '$dailyrnd_tloan', Reschedule_Status = 'Extended' WHERE id = '$repid'";
 $result= mysqli_query($con, $sql);
 if($result == true){
 echo 1;
@@ -51,7 +51,7 @@ $total_int = $rnds_int * $ten;
 $monthly_intrest = $rnds_int / $ten;
 // inserting the customer information
 $sql = "UPDATE repayments SET Product = '$pr_name', Product_id = '$pr', Duration = '$ten', Frequency = '$frq', Rate = '$rt', Loan_Amount = '$lum',
-Total_Bal = $lum - $pd, Interest_Amt = '$rnds_int',  Expected_Amount = '$rnd_rep', Total_Loan = '$rnd_tloan', Reschedule_Status = 'Yes' WHERE id = '$repid'";
+Total_Bal = $rnd_tloan - $pd, Interest_Amt = '$rnds_int',  Expected_Amount = '$rnd_rep', Total_Loan = '$rnd_tloan', Reschedule_Status = 'Extended' WHERE id = '$repid'";
 $result= mysqli_query($con, $sql);
 if($result == true){
 echo 1;

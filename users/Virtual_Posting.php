@@ -56,7 +56,7 @@
 </div>
 </div>
 <br><br>
-<b><i class="fa fa-table"></i> Virtual Repayment Notifications Table</b>
+<b><i class="fa fa-table"></i> Virtual Notifications Table</b>
 <br>
 <br>
 <div id="result"></div>

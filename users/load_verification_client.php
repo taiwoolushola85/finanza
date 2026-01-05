@@ -74,38 +74,41 @@ Total Record: <?php echo $total; ?>
 </tr>
 </thead>
 <tbody>
-<?php foreach ($results as $member): ?>
-<tr style="font-size:8px">
-<td><?php echo htmlspecialchars($member['BVN']); ?></td>
-<td style="text-transform:capitalize">
-<?php echo htmlspecialchars($member['Firstname'] . " " . $member['Middlename'] . " " . $member['Lastname']); ?>
-</td>
-<td><?php echo htmlspecialchars($member['Phone']); ?></td>
-<td><?php echo htmlspecialchars($member['Gender']); ?></td>
-<td><?php echo htmlspecialchars($member['Branch']); ?></td>
-<td><?php echo htmlspecialchars($member['Officer_Name']); ?></td>
-<td>
-<?php 
-$status = $member['Status'];
-if ($status == 'Under Review') {
-echo "<span>" . htmlspecialchars($status) . "</span>";
-} elseif ($status == 'Declined') {
-echo "<span>" . htmlspecialchars($status) . "</span>";
-} else {
-echo "<span>" . htmlspecialchars($status) . "</span>";
-}
-?>
-</td>
-<td><?php echo htmlspecialchars($member['Date_Reg']); ?></td>
-<td><?php echo htmlspecialchars($member['Time_Reg']); ?></td>
-<td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo htmlspecialchars($member['id']); ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
-</tr>
-<?php endforeach; ?>
+<?php if (count($results) > 0): ?>
+    <?php foreach ($results as $member): ?>
+        <tr style="font-size:8px">
+            <td><?php echo htmlspecialchars($member['BVN']); ?></td>
+            <td style="text-transform:capitalize">
+                <?php echo htmlspecialchars($member['Firstname'] . " " . $member['Middlename'] . " " . $member['Lastname']); ?>
+            </td>
+            <td><?php echo htmlspecialchars($member['Phone']); ?></td>
+            <td><?php echo htmlspecialchars($member['Gender']); ?></td>
+            <td><?php echo htmlspecialchars($member['Branch']); ?></td>
+            <td><?php echo htmlspecialchars($member['Officer_Name']); ?></td>
+            <td>
+                <span><?php echo htmlspecialchars($member['Status']); ?></span>
+            </td>
+            <td><?php echo htmlspecialchars($member['Date_Reg']); ?></td>
+            <td><?php echo htmlspecialchars($member['Time_Reg']); ?></td>
+            <td>
+                <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal"
+                   data-id="<?php echo htmlspecialchars($member['id']); ?>">
+                    <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">
+                        Details
+                    </button>
+                </a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="10" style="text-align:center; font-size:9px; color:#999;">
+            No record found
+        </td>
+    </tr>
+<?php endif; ?>
 </tbody>
+
 </table>
 </div>
 

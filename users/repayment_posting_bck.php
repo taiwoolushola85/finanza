@@ -237,7 +237,7 @@ Branch_Code, Status, User, User_id, Team_Leader, Team_Name, Officer_Name, Date_P
 Balance, Phone, Payment_Method, Alert, Post_Method, Reciept_No, Reciept_Status, Posting_Status, Months, Years)
 VALUES ('NA', 'NA', '$virtaul_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '0', '$du', '$fr', 
 '$rt', '$pr_name', '$pr_id', '$br_name', '$br_id', 'Waiting For Approval', '$us', '$us_id', '$tm', '$tmn', '$ofn', '$d', '$ss', '$tim', '$int_amt', '$exp_amt',
-'$total_loan', '$path', '$nxt_bal', '$ph', 'Monie Point', '$alert', 'Basic Posting', '$recipt_no', 'Denied', 'Denied', '$mth', '$yrs')";
+'$total_loan', '$path', '$nxt_bal', '$ph', 'Monie Point', '$alert', 'Basic Posting', '$recipt_no', 'Denied', 'Successfull', '$mth', '$yrs')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);// last insert id
 if ($result == true) {
@@ -255,7 +255,7 @@ Saving_Account_No, Firstname, Middlename, Lastname, Unions, Union_Code, Loan_Amo
 Branch_Code, Status, User, User_id, Team_Leader, Team_Name, Officer_Name, Date_Paid, Time_Paid, Team_id, Interest_Amt, Expected_Amount,Total_Loan,Location,Balance,Phone,Payment_Method,Alert,Post_Method,Reciept_No,Reciept_Status,Posting_Status,Months,Years)
 VALUES ('NA', 'NA', '$virtaul_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '$sa', '$du', '$fr', 
 '$rt', '$pr_name', '$pr_id', '$br_name', '$br_id', 'Waiting For Approval', '$us', '$us_id', '$tm', '$tmn', '$ofn', '$d', '$ss', '$tim', '$int_amt', '$exp_amt', 
-'$total_loan', '$path', '$nxt_bal', '$ph', 'Monie Point', '$alert', 'Basic Posting', '$recipt_no', 'Denied', 'Denied', '$mth', '$yrs')";
+'$total_loan', '$path', '$nxt_bal', '$ph', 'Monie Point', '$alert', 'Basic Posting', '$recipt_no', 'Denied', 'Successfull', '$mth', '$yrs')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);// last insert id
 // saving record

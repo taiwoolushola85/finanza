@@ -81,24 +81,6 @@ Virtual Account <input type="checkbox" name="na[]" value="Virtual_Account">
 </div>
 </div>
 <br>
-<span><i style="color:red">*</i> <b>CUSTOMER</b> <input type="checkbox" name="ta[]" value="CUSTOMER" style="margin-left:20px" id="tab"></span><br>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Customer Profile <input type="checkbox" name="na[]"  value="Customer_Profile">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Guarantor <input type="checkbox" name="na[]"  value="Guarantor">
-</div>
-</div>
-</div>
-</div>
-<br>
 <span><i style="color:red">*</i> <b>CRMS</b> <input type="checkbox" name="ta[]" value="CRMS" style="margin-left:20px" id="tab"></span><br>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
@@ -177,6 +159,24 @@ Loan Portfolio <input type="checkbox" name="na[]" value="Loan_Portfolio">
 <div class="card">
 <div class="card-body">
 Saving Portfolio <input type="checkbox" name="na[]" value="Saving_Portfolio">
+</div>
+</div>
+</div>
+</div>
+<br>
+<span><i style="color:red">*</i> <b>PROFILE</b> <input type="checkbox" name="ta[]" value="PROFILE" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Customer Profile <input type="checkbox" name="na[]"  value="Customer_Profile">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Guarantor Profile <input type="checkbox" name="na[]"  value="Guarantor_Profile">
 </div>
 </div>
 </div>
@@ -422,6 +422,13 @@ Repayment Transactions <input type="checkbox" name="na[]" value="Repayment_Trans
 </div>
 </div>
 </div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Saving Transactions <input type="checkbox" name="na[]" value="Saving_Transactions">
+</div>
+</div>
+</div>
 </div>
 <br>
 <h6><i style="color:red">*</i> <b>APPLICATION</b> <input type="checkbox" name="ta[]" value="APPLICATION"></h6>
@@ -430,6 +437,17 @@ Repayment Transactions <input type="checkbox" name="na[]" value="Repayment_Trans
 <div class="card">
 <div class="card-body">
 Application List <input type="checkbox" name="na[]" value="Application_List">
+</div>
+</div>
+</div>
+</div>
+<br>
+<h6><i style="color:red">*</i> <b>FLEXI</b> <input type="checkbox" name="ta[]" value="FLEXI"></h6>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Registration List <input type="checkbox"  name="na[]" value="Registration_List">
 </div>
 </div>
 </div>
@@ -462,52 +480,37 @@ Saving Request <input type="checkbox" name="na[]" value="Saving_Request">
 <br>
 <br>
 <h5>HEAD OF RECOVERY ROLE</h5><br>
-<h6><i style="color:red">*</i> <b>TRANSACTIONS</b> <input type="checkbox" name="ta[]" value="TRANSACTIONS"></h6>
+<h6><i style="color:red">*</i><b> PORTFOLIO</b> <input type="checkbox" name="ta[]" value="PORTFOLIO"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Posting Transactions <input type="checkbox" name="na[]" value="Posting_Transactions">
+Expired Loan Portfolio <input type="checkbox" name="na[]" value="Expired_Loan_Portfolio">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Loan Portfolio <input type="checkbox" name="na[]" value="Loan_Portfolio">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Saving Portfolio <input type="checkbox" name="na[]" value="Saving_Portfolio">
 </div>
 </div>
 </div>
 </div>
 <br>
-<h6><i style="color:red">*</i><b> ACCOUNT</b> <input type="checkbox" name="ta[]" value="ACCOUNT"></h6>
+<h6><i style="color:red">*</i><b> TRANSACTION</b> <input type="checkbox" name="ta[]" value="TRANSACTION"></h6>
 <div class="row" style="margin-left:1px;">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-Loan Accounts <input type="checkbox" name="na[]" value="Loan_Accounts">
-</div>
-</div>
-</div>
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Saving Accounts <input type="checkbox" name="na[]" value="Saving_Accounts">
-</div>
-</div>
-</div>
-</div>
-<br>
-<h6><i style="color:red">*</i><b> REQUEST</b> <input type="checkbox" name="ta[]" value="REQUESTS"></h6>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Transportation Request <input type="checkbox" name="na[]" value="Transportation_Request">
-</div>
-</div>
-</div>
-</div>
-<br>
-<h6><i style="color:red">*</i><b> REMITTANCE</b> <input type="checkbox" name="ta[]" value="REMITTANCE"></h6>
-<div class="row" style="margin-left:1px;">
-<div class="col-md-3" style="margin-top:12px">
-<div class="card">
-<div class="card-body">
-Remittance <input type="checkbox" name="na[]" value="Money_Remitted">
+Posting Transaction <input type="checkbox" name="na[]" value="Posting_Transaction">
 </div>
 </div>
 </div>
@@ -565,6 +568,13 @@ Virtual Posting <input type="checkbox" name="na[]" value="Virtual_Posting">
 <div class="card">
 <div class="card-body">
 Reciept Posting <input type="checkbox" name="na[]" value="Reciept_Posting">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Saving Posting <input type="checkbox" name="na[]" value="Saving_Posting">
 </div>
 </div>
 </div>
@@ -650,14 +660,28 @@ Loan Verification <input type="checkbox" name="na[]" value="Loan_Verification">
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-CRC Checker <input type="checkbox" name="na[]" value="CRC_Check">
+Account Verification <input type="checkbox" name="na[]" value="Account_Verification">
 </div>
 </div>
 </div>
 <div class="col-md-3" style="margin-top:12px">
 <div class="card">
 <div class="card-body">
-BVN Validation <input type="checkbox" name="na[]" value="BVN Validation">
+CRC Verification <input type="checkbox" name="na[]" value="CRC_Verification">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+BVN Verification <input type="checkbox" name="na[]" value="BVN_Verification">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+NIN Verification <input type="checkbox" name="na[]" value="NIN_Verification">
 </div>
 </div>
 </div>
@@ -679,6 +703,24 @@ Virtual Posting <input type="checkbox" name="na[]" value="Virtual_Posting">
 <div class="card">
 <div class="card-body">
 Reciept Posting <input type="checkbox" name="na[]" value="Reciept_Posting">
+</div>
+</div>
+</div>
+</div>
+<br>
+<span><i style="color:red">*</i> <b>PORTFOLIO</b> <input type="checkbox" name="ta[]" value="PORTFOLIO" style="margin-left:20px" id="tab"></span><br>
+<div class="row" style="margin-left:1px;">
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Loan Portfolio <input type="checkbox" name="na[]" value="Loan_Portfolio">
+</div>
+</div>
+</div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Saving Portfolio <input type="checkbox" name="na[]" value="Saving_Portfolio">
 </div>
 </div>
 </div>

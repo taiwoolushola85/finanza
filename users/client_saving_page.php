@@ -10,6 +10,38 @@ $savid = $row['id'];
 $regid = $row['Reg_id'];
 $saving_bal = $row['Balance'];
 $sv = $row['Savings_Account_No'];
+// savings history
+$sql = "SELECT SUM(Savings) AS lm FROM save WHERE Status = 'Paid' AND Saving_Account = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmd = $data['lm'];
+// withdraw history
+$sql = "SELECT SUM(Amount_Withdraw) AS lm FROM withdraw WHERE Status = 'Paid' AND Saving_Account_No = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmw = $data['lm'];
+// saving transfer
+$sql = "SELECT SUM(Amount) AS lm FROM transfers WHERE Status = 'Paid' AND Saving_Account_No = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmtr = $data['lm'];
+// savings for repayment
+$sql = "SELECT SUM(Amount) AS lm FROM saving_rep WHERE Status = 'Paid' AND Saving_Account_No = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmr = $data['lm'];
+//savings upfront
+$sql = "SELECT SUM(Amount) AS lm FROM saving_upfront WHERE Status = 'Paid' AND Saving_Account_No = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmu = $data['lm'];
+/// credit savings
+$sql = "SELECT SUM(Amount) AS lm FROM credit WHERE Status = 'Paid' AND Reciever_Account = '$sv'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmc = $data['lm'];
+// getting total balance
+$saving_balance = ($pmd - $pmw - $pmr - $pmtr - $pmu)  + $pmc;// total saving balance
 //
 $Query = "SELECT * FROM repayments WHERE Reg_id = '$regid'";
 $result = mysqli_query($con, $Query);
@@ -665,6 +697,7 @@ echo"<span style='margin-left:10px'> No Record Found  </small> ";
 <div class="col-sm-3">
 <input type="text" name="id" class="form-control" hidden value="<?php echo $id;?>" required="required">
 <input type="text" name="ln" class="form-control" hidden value="<?php echo $loan;?>" required="required">
+<input type="text" name="bal" class="form-control" hidden value="<?php echo $saving_balance;?>" required="required">
 <input type="text" class="form-control" hidden placeholder="Amount" name="bl" value="<?php echo $saving_bal;?>" required="required">
 <label>Amount</label><br>
 <input type="number" class="form-control" placeholder="Amount" name="am"  required="required">
@@ -731,7 +764,7 @@ if($status == 'Active'){
 <input type="text" name="id" hidden class="form-control" value="<?php echo $id;?>" required="required">
 <input type="text" name="sav" hidden class="form-control" placeholder="Amount" value="<?php echo $sv;?>" required="required">
 <input type="text" name="ln" hidden class="form-control" value="<?php echo $loan;?>" required="required">
-<input type="text" class="form-control" hidden placeholder="Amount" name="bl" value="<?php echo $saving_bal;?>" required="required">
+<input type="text" name="bal" class="form-control" hidden value="<?php echo $saving_balance;?>" required="required">
 <label>Amount</label><br>
 <input type="number" name="amt" class="form-control" placeholder="Amount" required="required">
 </div>
@@ -829,7 +862,7 @@ processData:false,
 success: function(data){
 if(data==1){
 $("#please").hide();
-alert("🚫  Amount enter is greater than saving balance ");
+alert("🚫 Customer saving balance is inssufficient for this withdrawal ");
 $("#updateModal").modal('show');
 }else if(data==2){
 $("#please").hide();
@@ -887,7 +920,7 @@ processData:false,
 success: function(data){
 if(data==1){
 $("#please").hide();
-alert("🚫  Amount enter is greater than saving balance ");
+alert("🚫 Customer saving balance is inssufficient for this request ");
 $("#updateModal").modal('show');
 }else if(data == 2){
 $("#please").hide();

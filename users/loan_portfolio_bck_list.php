@@ -12,7 +12,7 @@ exit(0);
 
 include '../config/db.php';
 include '../config/user_session.php';
-
+$d = date('Y-m-d');
 // Sanitize and validate inputs
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $maxRows = isset($_POST['maxRows']) ? max(0, (int)$_POST['maxRows']) : 0;
@@ -52,7 +52,7 @@ mysqli_stmt_close($stmt);
 
 // Data query using prepared statement
 $dataQuery = "SELECT id, Account_Number, Firstname, Lastname, Middlename, Product, Branch, 
-Total_Loan, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, 
+Loan_Amount, Interest_Amt, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, 
 Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY id ASC";
 
 if ($maxRows > 0) {
@@ -120,7 +120,8 @@ Total Record: <?php echo htmlspecialchars($total); ?>
 <th style="font-size:8px">NAME</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">PRODUCT</th>
-<th style="font-size:8px">TOTAL LOAN</th>
+<th style="font-size:8px">PRINCIPAL</th>
+<th style="font-size:8px">INTEREST</th>
 <th style="font-size:8px">PAID</th>
 <th style="font-size:8px">OUTSTANDING</th>
 <th style="font-size:8px">EXPECTED AMT</th>
@@ -141,7 +142,8 @@ $middlename = htmlspecialchars($member['Middlename'], ENT_QUOTES, 'UTF-8');
 $lastname = htmlspecialchars($member['Lastname'], ENT_QUOTES, 'UTF-8');
 $branch = htmlspecialchars($member['Branch'], ENT_QUOTES, 'UTF-8');
 $product = htmlspecialchars($member['Product'], ENT_QUOTES, 'UTF-8');
-$totalloan = htmlspecialchars($member['Total_Loan'], ENT_QUOTES, 'UTF-8');
+$totalloan = htmlspecialchars($member['Loan_Amount'], ENT_QUOTES, 'UTF-8');
+$int = htmlspecialchars($member['Interest_Amt'], ENT_QUOTES, 'UTF-8');
 $paid = htmlspecialchars($member['Paid'], ENT_QUOTES, 'UTF-8');
 $exp = htmlspecialchars($member['Expected_Amount'], ENT_QUOTES, 'UTF-8');
 $totalbal = htmlspecialchars($member['Total_Bal'], ENT_QUOTES, 'UTF-8');
@@ -156,13 +158,20 @@ $id = (int)$member['id'];
 <td><?php echo $branch; ?></td>
 <td><?php echo $product; ?></td>
 <td><?php echo number_format((float)$totalloan, 2); ?></td>
+<td><?php echo number_format((float)$int, 2); ?></td>
 <td><?php echo number_format((float)$paid, 2); ?></td>
 <td><?php echo number_format((float)$totalbal, 2); ?></td>
 <td><?php echo number_format((float)$exp, 2); ?></td>
 <td><?php echo $datedisburse; ?></td>
 <td><?php echo $maturitydate; ?></td>
 <td>
-<span class='<?php echo htmlspecialchars($badgeClass, ENT_QUOTES, 'UTF-8'); ?>'><?php echo $status; ?></span>
+<span><?php 
+if($d > $maturitydate){
+echo "<span style='color:red'>Expired</span>";
+}else{
+echo "<span style='color:green'>Active</span>";
+}
+?></span>
 </td>
 <td>
 <a class="invks" href="#" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">

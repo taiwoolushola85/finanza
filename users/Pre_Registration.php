@@ -47,6 +47,8 @@
 </div>
 <!-- end page title -->
 
+
+
 <div  id="first">
 <div class="container">
 <div class="position-relative m-4">
@@ -71,25 +73,25 @@
 <center>
 <i id="check" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking BVN.! Please wait...</i>
 <i id="bvnerror" style="color:red; margin-left:10px; display:none">Invalid BVN !! Please Check...</i>
+
+<h5 id="fullName"></h5>
 </center>
 </div>
 <br>
 <b><i class="fa fa-star"></i> Personal Information</b><br>
-<div class="row" style="margin-top: 20px;">
+<div class="row" style="margin-top: 20px; ; display:none">
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Surname</label>
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Surname</label>
+<input type="text" class="form-control form-control-sm" hidden name="img" id="img" required>
 <input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="sn" id="firstName" required>
-<input type="text" class="form-control form-control-sm" placeholder="Surname" disabled id="firstNames" required>
 </div>
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Firstname</label>
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Firstname</label>
 <input type="text" class="form-control form-control-sm" placeholder="Firstname" hidden name="fn" id="middleName" required>
-<input type="text" class="form-control form-control-sm" placeholder="Firstname" disabled id="middleNames" required>
 </div>
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Lastname</label>
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Lastname</label>
 <input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="ln" id="lastName" required>
-<input type="text" class="form-control form-control-sm" placeholder="Lastname" disabled id="lastNames" required>
 </div>
 </div>
 
@@ -110,23 +112,7 @@
 </select>
 </div>
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Phone No</label>
 <input type="text" class="form-control form-control-sm" placeholder="Phone No" hidden name="ph" id="ph" required>
-<input type="text" class="form-control form-control-sm" placeholder="Phone No" disabled id="phs" required>
-</div>
-</div>
-<div class="row" style="margin-top: 20px;">
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Gender</label>
-<input type="text" class="form-control form-control-sm" hidden name="gn" id="gender" required>
-<input type="text" class="form-control form-control-sm" disabled id="genders" required>
-</div>
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Date Of Birth</label>
-<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" hidden name="db" id="dateOfBirth" required>
-<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" disabled id="dateOfBirths" required>
-</div>
-<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Repayment Day</label>
 <select class="form-control form-control-sm"  name="repday" required>
 <option value="">Select Option</option>
@@ -139,20 +125,34 @@
 </select>
 </div>
 </div>
+<div class="row" style="margin-top: 20px; ; display:none">
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Gender</label>
+<input type="text" class="form-control form-control-sm" hidden name="gn" id="gender" required>
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Date Of Birth</label>
+<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" hidden name="db" id="dateOfBirth" required>
+<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" disabled id="dateOfBirths" required>
+</div>
+</div>
+
+<b style="display:none"><i class="fa fa-star"></i> Means Of Identification</b><br>
+<div class="row" style="margin-top: 20px; display:none">
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Document Type</label>
+<input type="text" class="form-control form-control-sm" value="National ID Card" name="doc" hidden required>
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> NIN No</label>
+<input type="text" class="form-control form-control-sm" placeholder="Document No" hidden id="nin" name="docn" required>
+</div>
+</div>
 <br>
-<b><i class="fa fa-star"></i> Means Of Identification</b><br>
+<b><i class="fa fa-star"></i> Contact Information</b><br>
 <div class="row" style="margin-top: 20px;">
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Document Type</label>
-<input type="text" class="form-control form-control-sm" value="National ID Card" name="doc" hidden required>
-<input type="text" class="form-control form-control-sm" value="National ID Card" disabled required>
-</div>
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> NIN No</label>
-<input type="text" class="form-control form-control-sm" placeholder="Document No" hidden id="nin" name="docn" required>
-<input type="text" class="form-control form-control-sm" placeholder="Document No" disabled id="nins"  required>
-</div>
-<div class="col-sm-4">
+<input type="text" class="form-control form-control-sm" hidden name="sta" id="stateOfOrigin"  placeholder="State Of Origin" required>
 <label style="font-size:13px"><i style="color:red">*</i> Groups</label>
 <select type="text" class="form-control form-control-md" name="un" required>
 <option value="">Select Group</option>
@@ -173,15 +173,6 @@ $name= $rows['Name'];
 }
 ?>
 </select>
-</div>
-</div>
-<br>
-<b><i class="fa fa-star"></i> Contact Information</b><br>
-<div class="row" style="margin-top: 20px;">
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> State Of Origin</label>
-<input type="text" class="form-control form-control-sm" hidden name="sta" id="stateOfOrigin"  placeholder="State Of Origin" required>
-<input type="text" class="form-control form-control-sm" disabled id="stateOfOrigins"  placeholder="State Of Origin" required>
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Town/City</label>
@@ -313,15 +304,18 @@ if($mapped == 'Mapped'){
 <center>
 <i id="checks" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking NIN.! Please wait...</i>
 <i id="bvnerrors" style="color:red; margin-left:10px; display:none">Invalid NIN !! Please Check...</i>
+
+<h5 id="fullNames"></h5>
 </center>
 </div>
 <br>
 <i><b style="color:red">Note:</b> All fields in red border are required</i><br><br>
-<b><i class="fa fa-star"></i> Gaurantor Information</b><br><br>
+<b><i class="fa fa-star"></i> Gaurantor Information</b><br>
 
-<div class="row" style="margin-top:20px;">
+<div class="row" style="margin-top:20px; display:none">
 <div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Surname</label>
+<input type="text" class="form-control form-control-sm" hidden name="imgs" id="imgs" required>
 <input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="surname2" id="sn" required>
 <input type="text" class="form-control form-control-sm" placeholder="Surname" disabled id="sns" required>
 </div>
@@ -335,21 +329,23 @@ if($mapped == 'Mapped'){
 <input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="lastname2" id="ln" required>
 <input type="text" class="form-control form-control-sm" placeholder="Lastname" disabled id="lns" required>
 </div>
-<div class="col-sm-3">
+</div>
+<div class="row" style="margin-top:20px;">
+<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Phone No</label>
 <input type="number" class="form-control form-control-sm" placeholder="Phone No" name="phone2" id="ph" required>
 </div>
-</div>
-<div class="row" style="margin-top:20px;">
-<div class="col-sm-3">
+<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Address</label>
 <input type="text" class="form-control form-control-sm" placeholder="Address" name="address3" required>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Occupation</label>
 <input type="text" class="form-control form-control-sm" placeholder="Occupation" name="occupation" required>
 </div>
-<div class="col-sm-3">
+</div>
+<div class="row" style="margin-top:20px;">
+<div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Relationship</label>
 <select class="form-control form-control-sm" name="relationship" required>
 <option value="">Select Type</option>
@@ -369,13 +365,16 @@ if($mapped == 'Mapped'){
 <option value="Other">Other</option>
 </select>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Gender</label>
-<input type="text" class="form-control form-control-sm" name="gender3" hidden id="gn" required>
-<input type="text" class="form-control form-control-sm" disabled id="gns" required>
+<select class="form-control form-control-sm" name="gender3" required>
+<option value="">Select Gender</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
 </div>
 </div>
-<div class="row" style="margin-top:20px;">
+<div class="row" style="margin-top:20px; display:none">
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> ID Type</label>
 <input type="text" class="form-control form-control-sm" value="National ID Card" hidden name="idtype" required>
@@ -390,7 +389,7 @@ if($mapped == 'Mapped'){
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-12">
 <label style="font-size:13px"><i style="color:red">*</i> Remark/Comment</label>
-<textarea type="text" class="form-control form-control-sm" name="remark" cols="6" rows="6" required></textarea>
+<textarea type="text" class="form-control form-control-sm" name="remark" cols="6" rows="6" placeholder="Type your comment here....." required></textarea>
 </div>
 </div>
 <br>
@@ -410,6 +409,7 @@ if($mapped == 'Mapped'){
 
 
 </div>
+
 
 
 
@@ -561,8 +561,10 @@ $('#check').hide();
 });
 }
 function displaySuccessResult(data) {      
+$('#check').hide();
 // Populate table
-$('#userPhoto').attr('src', data.photo || 'https://via.placeholder.com/150');
+$('#userPhoto').attr('src', data.photo || 'https://placehold.net/avatar.svg');
+$('#img').val(data.photo || 'https://placehold.net/avatar.svg');
 $('#bvnData').val(data.bvn || 'N/A');
 $('#firstName').val(data.firstName || 'N/A');
 $('#middleName').val(data.middleName || 'N/A');
@@ -572,17 +574,11 @@ $('#gender').val(data.gender || 'N/A');
 $('#nin').val(data.nin || 'N/A');
 $('#stateOfOrigin').val(data.stateOfOrigin || 'N/A');
 // disabled value
-$('#firstNames').val(data.firstName || 'N/A');
-$('#middleNames').val(data.middleName || 'N/A');
-$('#lastNames').val(data.lastName || 'N/A');
-$('#dateOfBirths').val(data.dateOfBirth || 'N/A');
-$('#genders').val(data.gender || 'N/A');
-$('#nins').val(data.nin || 'N/A');
-$('#stateOfOrigins').val(data.stateOfOrigin || 'N/A');
+$('#fullName').text([data.firstName, data.middleName, data.lastName].filter(Boolean).join(' ') || 'N/A');
+
 // Handle phone numbers array
-const phones = data.phones ? data.phones.filter(p => p).join(', ') : 'N/A';
-$('#ph').val(phones);
-$('#phs').val(phones);
+//const phones = data.phones ? data.phones.filter(p => p).join(', ') : 'N/A';
+$('#ph').val(phones || 'N/A');
 // Show success message
 alert('Customer Verification successful!');
 }
@@ -645,8 +641,10 @@ $('#checks').hide();
 }
 
 function displaySuccessResult(data) {
+$('#checks').hide();
 // Populate fields with user data
 $('#userPhotos').attr('src', data.photo || 'https://via.placeholder.com/150');
+$('#imgs').val(data.photo || 'https://placehold.net/avatar.svg');
 $('#ninData').val(data.nin || 'N/A');
 $('#ninDatas').val(data.nin || 'N/A');
 $('#sn').val(data.surname || data.firstName || 'N/A');
@@ -655,8 +653,7 @@ $('#fn').val(data.firstname || data.middleName || 'N/A');
 $('#fns').val(data.firstname || data.middleName || 'N/A');
 $('#ln').val(data.surname || data.lastName || 'N/A');
 $('#lns').val(data.surname || data.lastName || 'N/A');
-$('#gn').val(data.gender || 'N/A');
-$('#gns').val(data.gender || 'N/A');
+$('#fullNames').text([data.surname, data.firstname].filter(Boolean).join(' ') || 'N/A');
 // Show success message
 alert('Gaurantor Verification successful!');
 }
@@ -685,7 +682,6 @@ contentType: false,
 cache: false, 
 processData:false,
 success: function(data){
-$("#please").show();
 $("#uploadForm")[0].reset();
 if(data == 1){
 alert("🚫 Please fill all required fields before submitting the application.!");

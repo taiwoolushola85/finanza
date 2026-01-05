@@ -38,7 +38,8 @@ $bal = $rep['Total_Bal'];
 <button class="btn btn-outline-success btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerInfo()">Customer Info</button>
 <button class="btn btn-outline-info btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerLoan()">Loan History</button>
 <button class="btn btn-outline-warning btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerGua()">Gaurantor Info</button>
-<button class="btn btn-outline-primary btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerBiz()">Document & Business Gallery</button>
+<button class="btn btn-outline-primary btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerCRC()">CRC Report</button>
+<button class="btn btn-outline-info btn-sm w-100" style="font-size: 12px; margin-top:5px;" onclick="customerBiz()">Document & Business Gallery</button>
 </center>
 </div>
 <div class="col-sm-9">
@@ -415,12 +416,49 @@ echo" No Record Found";
 </table>
 </div>
 
+</div>
+
+
+<div id="crc" style="display:none;">
+<br>
+<br>
+<h5><i class="fa fa-file"></i> CRC REPORT</h5>
+<br>
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT id, Location FROM document WHERE BVN = '$bvn' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bn = $rows['id'];
+$crc = $rows['Location'];
+?>
+<embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
+</tr>
+<?php
+} 
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo " No CRC Report Found  <br/> ";        
+}
+?>
 
 
 
 
 
 </div>
+
+
+
+
+
+
 
 <div id="loan" style="display:none;">
 <br>
@@ -550,6 +588,10 @@ $st = $rows['Status'];
 
 
 </div>
+
+
+
+
 <div id="biz" style="display:none;">
 <br>
 <br>
@@ -596,10 +638,12 @@ var a = document.getElementById("client");
 var b = document.getElementById("gua");
 var c = document.getElementById("loan");
 var d = document.getElementById("biz");
+var x = document.getElementById("crc");
 a.style.display = 'block';
 b.style.display = 'none';
 c.style.display = 'none';
 d.style.display = 'none';
+x.style.display = 'none';
 }
 
 function customerLoan(){
@@ -607,10 +651,12 @@ var a = document.getElementById("client");
 var b = document.getElementById("gua");
 var c = document.getElementById("loan");
 var d = document.getElementById("biz");
+var x = document.getElementById("crc");
 a.style.display = 'none';
 b.style.display = 'none';
 c.style.display = 'block';
 d.style.display = 'none';
+x.style.display = 'none';
 }
 
 
@@ -619,10 +665,12 @@ var a = document.getElementById("client");
 var b = document.getElementById("gua");
 var c = document.getElementById("loan");
 var d = document.getElementById("biz");
+var x = document.getElementById("crc");
 a.style.display = 'none';
 b.style.display = 'block';
 c.style.display = 'none';
 d.style.display = 'none';
+x.style.display = 'none';
 }
 
 
@@ -631,11 +679,29 @@ var a = document.getElementById("client");
 var b = document.getElementById("gua");
 var c = document.getElementById("loan");
 var d = document.getElementById("biz");
+var x = document.getElementById("crc");
 a.style.display = 'none';
 b.style.display = 'none';
 c.style.display = 'none';
+x.style.display = 'none';
 d.style.display = 'block';
 }
+
+
+
+function customerCRC() {
+var a = document.getElementById("client");
+var b = document.getElementById("gua");
+var c = document.getElementById("loan");
+var d = document.getElementById("biz");
+var x = document.getElementById("crc");
+a.style.display = 'none';
+b.style.display = 'none';
+c.style.display = 'none';
+d.style.display = 'none';
+x.style.display = 'block';
+}
+
 
 </script>
 

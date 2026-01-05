@@ -13,7 +13,7 @@ include '../config/user_session.php';
 
 // Prepare base query with proper escaping
 $searchEscaped = mysqli_real_escape_string($con, $search);
-$baseWhere = "Status != 'Disbursed'";
+$baseWhere = "Status != 'Disbursed' AND Status != 'Cancelled'";
 
 // Build query based on conditions
 if (!empty($search)) {
@@ -53,7 +53,7 @@ mysqli_close($con);
 ?>
 
 
-<div id="table-container" style="height:200px;">
+<div id="table-container" style="height:175px; margin-top:10px">
 <table>
 <thead>
 <tr>

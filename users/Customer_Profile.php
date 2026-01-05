@@ -16,10 +16,10 @@
 <li class="breadcrumb-item">
 <a href="#!">
 <i class="mdi mdi-home-outline fs-18 lh-1"></i>
-<span class="visually-hidden">Customer</span>
+<span class="visually-hidden">Profile</span>
 </a>
 </li>
-<li class="breadcrumb-item"><a href="#!">Customer</a></li>
+<li class="breadcrumb-item"><a href="#!">Profile</a></li>
 <li class="breadcrumb-item active" aria-current="page">Customer Profile</li>
 </ol>
 </nav>

@@ -9,18 +9,14 @@ $bnk = $_POST['bn']; //bank
 $acct_no = $_POST['an']; // account no
 $acct_name = $_POST['ann']; // account name
 // getting loan product for registration
-$Query = "SELECT Product, Rate, Frequency, Inssurance FROM product_list WHERE Product_id='$pr' AND Tenure = '$ten'";
+$Query = "SELECT Product, Rate, Frequency, Inssurance FROM product_list WHERE Product_id = '$pr' AND Tenure = '$ten'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $pr_name = $row['Product'];
 $rt = $row['Rate'];
 $frq = $row['Frequency'];
 $ins = $row['Inssurance'];
-//checking if all filed has been filled
-if(empty($type) || empty($pr) || empty($ten) || empty($lum) || empty($bnk) || empty($acct_no) || empty($acct_name)){
-echo 1;
-exit();
-}else{
+//processing based on frequency
 if($frq == 'Daily'){
 // expected repayment
 $dd = $lum + 0; // the intererst is 0
@@ -63,17 +59,17 @@ $upfront_saving = ($lum * $rt) / 100;
 // Calculate the inssurance percentage
 $inssurance = ($lum * $ins) / 100;
 //monthly interest
-$monthly_intrest = $rnds_int / $ten;
+$monthly_intrest = $total_int / $ten;
 // inserting the customer information
 $sql = "UPDATE register SET Product = '$pr_name', Product_id = '$pr', Tenure = '$ten', Frequency = '$frq', Rate = '$rt', Loan_Amount = '$lum', Bank = '$bnk',
-Account_Name = '$acct_name', Account_No = '$acct_no', Interest_Amt = '$rnds_int', Monthly_Interest = '$monthly_intrest', Repayment_Amt = '$rnd_rep', 
-Total_Loan = '$rnd_tloan', Upfront = '$upfront_saving', Inssurance = '$inssurance', Form = '500', Card = '1000', Upfront_Types  = '$type' WHERE id = '$id'";
+Account_Name = '$acct_name', Account_No = '$acct_no', Interest_Amt = '$total_int', Monthly_Interest = '$monthly_intrest', Repayment_Amt = '$rnd_rep', 
+Total_Loan = '$rnd_tloan', Upfront = '$upfront_saving', Inssurance = '$inssurance', Form = '500', Card = '1000', Upfront_Types  = '$type',
+Status = 'Waiting For Verification' WHERE id = '$id'";
 $result= mysqli_query($con, $sql);
 if($result == true){
 echo 2;
 }else{
 echo("Error description: " . mysqli_error($con));
-}
 }
 }
 mysqli_close($con);

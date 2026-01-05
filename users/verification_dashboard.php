@@ -109,10 +109,14 @@ Client loan application awaiting verification</p>
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT COUNT(*) FROM register WHERE Status != 'Disbursed' AND Branch ='$brss'");
+$result = mysqli_query($con, "SELECT COUNT(*) FROM register WHERE Status = 'Waiting For Verification' AND Branch ='$brss'");
 $row = mysqli_fetch_array($result);
-$total = $row[0];
-echo $total;
+$total1 = $row[0];
+//
+$result = mysqli_query($con, "SELECT COUNT(*) FROM register WHERE Status = 'Under Review' AND Branch ='$brss'");
+$row = mysqli_fetch_array($result);
+$total2 = $row[0];
+echo $total1 + $total2;
 ?>
 </h5>
 <span class="badge badge-label-success float-end">Active</span>

@@ -16,7 +16,7 @@
 
 <!--  Modal content for the menu -->
 <div class="modal" id="menu">
-<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h6 class="modal-title" id="myLargeModalLabel">Menu List</h6>

@@ -49,33 +49,26 @@ $result = $stmt->get_result();
 <th style="font-size:8px">LOAN STATUS</th> 
 </tr> 
 </thead>
-
 <tbody>
-<?php while ($member = $result->fetch_assoc()) { ?>
+<?php 
+if ($result->num_rows > 0) {
+while ($member = $result->fetch_assoc()) { ?>
 <tr style="font-size:8px" class="invks" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member['id']; ?>">
 <td><?php echo $member['Loan_Account_No']; ?></td>
-<td style="text-transform:uppercase;">
-<?php echo $member['Firstname']." ".$member['Middlename']." ".$member['Lastname']; ?>
-</td>
+<td style="text-transform:uppercase;"><?php echo $member['Firstname']." ".$member['Middlename']." ".$member['Lastname']; ?></td>
 <td><?php echo $member['Unions']; ?></td>
 <td><?php echo $member['Product']; ?></td>
 <td><?php echo number_format($member['Total_Loan'], 2); ?></td>
 <td><?php echo number_format($member['Paid'], 2); ?></td>
 <td><?php echo number_format($member['Expected_Amount'], 2); ?></td>
 <td><?php echo number_format($member['Total_Bal'], 2); ?></td>
-<td><?php $date = date_create($member['Maturity_Date']);
-echo date_format($date, "d-M-Y");
-?>
-</td>
-<td>
-<?php 
-if ($member['Maturity_Date'] < $d) {
-echo "<span style='color:red'>Expired</span>";
-} else {
-echo "<span style='color:green'>Running</span>";
-}
-?>
-</td>
+<td><?php $date = date_create($member['Maturity_Date']); echo date_format($date, "d-M-Y"); ?></td>
+<td><?php echo ($member['Maturity_Date'] < $d) ? "<span style='color:red'>Expired</span>" : "<span style='color:green'>Running</span>"; ?></td>
+</tr>
+<?php } 
+} else { ?>
+<tr>
+<td colspan="10" style="text-align:center; font-size:10px;">No record found</td>
 </tr>
 <?php } ?>
 </tbody>
@@ -109,10 +102,6 @@ echo "<span style='color:green'>Running</span>";
 <input type="text" name="id" class="form-control" id="stid" hidden required>
 <input type="text" name="tba" class="form-control" id="tba" hidden required>
 <input type="number" name="am" class="form-control" placeholder="Enter Repayment Amount">
-</div>
-<div class="col-sm-12">
-<label class="form-label"><i style="color: red;">*</i> Enter Savings</label>
-<input type="number" name="sa" class="form-control" placeholder="Enter Saving Amount">
 </div>
 </div>
 <br>
@@ -170,7 +159,7 @@ if(checked == true) {
 $("#updateModal").modal('hide');
 $("#please").show();
 $.ajax({
-url: "repayment_posting_bck.php",
+url: "recovery_repayment_posting_bck.php",
 type: "POST",
 data: new FormData(this),
 contentType: false, 
@@ -182,32 +171,17 @@ $('#reciept').attr('src', '');
 $("#reciptUpload")[0].reset();
 if(data == 1){
 $("#please").hide();
-alert("🚫 Do not put zero as an amount for repayments amount..");
+alert("🚫 Reciept size is more than 1.8MB, Please crop the image..");
 }else if (data == 2){
 $("#please").hide();
-alert("🚫 Do not put zero as an amount for saving amount..");   
+alert("🚫 Amount entered is greater than loan balance. please check");   
 }else if (data == 3){
 $("#please").hide();
-alert("🚫 Reciept size is more than 5MB, Please crop the image..");   
+alert("🚫 You have posted repayment for this customer today. please try again next day.");   
 }else if (data == 4){
 $("#please").hide();
-alert("🚫 You have posted repayment for this customer today. please try again next day.");   
+alert("🚫 Customer repayment still waiting for approval by the lead. please check");   
 }else if (data == 5){
-$("#please").hide();
-alert("🚫 This customer has a pending repayment posted waiting for approval. please confirm from your lead");   
-}else if (data == 6){
-$("#please").hide();
-alert("🚫 You have posted saving for this customer today. please try again next day.");   
-}else if (data == 7){
-$("#please").hide();
-alert("🚫 This customer has a pending savings posted waiting for approval. please confirm from your lead");  
-}else if (data == 8){
-$("#please").hide();
-alert("🚫 The amount you entered is higher than the customer current loan balance");  
-}else if (data == 9){
-$("#please").hide();
-alert("🚫 You are not allowed to post only savings, for this customer. please include the repayment amount.");   
-}else if(data == 10){
 setTimeout(function(){
 $("#please").hide();
 $("#toast").css("display", "block");

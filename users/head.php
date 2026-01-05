@@ -40,23 +40,15 @@ $user = $_SESSION['Username'];
 
 <style>
 
-input:valid {
-  border-color: hsl(120, 76%, 50%);
+.form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 8;
 }
-input:invalid {
-  border-color: red;
-}
-select:valid {
-  border-color: hsl(120, 76%, 50%);
-}
-select:invalid {
-  border-color: red;
-}
-textarea:valid {
-  border-color: hsl(120, 76%, 50%);
-}
-textarea:invalid {
-  border-color: red;
+
+.form-control:focus {
+    box-shadow: none;
+    border-bottom-color: #0d6efd;
 }
 
 /* Toast Container */
@@ -162,6 +154,7 @@ redirect();
 });
 
 </script>
+
 <?php
 include('../config/db.php') ;
 if (isset($_SESSION['Username'])) {
@@ -188,7 +181,7 @@ $brss = $row['Branch'];
 <div class="navbar-logo-box">
 <a href="#" class="logo logo-dark">
 <span class="logo-sm">
-<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+<h4 style="margin-top:10px;"><img src="../assets/images/logo-sm.png" class="dark-logo d-none" height="20" alt="Logo-Dark"><b style="font-size:19px;"> FINANZA</b></h4>
 </span>
 <span class="logo-lg">
 <h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
@@ -196,7 +189,7 @@ $brss = $row['Branch'];
 </a>
 <a href="#" class="logo logo-light">
 <span class="logo-sm">
-<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+<h4 style="margin-top:10px;"><img src="../assets/images/logo-sm.png" class="dark-logo d-none" height="20" alt="Logo-Dark"><b style="font-size:19px;"> FINANZA</b></h4>
 </span>
 <span class="logo-lg">
 <h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
@@ -232,56 +225,19 @@ $brss = $row['Branch'];
 </div>
 </form>
 
-<button type="button" class="btn btn-icon top-icon d-none d-md-block" id="light-dark-mode" aria-label="Toggle Light/Dark">
+
+<!-- Start Notifications -->
+<div class="dropdown d-inline-block">
+<button type="button" class="btn btn-icon top-icon d-md-block" id="light-dark-mode" aria-label="Toggle Light/Dark">
 <i class="mdi mdi-brightness-7 align-middle"></i>
 <i class="mdi mdi-white-balance-sunny align-middle"></i>
 </button>
-<!-- Start Notifications -->
-<div class="dropdown d-inline-block">
-<button type="button" class="btn btn-icon top-icon" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
-<i class="mdi mdi-bell-ring-outline fs-17"></i>
-</button>
-<div class="dropdown-menu dropdown-menu-lg dropdown-menu-md dropdown-menu-end dropdown-menu-animated p-0 " aria-labelledby="page-header-notifications-dropdown">
-<div class="p-4 border-bottom">
-<div class="row align-items-center">
-<div class="col">
-<h6 class="m-0"> <i class="mdi mdi-bell-ring-outline me-1 fs-15"></i> Notifications </h6>
-</div>
-<div class="col-auto">
-<a href="#!" class="badge bg-info-subtle text-info"> 8+</a>
-</div>
-</div>
-</div>
-<div data-simplebar style="max-height: 230px;">
-<a href="#!" class="text-reset notification-item">
-<div class="d-flex">
-<div class="avatar avatar-xs avatar-label-primary me-3">
-<span class="rounded fs-16">
-<i class="mdi mdi-file-document-outline"></i>
-</span>
-</div>
-<div class="flex-1">
-<h6 class="mb-1">New report has been recived</h6>
-<p class="mb-0 fs-12 text-muted"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
-</div>
-<i class="mdi mdi-chevron-right align-middle ms-2"></i>
-</div>
-</a>
-</div>
-<div class="p-2 border-top">
-<div class="d-grid">
-<a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-<i class="mdi mdi-arrow-right-circle me-1"></i> View More..
-</a>
-</div>
-</div>
-</div>
 </div>
 <!-- Start Profile -->
 <div class="dropdown d-inline-block ps-3 ms-2 border-start admin-user-info">
 <button type="button" aria-label="profile" class="btn btn-sm p-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <span class="avatar avatar-xs p-1 d-inline-block">
-<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid" style="border-radius:5px; height:30px">
+<img src="<?php echo $row['Location']; ?>" class="img-fluid" style="border-radius:5px; height:30px">
 </span>
 <span class="d-none d-xl-inline-block ms-1 fw-semibold fs-14 admin-name"><?php echo $row['Name']; ?></span>
 <i class="mdi mdi-chevron-down align-middle fs-16 d-none d-xl-inline-block"></i>
@@ -292,7 +248,7 @@ $brss = $row['Branch'];
 <div class="rich-list-item w-100 p-0">
 <div class="rich-list-prepend">
 <span class="rounded avatar-sm p-1 bg-body d-flex">
-<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid">
+<img src="<?php echo $row['Location']; ?>" class="img-fluid">
 </span>
 </div>
 <div class="rich-list-content">
@@ -347,8 +303,7 @@ $brss = $row['Branch'];
 </li>
 <li class="menu-title">Menu List</li>
 <?php
-
-include('../config/db.php');
+include '../config/db.php';
 //Get branch Details
 $Query = "SELECT DISTINCT Tab FROM control WHERE Role_Categorys = '$ct' AND Groups = '$gr' ORDER BY Tab ASC";
 //echo $Query, "<br>";
@@ -358,7 +313,6 @@ if ($Count > 0) {
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
 $tab = $rows['Tab'];
-
 ?>
 <li>
 <a href="javascript: void(0);" class="has-arrow" style="font-size:12px;">
@@ -367,7 +321,7 @@ $tab = $rows['Tab'];
 </a>
 <ul class="sub-menu mm-collapse" aria-expanded="false">
 <?php
-$Query = "SELECT role, Name FROM  control WHERE Tab = '$tab' AND Groups = '$gr' AND Role_Categorys = '$ct' ORDER BY Name ASC";
+$Query = "SELECT role, Name FROM control WHERE Tab = '$tab' AND Groups = '$gr' AND Role_Categorys = '$ct' ORDER BY Name ASC";
 $mresult = mysqli_query($con, $Query);
 $mCount = mysqli_num_rows($mresult);
 if ($mCount > 0) {
@@ -375,6 +329,7 @@ for ($mj=0 ; $mj < $mCount; $mj++){
 $mrows = mysqli_fetch_array($mresult);
 $mroles = $mrows['role'];
 $name = $mrows['Name'];
+
 ?>
 <li><a href="<?php echo $mroles; ?>.php"><?php echo $name; ?> </a></li>
 <?php
@@ -387,7 +342,7 @@ $name = $mrows['Name'];
 }
 }else {
 //$Available = false; 
-///echo" No Record Found  <br/> ";       
+echo "<i style='margin-left:20px'>No Menu Available</i>";       
 
 }
 ?>
@@ -396,8 +351,6 @@ $name = $mrows['Name'];
 <!-- Sidebar -->
 </div>
 </div>
-
-
 
 
 

@@ -42,7 +42,7 @@ $bl = $row['Balance'];
 <?php 
 if($st == 'Waiting For Approval'){
 ?>
-<button class="btn btn-outline-success btn-sm btn-block"  disabled="disabled">Approve Request</button>
+<button class="btn btn-light btn-sm btn-sm btn-block"  disabled="disabled">Approve Request</button>
 <?php 
 }else{
 ?>
@@ -51,11 +51,11 @@ if($st == 'Waiting For Approval'){
 <?php 
 if($amt <= $bl){
 ?>
-<button class="btn btn-outline-success btn-sm btn-block"  onclick="data()">Approve Request</button>
+<button class="btn btn-light btn-sm btn-block"  onclick="data()">Approve Request</button>
 <?php
 }else{
 ?>
-<button class="btn btn-outline-success btn-sm btn-block"  disabled onclick="data()">Insufficient Balance</button>
+<button class="btn btn-light btn-sm btn-block"  disabled onclick="data()">Insufficient Balance</button>
 <?php
 }
 ?>
@@ -65,7 +65,7 @@ if($amt <= $bl){
 ?>
 <form action="" method="POST" enctype="multipart/form-data" id="upload">
 <input type="text" hidden class="form-control form-control-sm" placeholder="Account Name" name="id" value="<?php echo $id; ?>" required="required">
-<button class="btn btn-outline-danger btn-sm btn-block"  onclick="data()">Decline Request</button>
+<button class="btn btn-light btn-sm btn-block"  onclick="data()">Decline Request</button>
 </form>
 </div>
 </center>

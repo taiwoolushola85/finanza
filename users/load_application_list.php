@@ -76,7 +76,16 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
+if (empty($results)) {
+?>
+<tr>
+<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+<strong>No record found</strong>
+</td>
+</tr>
+<?php
+} else {
+foreach ($results as $member) {
 // Escape output for XSS protection
 $bvn = htmlspecialchars($member['BVN']);
 $firstname = htmlspecialchars($member['Firstname']);
@@ -117,6 +126,7 @@ $badgeClass = 'badge-soft-danger';
 </td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>

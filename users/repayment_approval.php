@@ -26,7 +26,7 @@ $result = mysqli_query($con, "UPDATE repayments SET Paid = Paid + $amt, Total_Ba
 Transaction_Date = '$dp', Signed_Date = '$d' WHERE Transaction_id = '$tr' AND Status = 'Active'");
 //
 $result = mysqli_query($con, "UPDATE savings SET Balance = Balance + $sav, Last_Payment_Date = '$dp', Last_Amount = '$sav', Repayments_id = '$rep_id'  
-WHERE Savings_Account_No = '$sn' AND User = '$us' AND Status = 'Active'");
+WHERE Savings_Account_No = '$sn' AND Status = 'Active'");
 //
 $result = mysqli_query($con, "UPDATE save SET Status = 'Paid' WHERE History_id = '$id'");
 // updating schedule

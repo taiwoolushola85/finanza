@@ -8,7 +8,7 @@
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
-<i class="fa fa-check"></i> Request Successfully Sent
+<i class="fa fa-check"></i> Loan Successfully Extended
 </div>
 </div>
 </div>
@@ -48,12 +48,12 @@
 <br>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div class="row">
-<div class="col-sm-4">
+<div class="col-sm-3">
 <label><i style="color:red">*</i> Enter Active Loan Account No</label>
 <div class="input-group mb-3">
 <input type="number" class="form-control form-control-sm"  id="acct" placeholder="Enter Active Loan Account" required>
 <span class="input-group-append">
-<button type="submit" class="btn btn-outline-primary btn-sm" onclick="data()"><i class="fa fa-search"></i> Search Record</button>
+<button type="submit" class="btn btn-outline-primary btn-sm" onclick="data()"><i class="fa fa-search"></i> Search</button>
 </span>
 </div>
 </form>

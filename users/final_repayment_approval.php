@@ -58,7 +58,11 @@ $yrs = date('Y');
 $mth = date('M');
 $rand = rand();
 $ran = uniqid();
-//
+
+// saving for repayment request
+$Query = "UPDATE saving_rep SET Status = 'Paid', Management_Approve = '$na', Date_Approved = '$d' WHERE id = '$request_id'";
+$result = mysqli_query($con, $Query);
+// inserting into history table
 $Query  = "INSERT INTO history (Session_id, Notification_id, Rep_id, Virtual_No, Disbursement_No, Register_id, Repayment_id, Loan_Account_No,
 Transaction_id, Saving_Account_No, Firstname, Middlename, Lastname, Unions, Union_Code, Loan_Amount, Amount, Savings, Duration, Frequency, Rate, Loan_Type,
 Product_id, Branch, Branch_Code, Status, User, User_id, Team_Leader, Team_Name, Officer_Name, Date_Paid, Time_Paid, Team_id, Interest_Amt, Expected_Amount, 
@@ -67,9 +71,6 @@ VALUES ('NA', 'NA', '$id', '$virtaul_acct', '$dis', '$reg', '$id', '$ln', '$tr',
 '$du', '$fr', '$rt', '$pr_name', '$pr_id', '$br_name', '$br_id', 'Paid', '$us', '$us_id', '$tm', '$tmn', '$ofn', '$d', '$ss', '$tim', '$int_amt', '$exp_amt',
 '$total_loan', 'No Reciept', '$bal', '$ph', 'Saving For Repayment', 'Payment Confirmed', '$alert', 'System Posting', 'No Reciept No', 'Denied', 'Denied', '$mth',
 '$yrs')";
-$result = mysqli_query($con, $Query);
-// saving for repayment request
-$Query = "UPDATE saving_rep SET Status = 'Paid', Management_Approve = '$na', Date_Approved = '$d' WHERE id = '$request_id'";
 $result = mysqli_query($con, $Query);
 // savings history
 $sql = "SELECT SUM(Savings) AS lm FROM save WHERE Status ='Paid' AND Saving_Account = '$sa'";
@@ -97,17 +98,17 @@ $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmu = $data['lm'];
 /// credit savings
-$sql = "SELECT SUM(Amount) AS lm FROM credit WHERE Status ='Paid' AND  Reciever_Account = '$sa'";
+$sql = "SELECT SUM(Amount) AS lm FROM credit WHERE Status ='Paid' AND Reciever_Account = '$sa'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmc = $data['lm'];
 // getting total balance
-$bal = $pmd - $pmw - $pmr - $pmtr + $pmc;
+$bal = ($pmd - $pmw - $pmr - $pmtr) + $pmc;
 //
 $Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sa'";
 $result = mysqli_query($con, $Query);
 //
-$Query = "UPDATE savings SET Balance = '$bal' WHERE Savings_Account_No = '$sa'";
+$Query = "UPDATE savings SET Balance = '$bal', Savings_Repayment = '$pmr' WHERE Savings_Account_No = '$sa'";
 // updating reciever schedule 
 $Query = "UPDATE schedule SET Amount_Paid = '$amt', Savings = '0', Payment_Status = 'Paid', Date_Paid = '$d', Payment_Method = 'Savings Method' 
 WHERE Transaction_id = '$tr' AND Payment_Status = 'Outstanding' ORDER BY id ASC LIMIT 1";

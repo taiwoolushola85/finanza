@@ -165,13 +165,11 @@ processData:false,
 success: function(data){ 
 $("#uploadExt")[0].reset(); 
 if (data == 1){
-$("#please").hide();
-alert ("🚫 Request has been sent already for approval.");
-}else if(data == 2){
 setTimeout(function(){
 $("#please").hide();
 $("#toast").css("display", "block");
 $("#toast").show();
+loadDa()
 }, 3000);
 setTimeout(function(){
 $("#please").hide();

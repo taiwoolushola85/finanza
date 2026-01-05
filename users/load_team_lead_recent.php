@@ -26,7 +26,7 @@ $con->close();
 
 // Output starts here
 ?>
-<marquee direction="up" scrolldelay="300" style="margin-top:0px; height:154px">
+<marquee direction="up" scrolldelay="300" style="margin-top:0px; height:189px">
 <?php
 // If no data
 if (empty($results)) {

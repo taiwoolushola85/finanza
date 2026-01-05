@@ -88,6 +88,17 @@ fclose($fp);
 $url = '../data/notification.json';
 $data = file_get_contents($url);
 $json = json_decode($data);
+?>
+<?php
+if (empty($json)) {
+?>
+<tr>
+<td colspan="10" style="text-align:center; font-size:12px">
+No record found
+</td>
+</tr>
+<?php
+} else {
 foreach($json as $member){
 ?>
 <tr style="font-size:8px" class="invks" data-bs-toggle="modal" data-bs-target="#updateMod" id="<?php echo $member->id?>">
@@ -103,6 +114,7 @@ foreach($json as $member){
 <td ><?php echo $member->tnxdate?></td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>
@@ -146,6 +158,9 @@ foreach($json as $member){
 </div>
 </div>
 </div>
+
+
+
 
 <script>
 // to show data on a modal box

@@ -89,8 +89,6 @@
 <div class="page-content">
 <div class="container-fluid">
 <!-- start page title -->
-<div class="card">
-<div class="card-body">
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -110,11 +108,13 @@
 </div>
 </div>
 </div>
-</div>
-</div>
+
 <!-- end page title -->
-<div class="card">
-<div class="card-body">
+<br>
+<br>
+<br>
+<br>
+
 <div class="row">
 <div class="col-sm-2">
 
@@ -138,8 +138,7 @@
 <br>
 <div id="result"></div>
 
-</div>
-</div>
+
 
 
 
@@ -147,7 +146,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal-dialog modal-dialog-centered modal-xl" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">APPLICATION PROFILE</h5>

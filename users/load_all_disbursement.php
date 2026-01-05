@@ -10,7 +10,8 @@ include '../config/user_session.php';
 $d = date('Y-m-d');
 
 // FIXED: Properly parameterized query (was still vulnerable with $User)
-$stmt = $con->prepare("SELECT id, Firstname, Middlename, Loan_Amount, Status, Date_Disbursed, Time_Disbursed FROM repayments ORDER BY id DESC LIMIT 10");
+$stmt = $con->prepare("SELECT id, Firstname, Middlename, Loan_Amount, Status, Date_Disbursed, Time_Disbursed FROM repayments 
+WHERE Status = 'Active' ORDER BY id DESC LIMIT 10");
 $stmt->execute();
 $result = $stmt->get_result();
 

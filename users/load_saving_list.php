@@ -92,7 +92,16 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
+if (empty($results)) {
+?>
+<tr>
+<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+<strong>No record found</strong>
+</td>
+</tr>
+<?php
+} else {
+foreach ($results as $member) {
 // Escape output for XSS protection
 $vrt = htmlspecialchars($member['Virtual_Account']);
 $firstname = htmlspecialchars($member['Firstname']);
@@ -136,6 +145,7 @@ $badgeClass = 'badge-soft-danger';
 </td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>
@@ -223,7 +233,8 @@ $row = mysqli_fetch_array($countResult);
 $total = $row[0];
 
 // Data query
-$dataQuery = "SELECT id, BVN, Flexi_Account_No, Surname, Firstname, Othername, Plan, Deposit_Amt, Total_Bal, Mauturity_Date, Officer_Name, Status,
+$dataQuery = "SELECT id, BVN, Flexi_Account_No, Surname, Firstname, Othername, Plan, Deposit_Amt, Total_Bal, Date_Start, Officer_Name, Status,
+(SELECT COALESCE(SUM(Amount), 0) FROM flexi_history WHERE Flexi_Account = Flexi_Account_No AND Status = 'Paid' ) AS `deposit`, 
 (SELECT COALESCE(SUM(Amount), 0) FROM flexi_withdraw WHERE Flexi_Accounts = Flexi_Account_No AND Status = 'Paid' ) AS `withdraw`
 FROM flexi_account WHERE $whereClause ORDER BY id ASC";
 
@@ -242,7 +253,7 @@ $results[] = $row;
 }
 
 // Save to JSON file
-$fp = fopen('../data/flexi_portfolio_list.json', 'w'); 
+$fp = fopen('../data/credit_officer_flexi_portfolio_list.json', 'w'); 
 fwrite($fp, json_encode($results)); 
 fclose($fp);
 
@@ -261,9 +272,10 @@ Total Record: <?php echo $total; ?>
 <th style="font-size:8px">SAVINGS ACCOUNT</th>
 <th style="font-size:8px">NAME</th>
 <th style="font-size:8px">SAVING PLAN</th>
-<th style="font-size:8px">INITIAL DEPOSIT</th>
+<th style="font-size:8px">TOTAL DEPOSIT</th>
+<th style="font-size:8px">TOTAL WITHDRAWAL</th>
 <th style="font-size:8px">BALANCE</th>
-<th style="font-size:8px">MATURITY DATE</th>
+<th style="font-size:8px">DATE ACTIVETED</th>
 <th style="font-size:8px">CREDIT OFFICER</th>
 <th style="font-size:8px">STATUS</th>
 <th style="font-size:8px">ACTION</th>
@@ -271,6 +283,15 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
+if (empty($results)) {
+?>
+<tr>
+<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+<strong>No record found</strong>
+</td>
+</tr>
+<?php
+} else {
 foreach($results as $member) {
 // Escape output for XSS protection
 $bvn = htmlspecialchars($member['BVN']);
@@ -280,8 +301,10 @@ $firstname = htmlspecialchars($member['Firstname']);
 $othername = htmlspecialchars($member['Othername']);
 $plan = htmlspecialchars($member['Plan']);
 $depo = htmlspecialchars($member['Deposit_Amt']);
+$pd = htmlspecialchars($member['deposit']);
+$with = htmlspecialchars($member['withdraw']);
 $bal = htmlspecialchars($member['Total_Bal']);
-$maturity = htmlspecialchars($member['Maturity_Date']);
+$maturity = htmlspecialchars($member['Date_Start']);
 $ofn = htmlspecialchars($member['Officer_Name']);
 $status = htmlspecialchars($member['Status']);
 $id = (int)$member['id'];
@@ -291,20 +314,22 @@ $id = (int)$member['id'];
 <td><?php echo $flexiacct; ?></td>
 <td style="text-transform:capitalize"><?php echo "$surname $firstname $othername"; ?></td>
 <td><?php echo $plan; ?></td>
-<td><?php echo number_format($depo,2); ?></td>
-<td><?php echo number_format($bal,2); ?></td>
+<td><?php echo number_format($pd,2); ?></td>
+<td><?php echo number_format($with,2); ?></td>
+<td><?php echo number_format($pd - $with,2); ?></td>
 <td><?php echo $maturity; ?></td>
 <td><?php echo $ofn; ?></td>
 <td>
 <span class=''><?php echo $status; ?></span>
 </td>
 <td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
+<a class="invk" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
 <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
 </a>
 </td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>
@@ -314,6 +339,38 @@ $id = (int)$member['id'];
 
 
 
+
+<script>
+// Display data in modal
+$(document).ready(function() {
+$('.invk').on('click', function(e) {e.preventDefault();
+$("#updateModal").hide();
+$("#view").show();
+var id = $(this).data('id');
+if(id) {
+$.ajax({
+url: 'client_flexi_saving_page.php',
+type: "GET",
+data: {'id': id},
+success: function(data) { 
+setTimeout(function() {
+$("#updateModal").show();
+$("#view").hide();
+$('#profile').html(data);
+}, 1000);
+},
+error: function(xhr, status, error) {
+alert('Error loading profile: ' + error);
+$("#view").hide();
+}
+});
+} else {
+alert('Invalid ID');
+$("#view").hide();
+}
+});
+});
+</script>
 
 
 
@@ -408,6 +465,15 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
+if (empty($results)) {
+?>
+<tr>
+<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+<strong>No record found</strong>
+</td>
+</tr>
+<?php
+} else {
 foreach($results as $member) {
 // Escape output for XSS protection
 $vrt = htmlspecialchars($member['Virtual_Account']);
@@ -452,6 +518,7 @@ $badgeClass = 'badge-soft-danger';
 </td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>

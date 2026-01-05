@@ -56,7 +56,7 @@ Total Record: <?php echo $total; ?>
 </small>
 <br><br>
 
-<div class="table-container">
+<div class="table-container" style="height:200px;">
 <table>
 <thead>
 <tr>
@@ -176,7 +176,7 @@ alert('Invalid role ID');
 });
 
 // Reload role list
-function loadup() {
+function loadup(){
 $.ajax({
 method: "POST",
 url: "role_analysis.php",
@@ -210,6 +210,7 @@ setTimeout(function() {
 $("#please").hide();
 $("#roleModal").modal('show');
 $("#rupdate").show();
+loadup();
 }, 3000);
 setTimeout(function() {
 $("#rupdate").hide();

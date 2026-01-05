@@ -1,104 +1,79 @@
 <?php
-// Set CORS headers at the top
+/* ================= HEADERS ================= */
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset=UTF-8");
 
-// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-exit(0);
+exit;
 }
 
 include '../config/db.php';
 include '../config/user_session.php';
-$d = date('Y-m-d');
-// Sanitize and validate inputs
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? max(0, (int)$_POST['maxRows']) : 0;
 
-// Use prepared statements to prevent SQL injection
-$whereClause = "Status = ?";
-$params = ['Active'];
-$types = 's';
+/* ================= INPUTS ================= */
+$search  = trim($_POST['search'] ?? '');
+$maxRows = (int)($_POST['maxRows'] ?? 0);
+$searchLike = "%{$search}%";
 
-if (!empty($search)) {
-$searchParam = "%$search%";
-$whereClause .= " AND (BVN LIKE ? OR Account_Number LIKE ? OR Loan_Account_No LIKE ? 
-OR Disbursement_No LIKE ? OR Transaction_id LIKE ? OR Savings_Account_No LIKE ? 
-OR Status LIKE ? OR Unions LIKE ? OR Firstname LIKE ? OR Middlename LIKE ? OR Lastname LIKE ? AND Status != 'Disbursed')";
-    
-// Add search parameter 11 times for all LIKE clauses
-for ($i = 0; $i < 11; $i++) {
-$params[] = $searchParam;
-$types .= 's';
+/* ================= BASE WHERE ================= */
+$where = "(Status = ? OR Status = ?)";
+$params = ['Active', 'Ready For Auditing'];
+$types  = "ss";
+
+/* ================= SEARCH ================= */
+if ($search !== '') {
+$where .= "AND (
+BVN LIKE ? OR Account_Number LIKE ? OR Loan_Account_No LIKE ?
+OR Disbursement_No LIKE ? OR Transaction_id LIKE ?
+OR Savings_Account_No LIKE ? OR Unions LIKE ?
+OR Firstname LIKE ? OR Middlename LIKE ? OR Lastname LIKE ?
+)
+AND Status != 'Disbursed'";
+
+for ($i = 0; $i < 10; $i++) {
+$params[] = $searchLike;
+$types .= "s";
 }
 }
 
-// Count query using prepared statement
-$countQuery = "SELECT COUNT(*) as total FROM repayments WHERE $whereClause";
-$stmt = mysqli_prepare($con, $countQuery);
+/* ================= COUNT QUERY ================= */
+$countSql = "SELECT COUNT(*) AS total FROM repayments WHERE $where";
+$stmt = $con->prepare($countSql);
+$stmt->bind_param($types, ...$params);
+$stmt->execute();
+$total = $stmt->get_result()->fetch_assoc()['total'];
+$stmt->close();
 
-if ($stmt === false) {
-die("Error preparing count query: " . mysqli_error($con));
-}
+/* ================= DATA QUERY ================= */
+$dataSql = "SELECT id, Loan_Account_No, Firstname, Middlename, Lastname, BVN, Product, Branch, Phone, Total_Loan, Paid, Total_Bal, Savings_Bal, Expected_Amount,
+Officer_Name, Maturity_Status, Date_Disbursed, Maturity_Date FROM repayments WHERE $where ORDER BY id ASC";
 
-mysqli_stmt_bind_param($stmt, $types, ...$params);
-mysqli_stmt_execute($stmt);
-$countResult = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($countResult);
-$total = $row['total'];
-mysqli_stmt_close($stmt);
-
-// Data query using prepared statement
-$dataQuery = "SELECT id, Loan_Account_No, Firstname, Lastname, Middlename, Product, Branch, Phone,
-Total_Loan, Paid, Savings, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Officer_Name,
-Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY id ASC";
+$dataParams = $params;
+$dataTypes  = $types;
 
 if ($maxRows > 0) {
-$dataQuery .= " LIMIT ?";
-$params[] = $maxRows;
-$types .= 'i';
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= "";
+$dataSql .= " LIMIT ?";
+$dataParams[] = $maxRows;
+$dataTypes .= "i";
 }
 
-$stmt = mysqli_prepare($con, $dataQuery);
+$stmt = $con->prepare($dataSql);
+$stmt->bind_param($dataTypes, ...$dataParams);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($stmt === false) {
-die("Error preparing data query: " . mysqli_error($con));
+/* ================= FETCH ================= */
+$results = [];
+while ($row = $result->fetch_assoc()) {
+$results[] = $row;
 }
 
-mysqli_stmt_bind_param($stmt, $types, ...$params);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
-mysqli_stmt_close($stmt);
-
-// Save to JSON file with proper error handling
-$jsonData = json_encode($results, JSON_PRETTY_PRINT);
-if ($jsonData === false) {
-error_log("JSON encoding failed: " . json_last_error_msg());
-} else {
-$filePath = '../data/loan_book.json';
-$dirPath = dirname($filePath);
-// Ensure directory exists
-if (!is_dir($dirPath)) {
-mkdir($dirPath, 0755, true);
-}
-    
-if (file_put_contents($filePath, $jsonData) === false) {
-error_log("Failed to write JSON file: $filePath");
-}
-}
-
-mysqli_close($con);
+$stmt->close();
+$con->close();
 ?>
+
 
 <div class="row">
 <div class="col-sm-10">
@@ -129,11 +104,12 @@ XLSX.writeFile(workbook, "loan_book.xlsx");
 <br><br>
 <?php endif; ?>
 
-<div id="table-container" style="height:340px; overflow-y:auto;">
-<table >
+<div id="table-container" style="height:340px;">
+<table id="expiredLoansTable" style="font-size: 8px;">
 <thead>
 <tr>
 <th style="font-size:8px">LOAN ACCT</th>
+<th style="font-size:8px">BVN</th>
 <th style="font-size:8px">NAME</th>
 <th style="font-size:8px">PHONE</th>
 <th style="font-size:8px">BRANCH</th>
@@ -155,6 +131,7 @@ if (!empty($results)) {
 foreach($results as $member) {
 // Escape output for XSS protection
 $vrt = htmlspecialchars($member['Loan_Account_No'], ENT_QUOTES, 'UTF-8');
+$bvn = htmlspecialchars($member['BVN'], ENT_QUOTES, 'UTF-8');
 $firstname = htmlspecialchars($member['Firstname'], ENT_QUOTES, 'UTF-8');
 $middlename = htmlspecialchars($member['Middlename'], ENT_QUOTES, 'UTF-8');
 $lastname = htmlspecialchars($member['Lastname'], ENT_QUOTES, 'UTF-8');
@@ -163,7 +140,7 @@ $branch = htmlspecialchars($member['Branch'], ENT_QUOTES, 'UTF-8');
 $product = htmlspecialchars($member['Product'], ENT_QUOTES, 'UTF-8');
 $totalloan = htmlspecialchars($member['Total_Loan'], ENT_QUOTES, 'UTF-8');
 $paid = htmlspecialchars($member['Paid'], ENT_QUOTES, 'UTF-8');
-$saving = htmlspecialchars($member['Savings'], ENT_QUOTES, 'UTF-8');
+$saving = htmlspecialchars($member['Savings_Bal'], ENT_QUOTES, 'UTF-8');
 $exp = htmlspecialchars($member['Expected_Amount'], ENT_QUOTES, 'UTF-8');
 $totalbal = htmlspecialchars($member['Total_Bal'], ENT_QUOTES, 'UTF-8');
 $datedisburse = htmlspecialchars($member['Date_Disbursed'], ENT_QUOTES, 'UTF-8');
@@ -174,6 +151,7 @@ $id = (int)$member['id'];
 ?>
 <tr style="font-size:8px">
 <td><?php echo $vrt; ?></td>
+<td><?php echo $bvn; ?></td>
 <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
 <td><?php echo $ph; ?></td>
 <td><?php echo $branch; ?></td>

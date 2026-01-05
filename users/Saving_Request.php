@@ -72,6 +72,7 @@
 <option value="">Select Option</option>
 <option value="Withdraw">Saving Withdrawal Request</option>
 <option value="Repayment">Saving Repayment Request</option>
+<option value="Flexi">Flexi Saving Withdrawal Request</option>
 </select>
 <br>
 <br>
@@ -124,7 +125,7 @@
 <script type="text/javascript">
 function getRequest()  {
 $("#loader").show();
-$("result").hide();
+$("#result").hide();
 var types = document.getElementById("types").value;
 // ajax function start here
 $.ajax({
@@ -135,7 +136,7 @@ data: {
 'types': types
 },
 success:function(data){
-$("result").show();
+$("#result").show();
 setTimeout(function(){
 $("#loader").hide();
 $('#result').html(data);

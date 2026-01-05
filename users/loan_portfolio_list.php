@@ -10,7 +10,7 @@ header("Access-Control-Allow-Origin: *");
 
 include '../config/db.php';
 include '../config/user_session.php';
-
+$d = date('Y-m-d');
 // Escape user input for SQL
 $User_escaped = mysqli_real_escape_string($con, $User);
 $search_escaped = mysqli_real_escape_string($con, $search);
@@ -31,8 +31,8 @@ $row = mysqli_fetch_array($countResult);
 $total = $row[0];
 
 // Data query
-$dataQuery = "SELECT id, Account_Number, Firstname, Lastname, Middlename, Product, Branch, Total_Loan, Paid, Maturity_Status, Expected_Amount,
-Date_Disbursed, Maturity_Date, Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY id ASC";
+$dataQuery = "SELECT id, Account_Number, Firstname, Lastname, Middlename, Product, Duration, Frequency, Loan_Amount, Interest_Amt, Paid, 
+Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY id ASC";
 
 if ($maxRows > 0) {
 $dataQuery .= " LIMIT $maxRows";
@@ -66,12 +66,13 @@ Total Record: <?php echo $total; ?>
 <tr>
 <th style="font-size:8px">VIRTUAL ACCT</th>
 <th style="font-size:8px">NAME</th>
-<th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">PRODUCT</th>
-<th style="font-size:8px">TOTAL LOAN</th>
+<th style="font-size:8px">DURATION</th>
+<th style="font-size:8px">PRINCIPAL</th>
+<th style="font-size:8px">INTERST</th>
 <th style="font-size:8px">PAID</th>
 <th style="font-size:8px">OUTSTANDING</th>
-<th style="font-size:8px">EXPECTED AMT</th>
+<th style="font-size:8px">EXPECTED</th>
 <th style="font-size:8px">DATE DISBURSED</th>
 <th style="font-size:8px">DATE EXPIRED</th>
 <th style="font-size:8px">STATUS</th>
@@ -80,54 +81,78 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$vrt = htmlspecialchars($member['Account_Number']);
-$firstname = htmlspecialchars($member['Firstname']);
-$middlename = htmlspecialchars($member['Middlename']);
-$lastname = htmlspecialchars($member['Lastname']);
-$branch = htmlspecialchars($member['Branch']);
-$product = htmlspecialchars($member['Product']);
-$totalloan = htmlspecialchars($member['Total_Loan']);
-$paid = htmlspecialchars($member['Paid']);
-$exp = htmlspecialchars($member['Expected_Amount']);
-$totalbal = htmlspecialchars($member['Total_Bal']);
-$datedisburse = htmlspecialchars($member['Date_Disbursed']);
-$maturitydate = htmlspecialchars($member['Maturity_Date']);
-$status = htmlspecialchars($member['Maturity_Status']);
-$id = (int)$member['id'];
-// Status badge
-$badgeClass = 'badge-soft-success';
-if ($status == 'Active') {
-$badgeClass = 'badge-soft-info';
-} elseif ($status == 'Cancelled') {
-$badgeClass = 'badge-soft-danger';
-}
+if (empty($results)) {
+?>
+    <tr>
+        <td colspan="13" style="text-align:center; font-size:10px; padding:15px;">
+            <strong>No record found</strong>
+        </td>
+    </tr>
+<?php
+} else {
+    foreach ($results as $member) {
+
+        // Escape output for XSS protection
+        $vrt = htmlspecialchars($member['Account_Number']);
+        $firstname = htmlspecialchars($member['Firstname']);
+        $middlename = htmlspecialchars($member['Middlename']);
+        $lastname = htmlspecialchars($member['Lastname']);
+        $product = htmlspecialchars($member['Product']);
+        $duration = htmlspecialchars($member['Duration']);
+        $fr = htmlspecialchars($member['Frequency']);
+        $totalloan = htmlspecialchars($member['Loan_Amount']);
+        $intamt = htmlspecialchars($member['Interest_Amt']);
+        $paid = htmlspecialchars($member['Paid']);
+        $exp = htmlspecialchars($member['Expected_Amount']);
+        $totalbal = htmlspecialchars($member['Total_Bal']);
+        $datedisburse = htmlspecialchars($member['Date_Disbursed']);
+        $maturitydate = htmlspecialchars($member['Maturity_Date']);
+        $status = htmlspecialchars($member['Maturity_Status']);
+        $id = (int)$member['id'];
 ?>
 <tr style="font-size:8px">
-<td><?php echo $vrt; ?></td>
-<td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $product; ?></td>
-<td><?php echo number_format($totalloan,2); ?></td>
-<td><?php echo number_format($paid,2); ?></td>
-<td><?php echo number_format($totalbal,2); ?></td>
-<td><?php echo number_format($exp,2); ?></td>
-<td><?php echo $datedisburse; ?></td>
-<td><?php echo $maturitydate; ?></td>
-<td>
-<span class=''><?php echo $status; ?></span>
-</td>
-<td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
+    <td><?php echo $vrt; ?></td>
+    <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
+    <td><?php echo $product; ?></td>
+    <td>
+        <?php
+        if ($fr == 'Daily') {
+            echo $duration . " Days";
+        } elseif ($fr == 'Weekly') {
+            echo $duration . " Weeks";
+        } else {
+            echo $duration . " Months";
+        }
+        ?>
+    </td>
+    <td><?php echo number_format($totalloan, 2); ?></td>
+    <td><?php echo number_format($intamt, 2); ?></td>
+    <td><?php echo number_format($paid, 2); ?></td>
+    <td><?php echo number_format($totalbal, 2); ?></td>
+    <td><?php echo number_format($exp, 2); ?></td>
+    <td><?php echo $datedisburse; ?></td>
+    <td><?php echo $maturitydate; ?></td>
+    <td>
+        <?php
+        if ($d > $maturitydate) {
+            echo "<span style='color:red' class='badge-soft-danger'>Expired</span>";
+        } else {
+            echo "<span style='color:green' class='badge-soft-success'>Active</span>";
+        }
+        ?>
+    </td>
+    <td>
+        <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
+            <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+        </a>
+    </td>
 </tr>
 <?php
+    }
 }
 ?>
 </tbody>
+
 </table>
 </div>
 

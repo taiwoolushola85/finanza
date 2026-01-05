@@ -56,7 +56,7 @@ Total Record: <?php echo $total; ?>
 </small>
 <br><br>
 
-<div class="table-container">
+<div class="table-container" style="height:200px;">
 <table>
 <thead>
 <tr>

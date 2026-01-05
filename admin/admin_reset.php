@@ -146,11 +146,14 @@
 
 
 <div class="modal" id="standard-modal" tabindex="-1" aria-hidden="true" style="display: none;">
-<div class="modal-dialog modal-sm modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered modal-sm" style="display:none; width:400px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
+<div class="modal-header">
+<h6 class="modal-title" style="font-size:12px; text-transform:uppercase"> Authentication</h6>
+<button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
 <div class="modal-body">
-<b>Set Authentication</b>
-<hr>
+
 <form action="" method="post" id="setAuth">
 <div style="margin: auto;">
 <div class="row">   

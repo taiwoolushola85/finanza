@@ -10,7 +10,7 @@ header("Access-Control-Allow-Origin: *");
 
 include '../config/db.php';
 include '../config/user_session.php';
-
+$d = date('Y-m-d');
 // Escape user input for SQL
 $User_escaped = mysqli_real_escape_string($con, $User);
 $search_escaped = mysqli_real_escape_string($con, $search);
@@ -80,54 +80,66 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$vrt = htmlspecialchars($member['Account_Number']);
-$firstname = htmlspecialchars($member['Firstname']);
-$middlename = htmlspecialchars($member['Middlename']);
-$lastname = htmlspecialchars($member['Lastname']);
-$branch = htmlspecialchars($member['Branch']);
-$product = htmlspecialchars($member['Product']);
-$totalloan = htmlspecialchars($member['Total_Loan']);
-$paid = htmlspecialchars($member['Paid']);
-$exp = htmlspecialchars($member['Expected_Amount']);
-$totalbal = htmlspecialchars($member['Total_Bal']);
-$datedisburse = htmlspecialchars($member['Date_Disbursed']);
-$maturitydate = htmlspecialchars($member['Maturity_Date']);
-$status = htmlspecialchars($member['Maturity_Status']);
-$id = (int)$member['id'];
-// Status badge
-$badgeClass = 'badge-soft-success';
-if ($status == 'Active') {
-$badgeClass = 'badge-soft-info';
-} elseif ($status == 'Cancelled') {
-$badgeClass = 'badge-soft-danger';
-}
+if (empty($results)) {
+?>
+    <tr>
+        <td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+            <strong>No record found</strong>
+        </td>
+    </tr>
+<?php
+} else {
+    foreach ($results as $member) {
+
+        // Escape output for XSS protection
+        $vrt = htmlspecialchars($member['Account_Number']);
+        $firstname = htmlspecialchars($member['Firstname']);
+        $middlename = htmlspecialchars($member['Middlename']);
+        $lastname = htmlspecialchars($member['Lastname']);
+        $branch = htmlspecialchars($member['Branch']);
+        $product = htmlspecialchars($member['Product']);
+        $totalloan = htmlspecialchars($member['Total_Loan']);
+        $paid = htmlspecialchars($member['Paid']);
+        $exp = htmlspecialchars($member['Expected_Amount']);
+        $totalbal = htmlspecialchars($member['Total_Bal']);
+        $datedisburse = htmlspecialchars($member['Date_Disbursed']);
+        $maturitydate = htmlspecialchars($member['Maturity_Date']);
+        $status = htmlspecialchars($member['Maturity_Status']);
+        $id = (int)$member['id'];
 ?>
 <tr style="font-size:8px">
-<td><?php echo $vrt; ?></td>
-<td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $product; ?></td>
-<td><?php echo number_format($totalloan,2); ?></td>
-<td><?php echo number_format($paid,2); ?></td>
-<td><?php echo number_format($totalbal,2); ?></td>
-<td><?php echo number_format($exp,2); ?></td>
-<td><?php echo $datedisburse; ?></td>
-<td><?php echo $maturitydate; ?></td>
+    <td><?php echo $vrt; ?></td>
+    <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
+    <td><?php echo $branch; ?></td>
+    <td><?php echo $product; ?></td>
+    <td><?php echo number_format($totalloan, 2); ?></td>
+    <td><?php echo number_format($paid, 2); ?></td>
+    <td><?php echo number_format($totalbal, 2); ?></td>
+    <td><?php echo number_format($exp, 2); ?></td>
+    <td><?php echo $datedisburse; ?></td>
+    <td><?php echo $maturitydate; ?></td>
 <td>
-<span class=''><?php echo $status; ?></span>
+<span><?php 
+if($d > $maturitydate){
+echo "<span style='color:red'>Expired</span>";
+}else{
+echo "<span style='color:green'>Active</span>";
+}
+?></span>
 </td>
-<td>
-<a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
+    <td>
+        <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
+            <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+        </a>
+    </td>
 </tr>
 <?php
+    }
 }
 ?>
 </tbody>
+
+
 </table>
 </div>
 

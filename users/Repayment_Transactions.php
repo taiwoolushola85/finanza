@@ -8,7 +8,7 @@
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
-<i class="fa fa-check"></i> Repaymen Successfully Approved
+<i class="fa fa-check"></i> Repayment Successfully Approved
 </div>
 </div>
 </div>
@@ -42,7 +42,7 @@
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Transactions</h3>
+<h3 class="mb-sm-0">Repayment Transactions</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">

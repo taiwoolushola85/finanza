@@ -72,37 +72,47 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$staff = htmlspecialchars($member['Staff_Name']);
-$branch = htmlspecialchars($member['Branches']);
-$role = htmlspecialchars($member['User_Role']);
-$country = htmlspecialchars($member['Countrys']);
-$status = htmlspecialchars($member['Status']);
-$date = htmlspecialchars($member['Date_Mapped']);
-$id = (int)$member['id'];
-// Status badge
-$badgeClass = 'badge-soft-success';
-if ($status == 'Active') {
-$badgeClass = 'badge-soft-info';
-} elseif ($status == 'Cancelled') {
-$badgeClass = 'badge-soft-danger';
-}
-?>
-<tr style="font-size:8px">
-<td><?php echo $staff; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $role; ?></td>
-<td><?php echo $country; ?></td>
-<td><?php echo $status; ?></td>
-<td><?php echo $date; ?></td>
-<td>
-<a class="inv" href="#!" data-id="<?php echo $id; ?>">    
-<button class="btn btn-outline-primary btn-sm" style="font-size:8px;"><i class="fa fa-trash"></i></button>
-</a>
-</td>
-</tr>
-<?php
+if (!empty($results)) {
+    foreach($results as $member) {
+        // Escape output for XSS protection
+        $staff = htmlspecialchars($member['Staff_Name']);
+        $branch = htmlspecialchars($member['Branches']);
+        $role = htmlspecialchars($member['User_Role']);
+        $country = htmlspecialchars($member['Countrys']);
+        $status = htmlspecialchars($member['Status']);
+        $date = htmlspecialchars($member['Date_Mapped']);
+        $id = (int)$member['id'];
+
+        // Status badge
+        $badgeClass = 'badge-soft-success';
+        if ($status == 'Active') {
+            $badgeClass = 'badge-soft-info';
+        } elseif ($status == 'Cancelled') {
+            $badgeClass = 'badge-soft-danger';
+        }
+        ?>
+        <tr style="font-size:8px">
+            <td><?php echo $staff; ?></td>
+            <td><?php echo $branch; ?></td>
+            <td><?php echo $role; ?></td>
+            <td><?php echo $country; ?></td>
+            <td><?php echo $status; ?></td>
+            <td><?php echo $date; ?></td>
+            <td>
+                <a class="inv" href="#!" data-id="<?php echo $id; ?>">    
+                    <button class="btn btn-outline-primary btn-sm" style="font-size:8px;"><i class="fa fa-trash"></i></button>
+                </a>
+            </td>
+        </tr>
+        <?php
+    }
+} else {
+    // Show no records message
+    ?>
+    <tr>
+        <td colspan="7" style="text-align:center; font-size:8px;">No record found</td>
+    </tr>
+    <?php
 }
 ?>
 </tbody>

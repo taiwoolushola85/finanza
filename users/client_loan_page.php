@@ -44,6 +44,7 @@ mysqli_stmt_close($stmt);
 
 $gid = $rows['id'] ?? 0;
 $gb = $rows['Gaurantor_BVN'] ?? '';
+$gname = $rows['Firstname']." ".$rows['Lastname'] ?? '';
 
 // Fetch payment history
 $stmt = mysqli_prepare($con, "SELECT * FROM history WHERE Repayment_id = ? ORDER BY Date_Paid DESC");
@@ -59,6 +60,14 @@ mysqli_stmt_bind_param($stmt, "i", $regid);
 mysqli_stmt_execute($stmt);
 $loanResult = mysqli_stmt_get_result($stmt);
 $loans = mysqli_fetch_all($loanResult, MYSQLI_ASSOC);
+mysqli_stmt_close($stmt);
+
+//fetching cancelled loan history
+$stmt = mysqli_prepare($con, "SELECT * FROM repayments WHERE Reg_id = ? AND Status = 'Cancelled' ORDER BY Date_Cancelled ASC LIMIT 5");
+mysqli_stmt_bind_param($stmt, "i", $regid);
+mysqli_stmt_execute($stmt);
+$cancelledResult = mysqli_stmt_get_result($stmt);
+$cancelled = mysqli_fetch_all($cancelledResult, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
 
 // Calculate totals
@@ -131,16 +140,17 @@ class="rounded-circle client-profile-img" alt="Client Photo"><br><br>
 <div id="dashboard" style="display:block;">
 
 <div class="row">
-<div class="col-sm-4">
+<div class="col-sm-2">
 <h6><i class="fa fa-home"></i> DASHBOARD</h6>
 </div>
-<div class="col-sm-8">
+<div class="col-sm-10">
 <div style="overflow-x: auto;">
-<div class="btn-group">
+<div class="btn-group" style="float: right;">
 <button class="btn btn-light" onclick="clientDash()"><i class="fa fa-home"></i> Home</button>
 <button class="btn btn-light" onclick="updateHis()"><i class="fa fa-list"></i> Payment History</button>
-<button class="btn btn-light" onclick="updateCrc()"><i class="fa fa-exclamation-triangle"></i> Write-Off</button>
+<button class="btn btn-light" onclick="updateCrc()"><i class="fa fa-exclamation-triangle"></i> Loan Write-Off</button>
 <button class="btn btn-light" onclick="updateComment()"><i class="fa fa-comment"></i> Comment</button>
+<button class="btn btn-light" onclick="updateReport()"><i class="fa fa-file"></i> CRC Report</button>
 </div>
 </div>
 </div>
@@ -261,7 +271,7 @@ class="rounded-circle client-profile-img" alt="Client Photo"><br><br>
 <th>Amount Paid</th>
 <th>Payment Method</th>
 <th>Reference</th>
-<th>Balance After</th>
+
 <th>Status</th>
 </tr>
 </thead>
@@ -273,7 +283,6 @@ class="rounded-circle client-profile-img" alt="Client Photo"><br><br>
 <td><?php echo number_format((float)($payment['Amount'] ?? 0), 2); ?></td>
 <td><?php echo htmlspecialchars($payment['Payment_Method'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
 <td><?php echo htmlspecialchars($payment['Reference'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
-<td><?php echo number_format((float)($payment['Balance'] ?? 0), 2); ?></td>
 <td><span class="badge bg-success" style="font-size:8px"><?php echo htmlspecialchars($payment['Status'] ?? 'Paid', ENT_QUOTES, 'UTF-8'); ?></span></td>
 </tr>
 <?php endforeach; ?>
@@ -287,6 +296,38 @@ class="rounded-circle client-profile-img" alt="Client Photo"><br><br>
 </div>
 </div>
 
+
+<!-- LOADING CRC REPORT TAB -->
+<div id="report" style="display:none;">
+<br><br>
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT id, Location FROM document WHERE BVN = '$bvn' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bn = $rows['id'];
+$crc = $rows['Location'];
+?>
+<embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
+</tr>
+<?php
+} 
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo " No CRC Report Found  <br/> ";        
+}
+?>
+
+</div>
+
+
+
 <!-- CRC DATA TAB -->
 <div id="crc" style="display:none;">
 <br>
@@ -294,8 +335,41 @@ class="rounded-circle client-profile-img" alt="Client Photo"><br><br>
 <div class="alert alert-info mt-3">
 <i class="fa fa-info-circle"></i> Please state the reason why you want to write off this loan
 </div>
-<br>
-<br>
+
+<div id="table-container" style="height:175px;">
+<table>
+<thead>
+<tr style="font-size:8px;">
+<th>Date</th>
+<th>Loan Amount</th>
+<th>Loan Officer</th>
+<th>Cancelled By</th>
+<th>Date Cancelled</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<?php if (!empty($cancelled)): ?>
+<?php foreach($cancelled as $cancelled): ?>
+<tr>
+<td><?php echo htmlspecialchars($cancelled['Date_Cancelled'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?php echo number_format((float)($cancelled['Loan_Amount'] ?? 0), 2); ?></td>
+<td><?php echo htmlspecialchars($cancelled['Officer_Name'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?php echo htmlspecialchars($cancelled['Cancelled_BY'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?php echo htmlspecialchars($cancelled['Date_Cancelled'] ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?></td>
+<td><span class="badge bg-success" style="font-size:8px"><?php echo htmlspecialchars($payment['Status'] ?? 'Paid', ENT_QUOTES, 'UTF-8'); ?></span></td>
+</tr>
+<?php endforeach; ?>
+<?php else: ?>
+<tr>
+<td colspan="6" class="text-center">No Loan Cancelled history available</td>
+</tr>
+<?php endif; ?>
+</tbody>
+</table>
+</div>
+
+
 <br>
 <h6><b> Loan Write Off Form</b></h6>
 <form action="" method="POST" enctype="multipart/form-data" id="upwriteoff">
@@ -466,7 +540,7 @@ $badgeClass = $status == 'Active' ? 'bg-info' : ($status == 'Closed' ? 'bg-succe
 <div class="col-sm-6 mb-1">
 <p class="" style="font-size:12px;">Guarantor Name:</p>
 <p class="" style="text-transform:capitalize; font-size:12px;">
-<?php echo htmlspecialchars($rows['Firstname']." ".$rows['Lastname']  ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?>
+<?php echo htmlspecialchars($gname ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?>
 </p>
 </div>
 <div class="col-sm-6 mb-3">
@@ -566,6 +640,7 @@ function clientDash() {
     $('#dash').show();
     $('#payment').hide();
     $('#crc').hide();
+    $('#report').hide();
     $('#comment').hide();
 }
 
@@ -573,6 +648,7 @@ function updateHis() {
     $('#dash').hide();
     $('#payment').show();
     $('#crc').hide();
+    $('#report').hide();
     $('#comment').hide();
 }
 
@@ -580,6 +656,7 @@ function updateCrc() {
     $('#dash').hide();
     $('#payment').hide();
     $('#crc').show();
+    $('#report').hide();
     $('#comment').hide();
 }
 
@@ -587,9 +664,17 @@ function updateComment() {
     $('#dash').hide();
     $('#payment').hide();
     $('#crc').hide();
+    $('#report').hide();
     $('#comment').show();
 }
 
+function updateReport() {
+    $('#dash').hide();
+    $('#payment').hide();
+    $('#crc').hide();
+    $('#comment').hide();
+    $('#report').show();
+}
 // Comment form submission
 $(document).ready(function() {
     $('#commentForm').on('submit', function(e) {

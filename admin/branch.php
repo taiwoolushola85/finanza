@@ -116,8 +116,8 @@ $name= $rows['Name'];// zone name
 </div>
 </div>
 <div class="col-sm-4">
-<label>Branch State</label>
-<input type="text" class="form-control form-control-md" required="required" name="st" placeholder="Enter Branch State">
+<label>Branch Location</label>
+<input type="text" class="form-control form-control-md" required="required" name="st" placeholder="Enter Branch Location">
 </div>
 </div>
 <br>
@@ -135,7 +135,7 @@ $name= $rows['Name'];// zone name
 
 
 <div class="modal" id="branchModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">BRANCH LIST TABLE</h5>
@@ -149,7 +149,7 @@ $name= $rows['Name'];// zone name
 <input type="text" class="form-control form-control-md" required="required" name="rl" id="branchname" placeholder="Enter Branch Name">
 </div>
 <div class="col-sm-6">
-<label>Branch State</label>
+<label>Branch Location</label>
 <input type="text" class="form-control form-control-md" required="required" name="ro" id="branchstate" placeholder="Enter Branch State">
 </div>
 </div>

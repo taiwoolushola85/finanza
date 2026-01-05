@@ -305,7 +305,7 @@ $Count = mysqli_num_rows($result);
 if ($Count > 0) {
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
-$cl_id= $rows['Register_id'];
+$cl_id= $rows['Reg_id'];
 $nnm= $rows['Firstname']. " ".$rows['Middlename']." ".$rows['Lastname'];
 $unn= $rows['Unions'];
 $lan= $rows['Loan_Account_No'];

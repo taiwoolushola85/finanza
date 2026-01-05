@@ -41,7 +41,7 @@ if($reg_status == 'Declined'){
 ?>
 <button class="btn btn-light" onclick="updateInfo()"><i class="fa fa-edit"></i> Update Info</button>
 <button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-folder"></i> Document Uploading</button>
-<button class="btn btn-light" onclick="uploadImage()"><i class="fa fa-upload"></i> Upload Image</button>
+<button class="btn btn-light" onclick="uploadImage()" style="display:none;"><i class="fa fa-upload"></i> Upload Image</button>
 <button class="btn btn-light" onclick="uploadProduct()"><i class="fa fa-star"></i> Change Product</button>
 </div>
 </div>
@@ -216,12 +216,12 @@ if($reg_status == "Under Review"){
 <span style="margin-left:8px;"><b>Bank:</b> <?php echo $row['Bank']; ?></span>
 </div>
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Account Name:</b> <?php echo $row['Account_Name']; ?></span>
+<span style="margin-left:8px;"><b>Acct Name:</b> <?php echo $row['Account_Name']; ?></span>
 </div>
 </div>
 <div class="row">
 <div class="col-sm-12">
-<span style="margin-left:8px;"><b>Account No:</b> <?php echo $row['Account_No']; ?></span>
+<span style="margin-left:8px;"><b>Acct No:</b> <?php echo $row['Account_No']; ?></span>
 </div>
 </div>
 <br>
@@ -313,15 +313,8 @@ if($reg_status == "Under Review"){
 <div class="row" style="margin-top: 20px;">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Document Type</label>
-<select type="text" class="form-control form-control-sm" name="doc" value="<?php echo htmlspecialchars($row['Document']); ?>" required>
-<option value="<?php echo htmlspecialchars($row['Document']); ?>"><?php echo htmlspecialchars($row['Document']); ?></option>
-<option value="National ID Card">National ID Card</option>
-<option value="Voter Card">Voters Card</option>
-<option value="International Passport">International Passport</option>
-<option value="Driver License">Driver's License</option>
-<option value="Membership Card">Membership Card</option>
-<option value="Other">Other</option>
-</select>
+<input type="text" class="form-control form-control-sm" name="doc" hidden value="<?php echo htmlspecialchars($row['Document']); ?>" required>
+<input type="text" class="form-control form-control-sm" disabled value="<?php echo htmlspecialchars($row['Document']); ?>" required>
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Document No</label>
@@ -488,7 +481,6 @@ if($reg_status == "Under Review"){
 <option value="Loan Form">Loan Form</option>
 <option value="Utility Bill">Utility Bill</option>
 <option value="ID Card">ID Card</option>
-<option value="KYC Form">KYC Form</option>
 <option value="Other Document">Other Document</option>
 </select>
 <input type="text" hidden class="form-control form-control-sm" name="id" placeholder="" value="<?php echo $reg_id; ?>"><br>
@@ -509,10 +501,10 @@ if($reg_status == "Under Review"){
 <form action="" method="POST" enctype="multipart/form-data" id="productUpdate">
 <b>Loan Product Information</b><br><br>
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-4">
 <input type="text" hidden="hidden" class="form-control form-control-sm" name="id" placeholder="id" required="required" value="<?php echo $reg_id ; ?>">
 <label style="font-size:13px"><i style="color:red">*</i> Loan Products</label><br>
-<select type="text" class="form-control form-control-md" name="pr" required = "required">
+<select type="text" class="form-control form-control-md" name="pr" id="pr" oninput="getProduct()" required = "required">
 <option value="">Select Loan Product</option>
 <?php 
 include '../config/db.php';
@@ -532,7 +524,13 @@ $name= $rows['Product_Name'];
 ?>
 </select>
 </div>
-<div class="col-sm-6">
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Tenure</label>
+<select type="text" class="form-control form-control-md" name="ten" id="hey" required="required">
+<option value="">Select Option</option>
+</select>
+</div>
+<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Principal Amount</label>
 <input type="number" class="form-control form-control-md" placeholder="Principal Amount" hidden name="lum" required = "required" value="<?php echo $row['Loan_Amount']; ?>">
 <input type="number" class="form-control form-control-md" placeholder="Principal Amount" disabled required = "required" value="<?php echo $row['Loan_Amount']; ?>">
@@ -719,6 +717,27 @@ var x = document.getElementById("second");
 var y = document.getElementById("third");
 x.style.display = 'block';
 y.style.display = 'none';
+}
+</script>
+
+
+
+<script type="text/javascript">
+function getProduct()  {
+var pr = document.getElementById("pr").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "load_tenure.php",
+dataType: "html",  
+data: {'pr': pr},
+success:function(data){
+setTimeout(function(){
+$("#hey").html(data);
+}, 100);
+}
+});
+// ajax function ends here
 }
 </script>
 

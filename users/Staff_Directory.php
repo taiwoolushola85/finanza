@@ -4,7 +4,7 @@
 <div class="toast-header">
 <small class="fa fa-bell"></small>
 <strong class="me-auto" style="margin-left:8px;">Finanza</strong>
-<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">
@@ -20,7 +20,7 @@
 <div class="toast-header">
 <small class="fa fa-bell"></small>
 <strong class="me-auto" style="margin-left:8px;">Finanza</strong>
-<img src="../assets/images/favicon.ico" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
+<img src="../assets/images/logo-sm.png" class="rounded me-2" style="height:20px; width:20px" alt="Finanza icon">
 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 </div>
 <div class="toast-body">

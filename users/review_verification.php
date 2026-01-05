@@ -7,6 +7,7 @@ $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $regid = $row['id'];
 $reg_status = $row['Status'];
+$bvn = $row['BVN'];
 // gaurantor info
 $Query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
 $result = mysqli_query($con, $Query);
@@ -20,8 +21,9 @@ $id = $rows['id'];
 <div class="btn-group">
 <button class="btn btn-light" onclick="clientDash()"><i class="fa fa-user"></i> Loan Profile</button>
 <button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
+<button class="btn btn-light" onclick="updateCRC()"><i class="fa fa-file"></i> CRC Report</button>
 <button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-upload"></i> Upload Business Img</button>
-<button class="btn btn-light" onclick="updateApprove()"><i class="fa fa-star"></i> Verification</button>
+<button class="btn btn-light" onclick="updateApprove()"><i class="fa fa-star"></i> Remark/Comment </button>
 </div>
 </div>
 </center>
@@ -286,7 +288,6 @@ $id = $rows['id'];
 <option value="Loan Form">Loan Form</option>
 <option value="Utility Bill">Utility Bill</option>
 <option value="ID Card">ID Card</option>
-<option value="KYC Form">KYC Form</option>
 <option value="Other Documents">Other Documents</option>
 </select>
 </div>
@@ -301,9 +302,6 @@ $id = $rows['id'];
 <maquee> <b style="color: red">Note: </b>You are to capture 3 business image and upload before approving the loan</maquee><hr>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div id="upload" style="display: block;">
-<?php 
-if($row['Location'] != "Null" && $rows['Location'] != "Null" && $rows['ID_Image'] != "Null"){
-?>
 <div class="row">
 <div class="col-12 col-sm-12 col-md-12" style="margin-top: 10px;">
 <div id="image"><img id="outver" width="270" height="270" style="border-radius:10px"/></div>
@@ -324,9 +322,36 @@ if($row['Location'] != "Null" && $rows['Location'] != "Null" && $rows['ID_Image'
 
 </div>
 
+
+</div>
+
+
+
+<div id="crc" style="display:none;">
+<br><br>
+CRC REPORT
+<br><br>
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT id, Location FROM document WHERE BVN = '$bvn' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bn = $rows['id'];
+$crc = $rows['Location'];
+?>
+<embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
+</tr>
 <?php
-}else{
-echo "<span style='color:red; font-size:12px'>All client image need's to be uploaded before verification</span>";
+} 
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo " No CRC Report Found  <br/> ";        
 }
 ?>
 
@@ -443,29 +468,35 @@ var x = document.getElementById("firsts");
 var y = document.getElementById("seconds");
 var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
+var b = document.getElementById("crc");
 x.style.display = 'block';
 y.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'none';
+b.style.display = 'none';
 }
 function updateDoc(){
 var x = document.getElementById("firsts");
 var y = document.getElementById("seconds");
 var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
+var b = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'none';
 y.style.display = 'block';
+b.style.display = 'none';
 }
 function updateVerification(){
 var x = document.getElementById("firsts");
 var y = document.getElementById("seconds");
 var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
+var b = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'block';
 y.style.display = 'none';
+b.style.display = 'none';
 a.style.display = 'none';
 }
 function updateApprove(){
@@ -473,9 +504,23 @@ var x = document.getElementById("firsts");
 var y = document.getElementById("seconds");
 var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
+var b = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'block';
+y.style.display = 'none';
+b.style.display = 'none';
+}
+function updateCRC(){
+var x = document.getElementById("firsts");
+var y = document.getElementById("seconds");
+var z = document.getElementById("thirds");
+var a = document.getElementById("fourth");
+var b = document.getElementById("crc");
+x.style.display = 'none';
+z.style.display = 'none';
+a.style.display = 'none';
+b.style.display = 'block';
 y.style.display = 'none';
 }
 </script>

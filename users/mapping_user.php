@@ -70,31 +70,34 @@ Total Record: <?php echo $total; ?>
 </tr>
 </thead>
 <tbody>
-<?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$staff = htmlspecialchars($member['Officer_Name']);
-$branch = htmlspecialchars($member['Branch']);
-$role = htmlspecialchars($member['Team_Name']);
-$status = htmlspecialchars($member['Status']);
-$date = htmlspecialchars($member['Date_Mapped']);
-$id = (int)$member['id'];
-?>
-<tr style="font-size:8px">
-<td><?php echo $staff; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $role; ?></td>
-<td><?php echo $status; ?></td>
-<td><?php echo $date; ?></td>
-<td>
-<a class="inv" href="#!" data-id="<?php echo $id; ?>">    
-<button class="btn btn-outline-primary btn-sm" style="font-size:8px;"><i class="fa fa-trash"></i></button>
-</a>
-</td>
-</tr>
-<?php
-}
-?>
+<?php if (!empty($results)): ?>
+    <?php foreach($results as $member): 
+        // Escape output for XSS protection
+        $staff = htmlspecialchars($member['Officer_Name']);
+        $branch = htmlspecialchars($member['Branch']);
+        $role = htmlspecialchars($member['Team_Name']);
+        $status = htmlspecialchars($member['Status']);
+        $date = htmlspecialchars($member['Date_Mapped']);
+        $id = (int)$member['id'];
+    ?>
+    <tr style="font-size:8px">
+        <td><?php echo $staff; ?></td>
+        <td><?php echo $branch; ?></td>
+        <td><?php echo $role; ?></td>
+        <td><?php echo $status; ?></td>
+        <td><?php echo $date; ?></td>
+        <td>
+            <a class="inv" href="#!" data-id="<?php echo $id; ?>">    
+                <button class="btn btn-outline-primary btn-sm" style="font-size:8px;"><i class="fa fa-trash"></i></button>
+            </a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="6" style="text-align:center; font-size:8px">No records found</td>
+    </tr>
+<?php endif; ?>
 </tbody>
 </table>
 </div>

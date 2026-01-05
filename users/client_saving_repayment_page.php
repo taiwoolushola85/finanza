@@ -65,7 +65,7 @@ $stt = $row['Status'];
 <?php 
 if($st == 'Waiting For Approval'){
 ?>
-<button class="btn btn-success" disabled="disabled"><i class="fa fa-check"></i> Approve Request</button>
+<button class="btn btn-light btn-sm" disabled="disabled"><i class="fa fa-check"></i> Approve Request</button>
 <?php 
 }else{
 ?>
@@ -74,11 +74,11 @@ if($st == 'Waiting For Approval'){
 <?php 
 if($amt <= $bal_savv){
 ?>
-<button class="btn btn-success"><i class="fa fa-check"></i> Approve Request</button>
+<button class="btn btn-light btn-sm"><i class="fa fa-check"></i> Approve Request</button>
 <?php
 }else{
 ?>
-<button class="btn btn-success" disabled="disabled"><i class="fa fa-check"></i> Insufficient Balance</button>
+<button class="btn btn-light btn-sm" disabled="disabled"><i class="fa fa-check"></i> Insufficient Balance</button>
 <?php
 }
 ?>
@@ -88,7 +88,7 @@ if($amt <= $bal_savv){
 ?>
 <form action="" method="POST" enctype="multipart/form-data" id="reDecline">
 <input type="text" hidden class="form-control form-control-sm" placeholder="Account Name" name="id" value="<?php echo $id; ?>" required="required">
-<button type="submit" class="btn btn-danger" onclick="updateDoc()"><i class="fa fa-trash"></i> Decline Request</button>
+<button type="submit" class="btn btn-light btn-sm" onclick="updateDoc()"><i class="fa fa-trash"></i> Decline Request</button>
 </form>
 </div>
 </center>

@@ -57,7 +57,7 @@ Total Record: <?php echo $total; ?>
 </small>
 <br><br>
 
-<div id="table-container" style="height:430px;">
+<div id="table-container" style="height:400px;">
 <table>
 <thead>
 <tr>
@@ -73,35 +73,45 @@ Total Record: <?php echo $total; ?>
 </thead>
 <tbody>
 <?php
-foreach($results as $member) {
-// Escape output for XSS protection
-$id = (int)$member['id'];
-$staffId = htmlspecialchars($member['Staff_ID']);
-$name = htmlspecialchars($member['Name']);
-$userGroup = htmlspecialchars($member['User_Group']);
-$email = htmlspecialchars($member['Email']);
-$branch = htmlspecialchars($member['Branch']);
-$username = htmlspecialchars($member['Username']);
-$status = htmlspecialchars($member['Status']);
-?>
-<tr style="font-size:8px">
-<td><?php echo $staffId; ?></td>
-<td style="text-transform:capitalize"><?php echo $name; ?></td>
-<td><?php echo $userGroup; ?></td>
-<td><?php echo $email; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $username; ?></td>
-<td><?php echo $status; ?></td>
-<td>
-<a href="view_user.php?id=<?php echo $id; ?>" class="btn btn-sm btn-outline-primary" style="font-size:7px">
-<i class="fa fa-eye"></i> View
-</a>
-</td>
-</tr>
-<?php
+if (!empty($results)) {
+    foreach($results as $member) {
+        // Escape output for XSS protection
+        $id = (int)$member['id'];
+        $staffId = htmlspecialchars($member['Staff_ID']);
+        $name = htmlspecialchars($member['Name']);
+        $userGroup = htmlspecialchars($member['User_Group']);
+        $email = htmlspecialchars($member['Email']);
+        $branch = htmlspecialchars($member['Branch']);
+        $username = htmlspecialchars($member['Username']);
+        $status = htmlspecialchars($member['Status']);
+        ?>
+        <tr style="font-size:8px">
+            <td><?php echo $staffId; ?></td>
+            <td style="text-transform:capitalize"><?php echo $name; ?></td>
+            <td><?php echo $userGroup; ?></td>
+            <td><?php echo $email; ?></td>
+            <td><?php echo $branch; ?></td>
+            <td><?php echo $username; ?></td>
+            <td><?php echo $status; ?></td>
+            <td>
+                <a href="view_user.php?id=<?php echo $id; ?>" class="btn btn-sm btn-outline-primary" style="font-size:7px">
+                    <i class="fa fa-eye"></i> View
+                </a>
+            </td>
+        </tr>
+        <?php
+    }
+} else {
+    // Show no records message
+    ?>
+    <tr>
+        <td colspan="8" style="text-align:center; font-size:8px;">No record found</td>
+    </tr>
+    <?php
 }
 ?>
 </tbody>
+
 </table>
 </div>
 

@@ -161,7 +161,7 @@ $loc = $row['Location'];
 <div class="navbar-logo-box">
 <a href="#" class="logo logo-dark">
 <span class="logo-sm">
-<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+<h4 style="margin-top: 10px;"><img src="../assets/images/logo-sm.png" class="dark-logo d-none" height="20" alt="Logo-Dark"><b style="font-size:17px;"> FINANZA</b></h4>
 </span>
 <span class="logo-lg">
 <h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
@@ -169,13 +169,13 @@ $loc = $row['Location'];
 </a>
 <a href="#" class="logo logo-light">
 <span class="logo-sm">
-<h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="20" alt="Logo-Dark"><b style="font-size:14px;"> FINANZA</b></h4>
+<h4 style="margin-top: 10px;"><img src="../assets/images/logo-sm.png" class="dark-logo d-none" height="20" alt="Logo-Dark"><b style="font-size:17px;"> FINANZA</b></h4>
 </span>
 <span class="logo-lg">
 <h4><img src="../assets/images/logo-sm.png" class="dark-logo" height="30" alt="Logo-Dark"><b> FINANZA</b></h4>
 </span>
 </a>
-<button type="button" class="btn btn-icon top-icon sidebar-btn" id="sidebar-btn" aria-label="Toggle navigation"><i class="mdi mdi-menu-open align-middle fs-17" style="margin-left:60px;"></i></button>
+<button type="button" class="btn btn-icon top-icon sidebar-btn" id="sidebar-btn" aria-label="Toggle navigation"><i class="mdi mdi-menu-open align-middle fs-17" style="margin-left:60px; font-size:25px"></i></button>
 <button type="button" class="btn btn-icon top-icon sidebar-horizontal-btn d-none" aria-label="Toggle navigation"><i class="mdi mdi-menu align-middle fs-17"></i></button>
 </div>
 <!-- Start menu -->
@@ -205,56 +205,16 @@ $loc = $row['Location'];
 </div>
 </form>
 
-<button type="button" class="btn btn-icon top-icon d-none d-md-block" id="light-dark-mode" aria-label="Toggle Light/Dark">
+<button type="button" class="btn btn-icon top-icon d-md-block" id="light-dark-mode" aria-label="Toggle Light/Dark">
 <i class="mdi mdi-brightness-7 align-middle"></i>
 <i class="mdi mdi-white-balance-sunny align-middle"></i>
 </button>
-<!-- Start Notifications -->
-<div class="dropdown d-inline-block">
-<button type="button" class="btn btn-icon top-icon" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
-<i class="mdi mdi-bell-ring-outline fs-17"></i>
-</button>
-<div class="dropdown-menu dropdown-menu-lg dropdown-menu-md dropdown-menu-end dropdown-menu-animated p-0 " aria-labelledby="page-header-notifications-dropdown">
-<div class="p-4 border-bottom">
-<div class="row align-items-center">
-<div class="col">
-<h6 class="m-0"> <i class="mdi mdi-bell-ring-outline me-1 fs-15"></i> Notifications </h6>
-</div>
-<div class="col-auto">
-<a href="#!" class="badge bg-info-subtle text-info"> 8+</a>
-</div>
-</div>
-</div>
-<div data-simplebar style="max-height: 230px;">
-<a href="#!" class="text-reset notification-item">
-<div class="d-flex">
-<div class="avatar avatar-xs avatar-label-primary me-3">
-<span class="rounded fs-16">
-<i class="mdi mdi-file-document-outline"></i>
-</span>
-</div>
-<div class="flex-1">
-<h6 class="mb-1">New report has been recived</h6>
-<p class="mb-0 fs-12 text-muted"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
-</div>
-<i class="mdi mdi-chevron-right align-middle ms-2"></i>
-</div>
-</a>
-</div>
-<div class="p-2 border-top">
-<div class="d-grid">
-<a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-<i class="mdi mdi-arrow-right-circle me-1"></i> View More..
-</a>
-</div>
-</div>
-</div>
-</div>
+
 <!-- Start Profile -->
 <div class="dropdown d-inline-block ps-3 ms-2 border-start admin-user-info">
 <button type="button" aria-label="profile" class="btn btn-sm p-0" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 <span class="avatar avatar-xs p-1 d-inline-block">
-<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid" style="border-radius:5px; height:30px">
+<img src="<?php echo $row['Location']; ?>"  class="img-fluid" style="border-radius:5px; height:30px">
 </span>
 <span class="d-none d-xl-inline-block ms-1 fw-semibold fs-14 admin-name"><?php echo $row['Name']; ?></span>
 <i class="mdi mdi-chevron-down align-middle fs-16 d-none d-xl-inline-block"></i>
@@ -265,14 +225,14 @@ $loc = $row['Location'];
 <div class="rich-list-item w-100 p-0">
 <div class="rich-list-prepend">
 <span class="rounded avatar-sm p-1 bg-body d-flex">
-<img src="<?php echo $row['Location']; ?>" alt="Header Avatar" class="img-fluid">
+<img src="<?php echo $row['Location']; ?>"  class="img-fluid">
 </span>
 </div>
 <div class="rich-list-content">
 <h3 class="rich-list-title fs-13 mb-1"><?php echo $row['Name']; ?></h3>
 <span class="rich-list-subtitle"><?php echo $row['User_Group']; ?></span>
 </div>
-<div class="rich-list-append"><span class="badge badge-label-primary fs-6">6+</span></div>
+<div class="rich-list-append"><span class="badge badge-label-primary fs-6"></span></div>
 </div>
 </div>
 <br>

@@ -5,31 +5,43 @@ include '../config/user_session.php';
 ?>
 
 <div class="row">
-<div class="col-sm-4">
+<div class="col-sm-3">
 <b>Withdrawal Request: 
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
 $result = mysqli_query($con, "SELECT COUNT(*) FROM withdraw WHERE Status = 'Processing' AND Team_Leader ='$User'");
 $row = mysqli_fetch_array($result);
-$total = $row[0];
-echo $total;
+$total1 = $row[0];
+echo $total1;
 ?>
 </b>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-3">
 <b>Savings For Repayment Request:
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
 $result = mysqli_query($con, "SELECT COUNT(*) FROM saving_rep WHERE Status = 'Processing' AND Team_Leader ='$User'");
 $row = mysqli_fetch_array($result);
-$total = $row[0];
-echo $total;
+$total2 = $row[0];
+echo $total2;
 ?>
 </b>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-3">
+<b>Total Flexi Withdrawal Request:
+<?php 
+include '../config/db.php';
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT COUNT(*) FROM flexi_withdraw WHERE Status = 'Processing' AND Team_Leader ='$User'");
+$row = mysqli_fetch_array($result);
+$total3 = $row[0];
+echo $total3;
+?>
+</b>
+</div>
+<div class="col-sm-3">
 <b>Total Request:
 <?php 
 include '../config/db.php';
@@ -41,7 +53,11 @@ $total1 = $row[0];
 $result = mysqli_query($con, "SELECT COUNT(*) FROM saving_rep WHERE Status = 'Processing' AND Team_Leader ='$User'");
 $row = mysqli_fetch_array($result);
 $total2 = $row[0];
-echo $total1 + $total2;
+//
+$result = mysqli_query($con, "SELECT COUNT(*) FROM flexi_withdraw WHERE Status = 'Processing' AND Team_Leader ='$User'");
+$row = mysqli_fetch_array($result);
+$total3 = $row[0];
+echo $total1 + $total2 + $total3;
 ?>
 </b>
 </div>
@@ -56,7 +72,6 @@ echo $total1 + $total2;
 if($types == "Withdraw"){
 ?>
 
-<div style="overflow-y:auto; height:300px;">
 <?php 
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -79,7 +94,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-responsive">
+<div class="table-container" style="overflow-y:auto; height:330px;">
 <table>
 <thead>
 <tr> 
@@ -133,7 +148,10 @@ foreach($json as $member){
 }else if($types == "Repayment"){
 ?>
 
-<div style="overflow-y:auto; height:300px">
+
+
+
+
 <?php 
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -156,7 +174,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-responsive">
+<div class="table-container" style="overflow-y:auto; height:330px;">
 <table>
 <thead>
 <tr> 
@@ -201,6 +219,85 @@ foreach($json as $member){
 </tbody>
 </table>
 </div>
+
+
+
+
+
+
+<?php 
+}else if($types == "Flexi"){
+?>
+
+
+
+<?php 
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Origin: *");
+include '../config/db.php';
+
+$result = mysqli_query($con, "SELECT id, Flexi_Accounts, Name, Branch, Amount, Officer_Name, Status, Date_Withdraw
+FROM flexi_withdraw WHERE Team_Leader = '$User' AND Status = 'Processing' ORDER BY Name ASC") or die("Bad Query.");
+
+mysqli_close($con);
+
+$results = array();
+while($row = mysqli_fetch_assoc($result))
+{
+$results[] = $row; 
+}
+$fp = fopen('../data/team_flexi_saving.json', 'w'); 
+fwrite($fp, json_encode($results)); 
+fclose($fp);
+//echo json_encode($results);
+?>
+
+<div class="table-container" style="overflow-y:auto; height:330px;">
+<table>
+<thead>
+<tr> 
+<th style="font-size:8px">FLEXI ACCOUNT</th>
+<th style="font-size:8px">ACCOUNT NAME</th>
+<th style="font-size:8px">BRANCH</th>
+<th style="font-size:8px">AMOUNT</th>
+<th style="font-size:8px">INITIATED BY</th>
+<th style="font-size:8px">DATE INITIATED</th>
+<th style="font-size:8px">LOAN OFFICER</th>
+<th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">ACTION</th>
+</tr>
+</thead>
+<tbody>
+<?php
+$url = '../data/team_flexi_saving.json';
+$data = file_get_contents($url);
+$json = json_decode($data);
+foreach($json as $member){
+?>
+<tr style="font-size:8px; text-transform:capitalize">
+<td><?php echo $member->Flexi_Accounts?></td>
+<td style="text-transform:capitalize"><?php echo $member->Name?></td>
+<td><?php echo $member->Branch?></td>
+<td ><?php echo number_format($member->Amount,2)?></td>
+<td><?php echo $member->Officer_Name?></td>
+<td ><?php echo date("d-M-Y", strtotime($member->Date_Withdraw))?></td>
+<td><?php echo $member->Officer_Name?></td>
+<td><?php echo $member->Status?></td>
+<td>
+<a class="invkK" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $member->id; ?>">
+<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+</a>
+</td>
+</tr>
+<?php
+}
+?>
+</tbody>
+</table>
+</div>
+
+
 
 
 
@@ -283,6 +380,42 @@ $("#view").hide();
 });
 });
 </script>
+
+
+
+
+<script>
+// Display data in modal
+$(document).ready(function() {
+$('.invkK').on('click', function(e) {e.preventDefault();
+$("#updateModal").hide();
+$("#view").show();
+var id = $(this).data('id');
+if(id) {
+$.ajax({
+url: 'client_flexi_withdrawal_page.php',
+type: "GET",
+data: {'id': id},
+success: function(data) { 
+setTimeout(function() {
+$("#updateModal").show();
+$("#view").hide();
+$('#profile').html(data);
+}, 1000);
+},
+error: function(xhr, status, error) {
+alert('Error loadingrequest page : ' + error);
+$("#view").hide();
+}
+});
+} else {
+alert('Invalid ID');
+$("#view").hide();
+}
+});
+});
+</script>
+
 
 <script type="text/javascript">
 function loads() {

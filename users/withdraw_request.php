@@ -8,6 +8,7 @@ $bnk = $_POST['bnk']; //  bank
 $acct = $_POST['acct']; //  account no
 $actname = $_POST['actname']; //  account name
 $reason = $_POST['reason']; //  reason
+$balance = $_POST['bal']; //  saving balance
 $result = mysqli_query($con, "SELECT * FROM savings WHERE id = '$savid'");
 $row= mysqli_fetch_array($result);
 $id = $row['id'];
@@ -42,7 +43,7 @@ echo 6;
 exit();
 }
 
-if($am > $bl){
+if($am > $balance){
 echo 1;
 exit();
 }

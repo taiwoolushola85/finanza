@@ -37,13 +37,10 @@
 <div class="card-body">
 <div class="d-flex align-items-start justify-content-between mb-6">
 <div>
-<h6 class="mb-3">Active Clients</h6>
+<h6 class="mb-3" style="font-size:14px;">Active Clients</h6>
 </div>
 <div class="position-relative d-inline-block avatar-progress progress-100">
 <svg class="position-absolute top-0 start-0 progress-svg">
-<circle class="progress-bg"></circle>
-<circle class="progress-circle stroke-success" stroke-dasharray="163.36281798666926" stroke-dashoffset="163.36281798666926" style="stroke-dashoffset: 40.8407;">
-</circle>
 </svg>
 <div class="avatar size-11 avatar-label-success avatar-circle">
 <i class="fas fa-users" style="font-size:24px;"></i>
@@ -54,11 +51,11 @@
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Active' AND User ='$User'");
+$result = mysqli_query($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Active' AND User = '$User'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
 ?>
-<h4 class="mb-0 fw-medium" style="font-size:16px;">Total: <span data-counter="<?php echo $total; ?>"> 
+<h4 class="mb-0 fw-medium" style="font-size:17px;"><b>Total:</b> <span><?php echo $total; ?></span> 
 </span></h4>
 </div>
 </div>
@@ -72,13 +69,10 @@ $total = $row[0];
 <div class="card-body">
 <div class="d-flex align-items-start justify-content-between mb-6">
 <div>
-<h6 class="mb-3">Portfolio</h6>
+<h6 class="mb-3" style="font-size:14px;">Portfolio</h6>
 </div>
 <div class="position-relative d-inline-block avatar-progress progress-75">
 <svg class="position-absolute top-0 start-0 progress-svg">
-<circle class="progress-bg"></circle>
-<circle class="progress-circle stroke-info" stroke-dasharray="163.36281798666926" stroke-dashoffset="163.36281798666926" style="stroke-dashoffset: 40.8407;">
-</circle>
 </svg>
 <div class="avatar size-11 avatar-label-info avatar-circle">
 <i class="fas fa-star" style="font-size:24px;"></i>
@@ -89,11 +83,11 @@ $total = $row[0];
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE Status != 'Cancelled' AND User ='$User'");
+$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE Status != 'Cancelled' AND User = '$User'");
 $row = mysqli_fetch_array($result);
 $totals = $row[0];
 ?>
-<h4 class="mb-0 fw-medium" style="font-size:16px;">Total: <span><?php echo number_format($totals,2); ?></span></h4>
+<h4 class="mb-0 fw-medium"><b style="font-size:17px;"> Total:</b> <span><?php echo number_format($totals,2); ?></span></h4>
 </div>
 </div>
 </div>
@@ -110,13 +104,10 @@ $totals = $row[0];
 <div class="card-body">
 <div class="d-flex align-items-start justify-content-between mb-6">
 <div>
-<h6 class="mb-3">Repayment Transaction</h6>
+<h6 class="mb-3" style="font-size:14px;">Repayment Transactions</h6>
 </div>
 <div class="position-relative d-inline-block avatar-progress progress-75">
 <svg class="position-absolute top-0 start-0 progress-svg">
-<circle class="progress-bg"></circle>
-<circle class="progress-circle stroke-primary" stroke-dasharray="163.36281798666926" stroke-dashoffset="163.36281798666926" style="stroke-dashoffset: 40.8407;">
-</circle>
 </svg>
 <div class="avatar size-11 avatar-label-primary avatar-circle">
 <i class="fas fa-money-bill" style="font-size:24px;"></i>
@@ -127,11 +118,11 @@ $totals = $row[0];
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Amount) FROM history WHERE User ='$User' AND Status != 'Paid' AND Post_Method = 'Basic Posting'");
+$result = mysqli_query($con, "SELECT SUM(Amount) FROM history WHERE User = '$User' AND Date_Paid = '$d'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
 ?>
-<h4 class="mb-0 fw-medium" style="font-size:16px;">Total: <span><?php echo number_format($total,2);?></span></h4>
+<h4 class="mb-0 fw-medium"><b style="font-size:17px;">Total:</b> <span><?php echo number_format($total,2);?></span></h4>
 </div>
 </div>
 </div>
@@ -144,13 +135,10 @@ $total = $row[0];
 <div class="card-body">
 <div class="d-flex align-items-start justify-content-between mb-6">
 <div>
-<h6 class="mb-3">Saving Transaction</h6>
+<h6 class="mb-3" style="font-size:14px;">Saving Transactions</h6>
 </div>
 <div class="position-relative d-inline-block avatar-progress progress-75">
 <svg class="position-absolute top-0 start-0 progress-svg">
-<circle class="progress-bg"></circle>
-<circle class="progress-circle stroke-warning" stroke-dasharray="163.36281798666926" stroke-dashoffset="163.36281798666926" style="stroke-dashoffset: 40.8407;">
-</circle>
 </svg>
 <div class="avatar size-11 avatar-label-warning avatar-circle">
 <i class="fas fa-briefcase" style="font-size:24px;"></i>
@@ -159,19 +147,19 @@ $total = $row[0];
 </div>
 <div class="d-flex justify-content-between align-items-center">
 <?php 
-$d = date('Y-m-d');
 include '../config/db.php';
-$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE User ='$User' AND Status != 'Paid' AND Posting_Method != 'Initial Deposit' 
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE User ='$User' AND Date_Paid = '$d' AND Posting_Method != 'Initial Deposit' 
 AND Posting_Method != 'System Posting'");
 $row = mysqli_fetch_array($result);
 $total1 = $row[0];
-$result = mysqli_query($con, "SELECT SUM(Amount) FROM flexi_history WHERE User ='$User' AND Status != 'Paid' AND Posting_Method != 'System Posting'
+$result = mysqli_query($con, "SELECT SUM(Amount) FROM flexi_history WHERE User ='$User' AND Date_Paid = '$d' AND Posting_Method != 'System Posting'
 AND Posting_Method != 'Initial Deposit'");
 $row = mysqli_fetch_array($result);
 $total2 = $row[0];
 mysqli_close($con);
 ?>
-<h4 class="mb-0 fw-medium" style="font-size:16px;">Total: <span><?php  echo number_format($total1 + $total2,2); ?></span></h4>
+<h4 class="mb-0 fw-medium"><b style="font-size:17px;">Total:</b> <span><?php  echo number_format($total1 + $total2,2); ?></span></h4>
 </div>
 </div>
 </div>
@@ -179,6 +167,82 @@ mysqli_close($con);
 
 </div>
 </div>
+
+
+
+
+<div class="card shadow-sm border-0">
+<div class="card-body">
+<div class="avatar avatar-sm avatar-label-success mb-6">
+<i class="fa fa-bookmark"></i>
+</div><h6 class="mb-2">Disbursement Performance Progress</h6>
+<div class="d-flex gap-4 flex-wrap justify-content-between align-items-start mb-8">
+<div>
+<p class="text-muted mb-0 lh-lg">You are monitoring monthly disbursement performance.</p>
+</div>
+<div class="d-flex gap-3">
+<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-30"></span>Outstanding</a>
+<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-60"></span>Achieve</a>
+<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-90"></span>Target</a>
+</div>
+</div>
+<div class="d-flex gap-2">
+<div class="w-100">
+<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
+<?php 
+include '../config/db.php';
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT SUM(Target) FROM mapping WHERE Loan_Officer = '$User'");
+$row = mysqli_fetch_array($result);
+$total1 = $row[0];
+//
+$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE User = '$User'");
+$row = mysqli_fetch_array($result);
+$total2 = $row[0];
+echo number_format($total1 - $total2,2);
+?>
+<br>Target Outstanding</span>
+<div class="progress progress-md bg-primary bg-opacity-30 w-100">
+<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+</div>
+</div>
+<div class="w-33 flex-shrink-0">
+<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
+<?php 
+include '../config/db.php';
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE User = '$User'");
+$row = mysqli_fetch_array($result);
+$total = $row[0];
+echo number_format($total,2);
+?>
+<br>Target Achieve</span>
+<div class="progress progress-md bg-primary bg-opacity-60">
+<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+</div>
+</div>
+<div class="w-25 flex-shrink-0">
+<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
+<?php 
+include '../config/db.php';
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT SUM(Target) FROM mapping WHERE Loan_Officer = '$User'");
+$row = mysqli_fetch_array($result);
+$total = $row[0];
+echo number_format($total,2);
+?><br>Target</span>
+<div class="progress progress-md bg-primary bg-opacity-90">
+<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+
+
 
 </div>
 <div class="col-sm-5">
@@ -220,7 +284,7 @@ mysqli_close($con);
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Closed' AND User ='$User'");
+$result = mysqli_query($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Closed' AND User = '$User'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo $total;
@@ -243,7 +307,7 @@ echo $total;
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE User = '$User' AND Status = 'Active' AND $d > Maturity_Date
+$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE User = '$User' AND Status = 'Active' AND '$d' > Maturity_Date
 AND Recovery_Status = 'No'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
@@ -251,7 +315,7 @@ echo number_format($total,2);
 mysqli_close($con);
 ?>
 </h5>
-<p class="text-muted mb-0">Expired runing loan</p>
+<p class="text-muted mb-0">Runing Expired Loans</p>
 </div>
 </div>
 
@@ -292,90 +356,35 @@ $('#recent').html(data);
 </div>
 </div>
 
-
-</div>
-</div>
-
-
-
-
-
-<div class="card">
+<div class="row">
+<div class="col-sm-6">
+<div class="card shadow-sm border-0">
 <div class="card-body">
-<div class="avatar avatar-sm avatar-label-success mb-6">
-<i class="fa fa-bookmark"></i>
-</div><h6 class="mb-2">Disbursement Performance Progress</h6>
-<div class="d-flex gap-4 flex-wrap justify-content-between align-items-start mb-8">
+<div class="d-flex align-items-start justify-content-between mb-6">
 <div>
-<p class="text-muted mb-0 lh-lg">You are monitoring monthly disbursement performance.</p>
+<h6 class="mb-3" style="font-size:14px;">Pending Loans</h6>
 </div>
-<div class="d-flex gap-3">
-<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-30"></span>Outstanding</a>
-<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-60"></span>Achieve</a>
-<a href="#!" class="d-flex align-items-center gap-2 text-body"><span class="size-3 rounded-circle d-inline bg-primary bg-opacity-90"></span>Target</a>
+<div class="position-relative d-inline-block avatar-progress progress-100">
+<svg class="position-absolute top-0 start-0 progress-svg">
+</svg>
+<div class="avatar size-11 avatar-label-info avatar-circle">
+<i class="fas fa-star" style="font-size:24px;"></i>
 </div>
 </div>
-<div class="d-flex gap-2">
-<div class="w-100">
-<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
+</div>
+<div class="d-flex justify-content-between align-items-center">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Target) FROM mapping WHERE Loan_Officer ='$User'");
-$row = mysqli_fetch_array($result);
-$total1 = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE User ='$User'");
-$row = mysqli_fetch_array($result);
-$total2 = $row[0];
-echo number_format($total1 - $total2,2);
-?>
-<br>Outstanding</span>
-<div class="progress progress-md bg-primary bg-opacity-30">
-<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
-</div>
-</div>
-<div class="w-33 flex-shrink-0">
-<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
-<?php 
-include '../config/db.php';
-$d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE User ='$User'");
+$result = mysqli_query($con, "SELECT COUNT(*) FROM register WHERE Status != 'Disbursed' AND User ='$User'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
-echo number_format($total,2);
 ?>
-<br>Achieve</span>
-<div class="progress progress-md bg-primary bg-opacity-60">
-<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
-</div>
-</div>
-<div class="w-25 flex-shrink-0">
-<span class="text-muted px-2 py-1 border rounded mb-3 d-inline-block">
-<?php 
-include '../config/db.php';
-$d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Target) FROM mapping WHERE Loan_Officer ='$User'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
-?><br>Target</span>
-<div class="progress progress-md bg-primary bg-opacity-90">
-<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-
-</div>
+<h4 class="mb-0 fw-medium" style="font-size:17px;"><b>Total:</b> <span><?php echo $total; ?></span> 
+</span></h4>
 </div>
 
 
-
-<div class="row" style="display:none;">
-<div class="col-sm-6">
-<div class="card shadow-sm border-0">
-<div class="card-body">
-<?php include 'chart.php';?>
 </div>
 </div>
 </div>
@@ -383,8 +392,41 @@ echo number_format($total,2);
 <div class="col-sm-6">
 <div class="card shadow-sm border-0">
 <div class="card-body">
-<?php include 'line.php';?>
+<div class="d-flex align-items-start justify-content-between mb-6">
+<div>
+<h6 class="mb-3" style="font-size:14px;">Cancelled Loans</h6>
+</div>
+<div class="position-relative d-inline-block avatar-progress progress-100">
+<svg class="position-absolute top-0 start-0 progress-svg">
+</svg>
+<div class="avatar size-11 avatar-label-danger avatar-circle">
+<i class="fas fa-exclamation-triangle" style="font-size:24px;"></i>
+</div>
+</div>
+</div>
+<div class="d-flex justify-content-between align-items-center">
+<?php 
+include '../config/db.php';
+$d = date('Y-m-d');
+$result = mysqli_query($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Cancelled' AND User ='$User'");
+$row = mysqli_fetch_array($result);
+$total = $row[0];
+?>
+<h4 class="mb-0 fw-medium" style="font-size:17px;"><b>Total:</b> <span><?php echo $total; ?></span> 
+</span></h4>
+</div>
+
+
 </div>
 </div>
 </div>
 </div>
+
+
+</div>
+</div>
+
+
+
+
+

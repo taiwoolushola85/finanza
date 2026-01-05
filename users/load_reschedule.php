@@ -97,11 +97,15 @@ Reschedule Form</b><hr>
 </div>
 <br>
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-4">
 <span>Virtual Account No</span>
 <input type="text" disabled class="form-control form-control" required value="<?php echo $rows['Account_Number']; ?>">
 </div>
-<div class="col-sm-6">
+<div class="col-sm-4">
+<span>Loan Amount</span>
+<input type="text" disabled class="form-control form-control" required value="<?php echo $rows['Loan_Amount']; ?>">
+</div>
+<div class="col-sm-4">
 <span>Current Balance</span>
 <input type="text" disabled class="form-control form-control" required value="<?php echo $rows['Total_Bal']; ?>">
 </div>
@@ -113,8 +117,7 @@ Reschedule Form</b><hr>
 <span>New Principal Amt</span>
 <input type="text" class="form-control form-control-sm" hidden  value="<?php echo $repid; ?>" name="repid" required="required">
 <input type="text" class="form-control form-control-sm" hidden  value="<?php echo $paid; ?>" name="pd" required="required">
-<input type="text" name="amt" hidden class="form-control form-control" value="<?php echo $rows['Total_Bal']; ?>" required placeholder="Enter Principal Loan Amount">
-<input type="text" disabled class="form-control form-control" value="<?php echo $rows['Total_Bal']; ?>" required placeholder="Enter Principal Loan Amount">
+<input type="text" name="amt" class="form-control form-control" placeholder="Enter Principal Loan Amount" required>
 </div>
 <div class="col-sm-3">
 <span>New Product</span>

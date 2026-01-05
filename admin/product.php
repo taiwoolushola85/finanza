@@ -190,7 +190,7 @@ $name= $rows['Product_Name'];
 </div>
 
 <div class="modal" id="productModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">PRODUCT LIST TABLE</h5>

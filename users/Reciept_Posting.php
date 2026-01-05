@@ -149,11 +149,8 @@ $("#result").html(
 <br>
 <br>
 <br>
-<div class="card">
-<div class="card-body">
 <div id="results"></div>
-</div>
-</div>
+
 
 </div>
 </div>

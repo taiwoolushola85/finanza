@@ -19,10 +19,14 @@ $id = $rows['id'];
 if($reg_status == 'Under Review'){
 ?>
 <div class="btn-group">
-<a class="approve" href="#!" id="<?php echo $regid; ?>"><button class="btn btn-success"><i class="fa fa-check"></i> Approve Application</button></a>
-<button class="btn btn-info"><i class="fa fa-book"></i> CRC Record</button>
-<a href="#!" class="decline" href="#!" id="<?php echo $regid; ?>"><button hidden class="btn btn-warning"><i class="fa fa-exclamation-triangle"></i> Decline Application</button></a>
-<a href="#!" class="delete" href="#!" id="<?php echo $regid; ?>"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete Application</button></a>
+<button class="btn btn-light" onclick="myCRC()"><i class="fa fa-user"></i> Loan Profile</button>
+<button class="btn btn-light" onclick="myProfile()"><i class="fa fa-book"></i> Generate CRC Report</button>
+<button class="btn btn-light" onclick="myApprove()"><i class="fa fa-upload"></i> Upload & Approve Loan</button>
+<a class="approve" href="#!" id="<?php echo $regid; ?>" hidden><button class="btn btn-success"><i class="fa fa-check"></i> Approve Application</button></a>
+<a href="#!" class="decline" href="#!" id="<?php echo $regid; ?>"><button hidden class="btn btn-warning">
+<i class="fa fa-exclamation-triangle"></i> Decline Application</button></a>
+<a href="#!" class="delete" href="#!" id="<?php echo $regid; ?>"><button class="btn btn-light">
+<i class="fa fa-trash"></i> Delete Application</button></a>
 </div>
 <?php 
 }else{
@@ -30,6 +34,7 @@ if($reg_status == 'Under Review'){
 }
 ?>
 
+<div id="first" style="display:block">
 <div class="row">
 <div class="col-sm-6">
 <br><br>
@@ -248,11 +253,8 @@ if($reg_status == "Under Review"){
 <?php 
 }
 ?>
-</div>
 
 
-</div>
-</div>
 
 <br>
 <b><i class="fa fa-star"></i> BUSINESS INFO</b>
@@ -283,24 +285,153 @@ if($reg_status == "Under Review"){
 </tbody>
 </table>
 
+</div>
+</div>
+
+
+
+
+<div id="second" style="display:none;">
+<br>
+<form id="bvnForm">
+<div class="row">
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> CRC Type</label>
+<select type="text" class="form-control form-control-sm" name="type" id="type" required>
+<option value="">Select CRC Type</option>
+<option value="Basic">Basic</option>
+<option value="Premium">Premium</option>
+</select>
+</div>
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> BVN</label>
+<input type="text" class="form-control form-control-sm" placeholder="11 Digit Number" name="bvn" id="bvn" hidden value="<?php echo $row['BVN']; ?>" required>
+<input type="text" class="form-control form-control-sm" placeholder="11 Digit Number" disabled value="<?php echo $row['BVN']; ?>" required>
+</div>
+</div>
+<br>
+<button type="submit" class="invks btn btn-outline-success btn-sm" id="submitBtn" >Verify</button>
+</form>
+<br>
+<b style="display:none;" id="loaders"><img src="../loader/loader.gif" style="height:16px"> Checking CRC Record ! Please wait...</b>
+<button id="downloadPdf" style="display:none; margin-bottom:15px; padding:8px 15px; background:#FF8C00; color:#fff; border:none; cursor:pointer;">
+Download as PDF
+</button>
+<div id="report"></div>
+
+</div>
+
+
+<div id="third" style="display:none;">
+<br>
+<br>
+Upload CRC Document Here to Approve Loan Application<br><br>
+<br>
+<br>
+<form action="" method="POST" enctype="multipart/form-data" id="uploadCrc">
+<div class="row">
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Upload CRC</label>
+<input type="text" class="form-control form-control-sm" name="id" value="<?php echo $row['id']; ?>" hidden required>
+<input type="file" class="form-control form-control-sm" name="Pic" required>
+</div>
+</div>
+<br>
+<button type="submit" class="btn btn-outline-success btn-sm" >Upload & Approve</button>
+</form>
+<br>
+
+
+
+</div>
+
+<script>
+// Display data in modal
+$(document).ready(function() {
+$('.invks').on('click', function(e) {e.preventDefault();
+$("#downloadPdf").hide();
+$("#loaders").show();
+var type = document.getElementById("type").value;
+var bvn = document.getElementById("bvn").value;
+if(bvn) {
+$.ajax({
+url: 'crc_report.php',
+type: "GET",
+data: {'type': type, 'bvn': bvn},
+success: function(data) { 
+$("#loaders").hide();
+$('#report').html(data);
+},
+error: function(xhr, status, error) {
+alert('Error loading data: ' + error);
+$("#loaders").hide();
+}
+});
+} else {
+alert('Select and filled all the required field..');
+$("#loaders").hide();
+}
+});
+});
+</script>
 
 
 <script>
-// to show data on a modal box
-$(document).ready(function() {
-$('.approve').on('click', function() {
-WRN_PROFILE_DELETE = "You are about to approve this loan application..";
+function myCRC() {
+var first = document.getElementById("first");
+var second = document.getElementById("second");
+var third = document.getElementById("third");
+if (first.style.display === "none") {
+first.style.display = "block";
+second.style.display = "none";
+third.style.display = "none";
+} else {
+}
+}
+function myProfile() {
+var first = document.getElementById("first");
+var second = document.getElementById("second");
+var third = document.getElementById("third");
+if (second.style.display === "none") {
+first.style.display = "none";
+second.style.display = "block";
+third.style.display = "none";
+} else {
+}
+}
+
+function myApprove() {
+var first = document.getElementById("first");
+var second = document.getElementById("second");
+var third = document.getElementById("third");
+if (third.style.display === "none") {
+first.style.display = "none";
+second.style.display = "none";
+third.style.display = "block";
+} else {
+}
+}
+</script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function (e){
+$("#uploadCrc").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to upload and approve this application..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
-var id = $(this).attr('id');
-if(id) {
 $("#updateModal").modal('hide');
 $("#please").show();
 $.ajax({
-url: 'approve_review.php?id' + id,
-type: "GET",
-data: {'id':id},
-success:function(data) { 
+url: "approve_review.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();
@@ -312,18 +443,17 @@ $("#please").hide();
 $("#toast").hide();
 }, 6000);
 }else{
+$("#please").hide();
 alert (data)
 }
+},
+error: function(){
 }
 });
-}else{
-alert (data)
 }
-}
-});
+}));
 });
 </script>
-
 
 
 

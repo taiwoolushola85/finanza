@@ -31,7 +31,53 @@
 
 
 <br>
-<br>
+
+<div class="row">
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Branch</label>
+<select type="text" class="form-control form-control-md" name="br" id="br" oninput="getBranch()" required>
+<option value="">Select Branch</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Name FROM branch WHERE Status = 'Activate' ORDER BY Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$nx= $rows['id']; // union id
+$name= $rows['Name'];
+?>
+<option value="<?php echo $nx; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Loan Officer</label>
+<select type="text" class="form-control form-control-md" name="lo" id="lo" oninput="getOfficer()" required>
+<option value="">Select Loan Officer</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Name FROM users WHERE Status = 'Activate' AND User_Group = 'Loan Officers' ORDER BY Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$nx= $rows['id']; // union id
+$name= $rows['Name'];
+?>
+<option value="<?php echo $nx; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
+</div>
 
 <br>
 <div class="row">
@@ -128,6 +174,63 @@ $('#result').html(data);
 });
 });
 </script>
+
+
+
+
+
+<script type="text/javascript">
+function getBranch()  {
+$("#loader").show();
+$("result").hide();
+var branch = document.getElementById("br").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "branch_overdue.php",
+dataType: "html",  
+data: {
+'branch': branch
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
+
+
+<script type="text/javascript">
+function getOfficer()  {
+$("#loader").show();
+$("result").hide();
+var lo = document.getElementById("lo").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "loan_officer_overdue.php",
+dataType: "html",  
+data: {
+'lo': lo
+},
+success:function(data){
+$("result").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#result').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
+
 
 <script type="text/javascript">
 function loads()  {

@@ -393,7 +393,7 @@ echo round($npl);
 ?>%
 </span>
 <div class="progress progress-sm bg-primary-subtle" >
-<div class="progress-bar bg-primary" style="width:100%;"></div>
+<div class="progress-bar bg-danger" style="width:<?php echo round($npl);?>%;"></div>
 </div>
 </div>
 </div>
@@ -407,19 +407,27 @@ echo round($npl);
 </center>
 </div>
 <div class="col-10">
-<b>DAILY LOANS<br> OUTSTANDING</b><span style="float:right;">
 <?php 
 include '../config/db.php';
-$mth = date('M');
-$year = date('Y');
-$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE Status = 'Active' AND Frequency = 'Daily'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
+// Total DAILY loans
+$dailyResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS daily_total FROM repayments WHERE Status = 'Active' AND Frequency = 'Daily'");
+$dailyRow = mysqli_fetch_assoc($dailyResult);
+$dailyTotal = $dailyRow['daily_total'] ?? 0;
+// Total ALL loans
+$totalResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS grand_total FROM repayments WHERE Status = 'Active'");
+$totalRow = mysqli_fetch_assoc($totalResult);
+$grandTotal = $totalRow['grand_total'] ?? 0;
+// Calculate percentage (avoid division by zero)
+$percentage = ($grandTotal > 0) ? ($dailyTotal / $grandTotal) * 100 : 0;
 ?>
+
+<b>DAILY LOANS <br> OUTSTANDING</b>
+<span style="float:right;">
+<?php echo number_format($dailyTotal, 2); ?>
 </span>
-<div class="progress progress-sm bg-primary-subtle" >
-<div class="progress-bar bg-primary" style="width:100%;"></div>
+<div class="progress progress-sm bg-primary-subtle">
+<div class="progress-bar bg-primary" style="width: <?php echo round($percentage, 2); ?>%;">
+</div>
 </div>
 </div>
 </div>
@@ -433,24 +441,31 @@ echo number_format($total,2);
 </center>
 </div>
 <div class="col-10">
-<b>
-WEELKY LOANS<br>
-OUTSTANDING
-</b><span style="float:right;">
+
 <?php 
 include '../config/db.php';
-$mth = date('M');
-$year = date('Y');
-$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE Status = 'Active' AND Frequency = 'Weekly'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
+// Total DAILY loans
+$dailyResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS weekly_total FROM repayments WHERE Status = 'Active' AND Frequency = 'Weekly'");
+$dailyRow = mysqli_fetch_assoc($dailyResult);
+$dailyTotal = $dailyRow['weekly_total'] ?? 0;
+// Total ALL loans
+$totalResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS grand_total FROM repayments WHERE Status = 'Active'");
+$totalRow = mysqli_fetch_assoc($totalResult);
+$grandTotal = $totalRow['grand_total'] ?? 0;
+// Calculate percentage (avoid division by zero)
+$percentage = ($grandTotal > 0) ? ($dailyTotal / $grandTotal) * 100 : 0;
 ?>
+
+<b>WEEKLY LOANS<br> OUTSTANDING</b>
+<span style="float:right;">
+<?php echo number_format($dailyTotal, 2); ?>
 </span>
-<div class="progress progress-sm bg-primary-subtle" >
-<div class="progress-bar bg-primary" style="width:100%;"></div>
+<div class="progress progress-sm bg-primary-subtle">
+<div class="progress-bar bg-info" style="width: <?php echo round($percentage, 2); ?>%;">
 </div>
 </div>
+</div>
+
 </div>
 
 <div class="row">
@@ -460,23 +475,30 @@ echo number_format($total,2);
 </center>
 </div>
 <div class="col-10">
-<b>
-MONTHLY LOANS<br>
-OUTSTANDING
-</b><span style="float:right;">
+
 <?php 
 include '../config/db.php';
-$mth = date('M');
-$year = date('Y');
-$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE Status = 'Active' AND Frequency = 'Monthly'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
+// Total DAILY loans
+$dailyResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS monthly_total FROM repayments WHERE Status = 'Active' AND Frequency = 'Monthly'");
+$dailyRow = mysqli_fetch_assoc($dailyResult);
+$dailyTotal = $dailyRow['monthly_total'] ?? 0;
+// Total ALL loans
+$totalResult = mysqli_query($con, "SELECT SUM(Total_Bal) AS grand_total FROM repayments WHERE Status = 'Active'");
+$totalRow = mysqli_fetch_assoc($totalResult);
+$grandTotal = $totalRow['grand_total'] ?? 0;
+// Calculate percentage (avoid division by zero)
+$percentage = ($grandTotal > 0) ? ($dailyTotal / $grandTotal) * 100 : 0;
 ?>
+
+<b>MONTHLY LOANS <br> OUTSTANDING</b>
+<span style="float:right;">
+<?php echo number_format($dailyTotal, 2); ?>
 </span>
-<div class="progress progress-sm bg-primary-subtle" >
-<div class="progress-bar bg-primary" style="width:100%;"></div>
+<div class="progress progress-sm bg-primary-subtle">
+<div class="progress-bar bg-warning" style="width: <?php echo round($percentage, 2); ?>%;">
 </div>
+</div>
+
 </div>
 </div>
 

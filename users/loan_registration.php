@@ -10,6 +10,8 @@ $ad = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", 
 $union = $_POST['un'];// union
 $education = $_POST['ed'];// education
 $ph = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['ph']);// phone
+$img = $_POST['img'];// client image
+$imgs = $_POST['imgs'];// gaurantor image
 $gn = $_POST['gn'];// gender
 $age = $_POST['db']; //date of birth
 $repday = $_POST['repday']; //repayment day
@@ -52,7 +54,7 @@ $yrs = date('Y');// time
 if(empty($bv) || empty($fn) || empty($mn) || empty($ln) || empty($ad) || empty($union) || empty($education) || empty($ph) || empty($gn) || empty($age) || empty($ms) 
 || empty($doc) || empty($docn) || empty($st1) || empty($ct1) || empty($bsn) || empty($bt) || empty($st) || empty($sd) || empty($add) || empty($sh) || empty($owner) 
 || empty($nin) || empty($fn2) || empty($mn2) || empty($ln2) || empty($occupation) || empty($ph2) || empty($ad2) || empty($re2) || empty($gn2) || empty($remark)
-|| empty($id_no2) || empty($id_type2)){
+|| empty($id_no2) || empty($id_type2) || empty($img)){
 echo 1;
 exit();
 }else{
@@ -79,20 +81,20 @@ $un_name = $row['Name'];
 // inserting the customer information
 $sql = "INSERT INTO register (Virtual_Account, Firstname, Middlename, Lastname, Address, Education, Phone, Gender, Branch, Years, Birthday_Month, Maritial_Status,
 Branch_id, State, Town, Location, Product, Product_id, Tenure, Frequency, Rate, Unions, Union_id, Loan_Amount, Bank, Account_Name, Account_No, BVN, Document,
-Document_No, Business, Biz_Type, Biz_State, Start_Date, Cash_Flow, Biz_Address, Biz_Owner,Shop_Owner, Date_Reg, Time_Reg, Status, User, User_id, Team_Leader,
+Document_No, Business, Biz_Type, Biz_State, Start_Date, Cash_Flow, Biz_Address, Biz_Owner, Shop_Owner, Date_Reg, Time_Reg, Status, User, User_id, Team_Leader,
 Team_id, Officer_Name, Team_Name, Map_id, Verification_Status, Interest_Amt, Monthly_Interest, Repayment_Amt, Total_Loan, Upfront, Inssurance, Form, Card,
 Schedule_Status, Application_Status, Saving_Type, Repayment_Day, Loan_Status, Months, Year_Booked, Stage) 
-VALUES ('NA', '$fn', '$mn', '$ln', '$ad', '$education', '$ph', '$gn', '$brss', '$age', '$date_month', '$ms', '$brss_id', '$st1', '$ct1', 'Null', 'Null', 'Null',
-'Null', 'Null', 'Null', '$un_name', '$un_id', 'Null', 'Null', 'Null', 'Null', '$bv', '$doc', '$docn', '$bsn', '$bt', '$st', '$sd', 'Null', '$add', '$owner', 
-'$sh', '$d', '$s', 'Under Review', '$User', '$usd_id', '$tlm', '$tm_id', '$ofn', '$tmn', '$map_id', 'Waiting', '0', '0', '0', '0', '0', '0', '0', '0', 'Not Confirmed',
-'Registered', 'Express Savings', '$repday', 'New Client', '$mth', '$yrs', '1')";
+VALUES ('NA', '$fn', '$mn', '$ln', '$ad', '$education', '$ph', '$gn', '$brss', '$age', '$date_month', '$ms', '$brss_id', '$st1', '$ct1', '$img', '-', '-',
+'-', '-', '-', '$un_name', '$un_id', '0', '-', '-', '-', '$bv', '$doc', '$docn', '$bsn', '$bt', '$st', '$sd', '-', '$add', '$owner', 
+'$sh', '$d', '$s', 'Under Review', '$User', '$usd_id', '$tlm', '$tm_id', '$ofn', '$tmn', '$map_id', 'Waiting', '0', '0', '0', '0', '0', '0', '0', '0', 
+'Not Confirmed', 'Registered', 'Express Savings', '$repday', 'New Client', '$mth', '$yrs', '1')";
 $result= mysqli_query($con, $sql);
 $last_id = mysqli_insert_id($con);// last insert id
 // gaurantor information
 $sql = "INSERT INTO gaurantors (Firstname, Middlename, Lastname, Phone, Address, Relationship, Gender, Location, Date_Reg, Time_Reg, User, User_id, Team_Leader, 
 Officer_Name, Team_Name, Team_id, Status, Regis_id, ID_No, ID_Type, ID_Image, Client_BVN, Client_Name, Gaurantor_BVN, Occupation) 
-VALUES ('$fn2', '$mn2', '$ln2', '$ph2', '$ad2', '$re2', '$gn2', 'Null', '$d', '$s', '$User', '$usd_id', '$tlm', '$ofn', '$tmn', '$tm_id', 'Active', '$last_id', 
-'$id_no2', '$id_type2', 'Null', '$bv', '$fll', '$nin', '$occupation')";
+VALUES ('$fn2', '$mn2', '$ln2', '$ph2', '$ad2', '$re2', '$gn2', '$imgs', '$d', '$s', '$User', '$usd_id', '$tlm', '$ofn', '$tmn', '$tm_id', 'Active', '$last_id', 
+'$id_no2', '$id_type2', '-', '$bv', '$fll', '$nin', '$occupation')";
 $result= mysqli_query($con, $sql);
 //comment box
 $sql = "INSERT INTO comment (Reg_No, BVN_No, Name, Comment, Date_Comment, Time_Comment, Comment_By, User_Role, Comment_Level) 

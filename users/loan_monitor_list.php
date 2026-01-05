@@ -30,7 +30,7 @@ Export Data
 <?php
 // Main query with proper escaping
 $base_query = "SELECT 
-r.id, r.Disbursement_No, r.Loan_Account_No, r.Firstname, r.Middlename, r.Lastname, 
+r.id, r.Disbursement_No, r.Loan_Account_No, r.Firstname, r.Middlename, r.Lastname, r.BVN, 
 r.Branch, r.Phone, r.Product, r.Total_Loan, r.Paid, r.Total_Bal, r.Expected_Amount, 
 r.Officer_Name, r.Date_Disbursed, r.Maturity_Date,
 reg.Account_No AS Account,
@@ -106,6 +106,7 @@ mysqli_close($con);
 <tr style="font-size:8px;">
 <th>DISBURSEMENT NO</th>
 <th>LOAN ACCT</th>
+<th>BVN</th>
 <th>NAME</th>
 <th>BRANCH</th>
 <th>PHONE</th>
@@ -140,6 +141,7 @@ foreach ($json as $member) {
 <tr style="font-size:8px">
 <td><?php echo htmlspecialchars($member->Disbursement_No ?? ''); ?></td>
 <td><?php echo htmlspecialchars($member->Loan_Account_No ?? ''); ?></td>
+<td><?php echo htmlspecialchars($member->BVN ?? ''); ?></td>
 <td style="text-transform:capitalize">
 <?php echo htmlspecialchars(trim(($member->Firstname ?? '') . " " . ($member->Middlename ?? '') . " " . ($member->Lastname ?? ''))); ?>
 </td>

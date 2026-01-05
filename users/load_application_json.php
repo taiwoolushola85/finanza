@@ -16,7 +16,7 @@ $User_escaped = mysqli_real_escape_string($con, $User);
 $search_escaped = mysqli_real_escape_string($con, $search);
 
 // Build query based on conditions
-$whereClause = "Status != 'Disbursed' AND User = '$User_escaped'";
+$whereClause = "Status != 'Disbursed' AND Status != 'Cancelled' AND User = '$User_escaped'";
 
 if (!empty($search)) {
 $whereClause .= " AND (BVN LIKE '%$search_escaped%' OR Firstname LIKE '%$search_escaped%' OR Middlename LIKE '%$search_escaped%' OR Lastname LIKE '%$search_escaped%')";
@@ -75,8 +75,18 @@ Total Record: <?php echo $total; ?>
 </tr>
 </thead>
 <tbody>
+<tbody>
 <?php
-foreach($results as $member) {
+if (empty($results)) {
+?>
+<tr>
+<td colspan="10" style="text-align:center; font-size:10px; padding:15px;">
+<strong>No record found</strong>
+</td>
+</tr>
+<?php
+} else {
+foreach ($results as $member) {
 // Escape output for XSS protection
 $bvn = htmlspecialchars($member['BVN']);
 $firstname = htmlspecialchars($member['Firstname']);
@@ -90,13 +100,6 @@ $status = htmlspecialchars($member['Status']);
 $dateReg = htmlspecialchars($member['Date_Reg']);
 $timeReg = htmlspecialchars($member['Time_Reg']);
 $id = (int)$member['id'];
-// Status badge
-$badgeClass = 'badge-soft-success';
-if ($status == 'Under Review') {
-$badgeClass = 'badge-soft-info';
-} elseif ($status == 'Declined') {
-$badgeClass = 'badge-soft-danger';
-}
 ?>
 <tr style="font-size:8px">
 <td><?php echo $bvn; ?></td>
@@ -105,9 +108,7 @@ $badgeClass = 'badge-soft-danger';
 <td><?php echo $gender; ?></td>
 <td><?php echo $branch; ?></td>
 <td><?php echo $officer; ?></td>
-<td>
-<span ><?php echo $status; ?></span>
-</td>
+<td><span><?php echo $status; ?></span></td>
 <td><?php echo $dateReg; ?></td>
 <td><?php echo $timeReg; ?></td>
 <td>
@@ -117,6 +118,7 @@ $badgeClass = 'badge-soft-danger';
 </td>
 </tr>
 <?php
+}
 }
 ?>
 </tbody>

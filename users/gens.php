@@ -44,8 +44,10 @@ if($bl == $bal){
 // do nothing
 
 }else{
-//updating savings balance
-$Query = "UPDATE savings SET Balance = '$bal' WHERE Savings_Account_No = '$sv'";
+$Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sv'";
+$result= mysqli_query($con, $Query);
+$Query = "UPDATE savings SET Savings_Paid = '$pmd', Balance = '$bal', Withdraw_Savings = '$pmw', Savings_Repayment = '$pmr', Savings_Transfer = '$pmtr', 
+Savings_Upfront = '$pmu', Savings_Recieved = '$pmc' WHERE Savings_Account_No = '$sv'";
 $result= mysqli_query($con, $Query);
 }
 ?>

@@ -82,10 +82,10 @@
 <li class="breadcrumb-item">
 <a href="#!">
 <i class="mdi mdi-home-outline fs-18 lh-1"></i>
-<span class="visually-hidden">Home</span>
+<span class="visually-hidden">Application</span>
 </a>
 </li>
-<li class="breadcrumb-item"><a href="#!">Home</a></li>
+<li class="breadcrumb-item"><a href="#!">Appllication</a></li>
 <li class="breadcrumb-item active" aria-current="page">Application List</li>
 </ol>
 </nav>
@@ -96,6 +96,8 @@
 <br>
 <br>
 <br>
+
+
 
 <?php 
 if($gr == 'Loan Officers'){
@@ -194,8 +196,10 @@ if($gr == 'Loan Officers'){
 ?>
 
 
+
+
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">APPLICATION PROFILE</h5>
