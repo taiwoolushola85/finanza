@@ -64,12 +64,13 @@
 
 <br>
 <br>
+<b style="color:red;">Note:</b> <i>Approval of only saving collections for an closed customer loan</i>
 <br>
 <br>
 
 <b><h6><i class="fa fa-box"></i> Transaction Dashboard</h6></b>
 <div class="row">
-<div class="col-xxl-4 col-6">
+<div class="col-xxl-6 col-6">
 <div class="card card-h-100">
 <div class="card-body d-flex align-items-center gap-3">
 <div class="avatar-sm avatar avatar-success">
@@ -81,7 +82,7 @@
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE Status != 'Paid' AND Team_Leader ='$User' AND Payment_Method = 'Basic Posting'");
+$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE Status != 'Paid' AND Team_Leader ='$User' AND Posting_Method = 'Basic Posting'");
 $row = mysqli_fetch_array($result);
 $total = $row[0];
 echo number_format($total,2);
@@ -91,29 +92,7 @@ echo number_format($total,2);
 </div>
 </div>
 </div>
-<div class="col-xxl-4 col-6">
-<div class="card card-h-100">
-<div class="card-body d-flex align-items-center gap-3">
-<div class="avatar-sm avatar avatar-info">
-<i class="fa fa-box"></i>
-</div>
-<div>
-<h6 class="mb-0">Flexi Savings Posting</h6>
-<p class="mb-0 text-muted">
-<?php 
-include '../config/db.php';
-$d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Amount) FROM flexi_history WHERE Status != 'Paid' AND Team_Leader ='$User' AND Posting_Method = 'Basic Posting'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
-?>
-</p>
-</div>
-</div>
-</div>
-</div>
-<div class="col-xxl-4 col-12">
+<div class="col-xxl-6 col-12">
 <div class="card card-h-100">
 <div class="card-body d-flex align-items-center gap-3">
 <div class="avatar-sm avatar avatar-warning">
@@ -125,14 +104,10 @@ echo number_format($total,2);
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE Status != 'Paid' AND Team_Leader ='$User' AND Payment_Method = 'Basic Posting'");
+$result = mysqli_query($con, "SELECT SUM(Savings) FROM save WHERE Status != 'Paid' AND Team_Leader ='$User' AND Posting_Method = 'Basic Posting'");
 $row = mysqli_fetch_array($result);
 $total1 = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Amount) FROM flexi_history WHERE Status != 'Paid' AND Team_Leader ='$User' AND Posting_Method = 'Basic Posting'");
-$row = mysqli_fetch_array($result);
-$total2 = $row[0];
-echo number_format($total1 + $total2,2);
+echo number_format($total1,2);
 ?>
 </p>
 </div>
@@ -173,7 +148,7 @@ $("#loader").show();
 // ajax function start here
 $.ajax({
 method: "POST",
-url: "flexi_team_list.php",
+url: "express_team_list.php",
 dataType: "html",  
 success:function(data){
 setTimeout(function(){
@@ -193,7 +168,7 @@ $('#list').html(data);
 function loads()  {
 $.ajax({
 method: "POST",
-url: "team_list.php",
+url: "express_team_list.php",
 dataType: "html",
 success:function(data){
 setTimeout(function(){

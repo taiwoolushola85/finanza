@@ -429,6 +429,13 @@ Saving Transactions <input type="checkbox" name="na[]" value="Saving_Transaction
 </div>
 </div>
 </div>
+<div class="col-md-3" style="margin-top:12px">
+<div class="card">
+<div class="card-body">
+Flexi Transactions <input type="checkbox" name="na[]" value="Flexi_Transactions">
+</div>
+</div>
+</div>
 </div>
 <br>
 <h6><i style="color:red">*</i> <b>APPLICATION</b> <input type="checkbox" name="ta[]" value="APPLICATION"></h6>

@@ -11,8 +11,6 @@ if($gr == 'Express'){
 <br>
 <br>
 <br>
-<br>
-<br>
 <b>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 5C2 4.44772 2.44772 4 3 4H8.66667H21C21.5523 4 22 4.44772 22 5V8H15.3333H8.66667H2V5Z" fill="currentColor" stroke="currentColor" />
@@ -119,8 +117,7 @@ echo date_format($date,"d-M-Y");
 </div>
 <div class="modal-body">
 <center>
-<p><img src="" id="customerImg" style="height: 100px; width:100px; border-radius:50px;" class="img-thumbnail" /></p>
-[ <b id="des"></b> ]<br><br>
+<p><img src="" id="reciepts" style="height: 350px; width:350px; border-radius:5px;" class="img-thumbnail"  /></p>
 </center>
 <form action="" method="POST" enctype="multipart/form-data" id="updateForm"> 
 <div class="row">
@@ -132,11 +129,11 @@ echo date_format($date,"d-M-Y");
 </div>
 <div class="col-sm-12" id="reciept" style="margin-top:10px">
 <label style="font-size:13px"><i style="color:red">*</i> Upload Reciept</label>
-<input type="file" class="form-control form-control-md" id="furls" required name="Pic" >
+<input type="file" class="form-control form-control-md" id="receiptFile" onchange="loadClient(event)" required name="Pic" >
 </div>
 </div>
 <br>
-<button type="submit" disabled class="btn btn-outline-success btn-sm" style="float:left;">Post Saving</button>
+<button type="submit" class="btn btn-outline-success btn-sm" style="float:left;">Post Saving</button>
 </form>
 </div>
 </div>
@@ -159,7 +156,14 @@ echo date_format($date,"d-M-Y");
 </div>
 
 
-
+<script>
+var loadClient = function(event) {
+var image = document.getElementById('reciepts');
+if (event.target.files && event.target.files[0]) {
+image.src = URL.createObjectURL(event.target.files[0]);
+}
+};
+</script>
 <script>
 // to show data on a modal box
 $(document).ready(function() {
@@ -205,6 +209,7 @@ cache: false,
 processData:false,
 success: function(data){ 
 $('#updateForm')[0].reset()
+$('#reciepts').attr('src', '');
 if(data==11){
 $("#please").hide();
 alert("🚫 Amount entered is higher than loan balance");
@@ -374,8 +379,7 @@ echo date_format($date,"d-M-Y");
 </div>
 <div class="modal-body">
 <center>
-<p><img src="" id="fcustomerImg" style="height: 100px; width:100px; border-radius:50px;" class="img-thumbnail" /></p>
-[ <b id="fdes"></b> ]<br><br>
+<p><img src="" id="recieptf" style="height: 350px; width:350px; border-radius:5px;" class="img-thumbnail"  /></p>
 </center>
 <form action="" method="POST" enctype="multipart/form-data" id="updateFlexi"> 
 <div class="row">
@@ -387,7 +391,7 @@ echo date_format($date,"d-M-Y");
 </div>
 <div class="col-sm-12" id="reciept" style="margin-top:10px">
 <label style="font-size:13px"><i style="color:red">*</i> Upload Reciept</label>
-<input type="file" class="form-control form-control-md" id="furls" required name="Pic" >
+<input type="file" class="form-control form-control-md" required name="Pic" id="receiptFiles" required="required" onchange="loadClients(event)" accept="image/*">
 </div>
 </div>
 <br>
@@ -414,6 +418,14 @@ echo date_format($date,"d-M-Y");
 </div>
 
 
+<script>
+var loadClients = function(event) {
+var image = document.getElementById('recieptf');
+if (event.target.files && event.target.files[0]) {
+image.src = URL.createObjectURL(event.target.files[0]);
+}
+};
+</script>
 
 <script>
 // to show data on a modal box
@@ -459,7 +471,8 @@ contentType: false,
 cache: false, 
 processData:false,
 success: function(data){ 
-$('#updateFlexi')[0].reset()
+$('#updateFlexi')[0].reset();
+$('#recieptf').attr('src', '');
 if(data==11){
 $("#please").hide();
 alert("🚫 Amount entered is higher than loan balance");

@@ -62,6 +62,8 @@ if($gr == 'Loan Officers'){
 </div>
 
 <br>
+<br>
+<br>
 
 <!-- GROUP SELECT -->
 <div class="row">
@@ -79,7 +81,7 @@ if($gr == 'Loan Officers'){
 
 
 <p id="not">
-<i class="fa fa-bell" style="color:red;"></i> Note: Please select the saving type you want to post repayment for.
+<i class="fa fa-bell" style="color:red;"></i> Note: Please select the saving type you want to post savings for.
 </p>
 
 <div id="result"></div>

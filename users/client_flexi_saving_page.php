@@ -54,8 +54,8 @@ Savings Info
 </nav>
 <div class="tab-content iq-tab-fade-up" id="simple-tab-content">
 <div class="tab-pane  active" id="pro-nav-home" role="tabpanel" aria-labelledby="pro-nav-home-tab">
-<div class="card"  style="font-size: 12px; text-transform:capitalize">
-<div class="card-body">
+<div style="font-size: 12px; text-transform:capitalize">
+<div >
 <div id="myPage">
 <div class="row">
 <div class="col-sm-6">

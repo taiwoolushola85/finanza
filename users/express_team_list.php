@@ -17,7 +17,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 $result = mysqli_query($con, "SELECT id, Officer_Name, Loan_Officer, Branch, Status,
-(SELECT COALESCE(SUM(Amount), 0) FROM flexi_history WHERE User = Loan_Officer AND Status = 'Waiting For Approval' AND Posting_Method = 'Basic Posting') AS `rep`,
+(SELECT COALESCE(SUM(Savings), 0) FROM save WHERE User = Loan_Officer AND Status = 'Waiting For Approval' AND Posting_Method = 'Basic Posting') AS `saving`,
 (SELECT Location FROM users WHERE Username = Loan_Officer) AS `img`
 FROM mapping WHERE Team_Leader = '$User' ORDER BY Officer_Name ASC") or die("Bad Query.");
 mysqli_close($con);
@@ -55,7 +55,7 @@ foreach($json as $member){
 <td style="font-size:9px;"><?php echo $member->id?></td>
 <td style="font-size:9px;"><?php echo $member->Officer_Name?></td>
 <td style="font-size:9px;"><?php echo $member->Branch?></td>
-<td style="font-size:9px;"><?php echo number_format($member->rep,2)?></td>
+<td style="font-size:9px;"><?php echo number_format($member->saving,2)?></td>
 <td style="font-size:9px;"><?php echo $member->Status?></td>
 <td>
 <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $member->Loan_Officer; ?>">
@@ -84,7 +84,7 @@ $("#view").show();
 var id = $(this).data('id');// username
 if(id) {
 $.ajax({
-url: 'flexi_transaction_list.php',
+url: 'express_transaction_list.php',
 type: "GET",
 data: {'id': id},// username
 success: function(data) { 
@@ -112,7 +112,7 @@ $("#view").hide();
 function load()  {
 $.ajax({
 method: "POST",
-url: "team_list.php",
+url: "express_team_list.php",
 dataType: "html",
 success:function(data){
 setTimeout(function(){

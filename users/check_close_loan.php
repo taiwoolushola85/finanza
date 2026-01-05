@@ -29,7 +29,6 @@ echo $total;
 </div>
 
 <br>
-<div style="overflow-y:auto; height:370px;">
 <?php 
 // Fix 3: Use prepared statements for the main query
 $stmt = mysqli_prepare($con, "SELECT id, Reg_id, Branch, Loan_Account_No, Account_Number, Firstname, Middlename, Lastname, Product, Total_Loan, Paid, 
@@ -51,7 +50,7 @@ fclose($fp);
 }
 ?>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:370px;">
 <table>
 <thead>
 <tr>

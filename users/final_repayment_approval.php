@@ -108,7 +108,9 @@ $bal = ($pmd - $pmw - $pmr - $pmtr) + $pmc;
 $Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sa'";
 $result = mysqli_query($con, $Query);
 //
-$Query = "UPDATE savings SET Balance = '$bal', Savings_Repayment = '$pmr' WHERE Savings_Account_No = '$sa'";
+$Query = "UPDATE savings SET Balance = '$bal', Savings_Paid = '$pmd', Withdraw_Savings = '$pmw', Savings_Repayment = '$pmr', Savings_Transfer = '$pmtr', 
+Savings_Upfront = '$pmu', Savings_Recieved = '$pmc' WHERE Savings_Account_No = '$sa'";
+$result = mysqli_query($con, $Query);
 // updating reciever schedule 
 $Query = "UPDATE schedule SET Amount_Paid = '$amt', Savings = '0', Payment_Status = 'Paid', Date_Paid = '$d', Payment_Method = 'Savings Method' 
 WHERE Transaction_id = '$tr' AND Payment_Status = 'Outstanding' ORDER BY id ASC LIMIT 1";

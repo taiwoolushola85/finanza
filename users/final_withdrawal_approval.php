@@ -56,7 +56,8 @@ $bal = ($pmd - $pmw - $pmr - $pmtr) + $pmc;
 $Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sa'";
 $result = mysqli_query($con, $Query);
 //
-$Query = "UPDATE savings SET Balance = '$bal', Withdraw_Savings = '$pmw' WHERE Savings_Account_No = '$sa'";
+$Query = "UPDATE savings SET Balance = '$bal', Savings_Paid = '$pmd', Withdraw_Savings = '$pmw', Savings_Repayment = '$pmr', Savings_Transfer = '$pmtr', 
+Savings_Upfront = '$pmu', Savings_Recieved = '$pmc' WHERE Savings_Account_No = '$sa'";
 $result = mysqli_query($con, $Query);
 // statment of account
 $sql = "INSERT INTO bank_account (Ref_No, Transaction_Type, Description, Opening_Balance, Debit, Credit, Transaction_By, Status, Months, Years, TNX_Date, TNX_Time) 

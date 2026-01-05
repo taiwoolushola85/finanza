@@ -45,7 +45,7 @@ $branch = $row['Branch'];
 
 
 <hr>
-<h5><b>Flexi Saving Posting</b></h5><hr>
+<h5><b>Express Saving Posting</b></h5><hr>
 <div class="row" >
 <div class="col-sm-3" style="margin-top: 10px;">
 <div class="d-grid gap-2">
@@ -64,7 +64,7 @@ $branch = $row['Branch'];
 <?php 
 include '../config/db.php';
 $username = $_GET['id'];
-$sql = "SELECT COUNT(*) AS overs FROM flexi_history WHERE User = '$username' AND Status = 'Waiting For Approval' AND Posting_Method = 'Basic Posting'";
+$sql = "SELECT COUNT(*) AS overs FROM save WHERE User = '$username' AND Status = 'Waiting For Approval' AND Posting_Method = 'Basic Posting'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $over = $data['overs'];
@@ -82,7 +82,7 @@ header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
 $username = $_GET['id'];// username
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT id, Surname, Firstname, Othername, Plan, Amount, Date_Paid, Status, Location, Time_Paid FROM flexi_history 
+$result = mysqli_query($con, "SELECT id,  Firstname, Middlename, Lastname, Savings, Date_Paid, Status, Reciept, Time_Paid FROM save
 WHERE User = '$username' AND Status = 'Waiting For Approval' AND Posting_Method = 'Basic Posting' ORDER BY Time_Paid ASC") or die("Bad Query.");
 
 
@@ -92,7 +92,7 @@ $results = array();
 while($row = mysqli_fetch_assoc($result)){
 $results[] = $row; 
 }
-$fp = fopen('../data/flexi_postings.json', 'w'); 
+$fp = fopen('../data/express_postings.json', 'w'); 
 fwrite($fp, json_encode($results)); 
 fclose($fp);
 //echo json_encode($results);
@@ -104,7 +104,6 @@ fclose($fp);
 <tr style="font-size:8px">
 <th>MARK</th>
 <th>NAME</th>
-<th>PLAN</th>
 <th>AMOUNT</th>
 <th>STATUS</th>
 <th>DATE</th>
@@ -113,16 +112,15 @@ fclose($fp);
 </tr>
 <tbody>
 <?php
-$url = '../data/flexi_postings.json';
+$url = '../data/express_postings.json';
 $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
 ?>
 <tr>
 <td><input type="checkbox" class="emp_checkbox" name="id[]" value="<?php echo $member->id; ?>" ></td>
-<td class="sort border-top" style="text-transform:uppercase"><?php echo $member->Surname." ".$member->Firstname." ".$member->Othername?></td>
-<td class="sort border-top" style="text-transform:uppercase"><?php echo $member->Plan?></td>
-<td class="sort border-top" ><?php echo number_format($member->Amount,2)?></td>
+<td class="sort border-top" style="text-transform:uppercase"><?php echo $member->Firstname." ".$member->Middlename." ".$member->Lastname?></td>
+<td class="sort border-top" ><?php echo number_format($member->Savings,2)?></td>
 <td class="sort border-top" style="text-transform:capitalize"><?php echo $member->Status?></td>
 <td class="sort border-top" >
 <?php 
@@ -164,7 +162,7 @@ $('.invk').on('click', function() {
 var recID = $(this).attr('id');
 if(recID) {
 $.ajax({
-url: 'flexi_reciept.php',
+url: 'express_reciept.php',
 type: "POST",
 data: {'id':recID},
 dataType: "json",
@@ -203,7 +201,7 @@ $("#approve").attr("disabled", true);
 $("#decline").attr("disabled", true);
 $.ajax({
 type: 'POST',
-url: "flexi_approval.php",
+url: "express_saving_approval.php",
 data: {id: ids},
 success:function (data) {
 setTimeout(function(){
@@ -244,7 +242,7 @@ ids.push($(this).val());
 if (ids.length) {
 $.ajax({
 type: 'POST',
-url: 'flexi_decline_bck.php',
+url: 'express_decline.php',
 data: {id: ids},
 success:function (data) {
 setTimeout(function(){
@@ -267,7 +265,7 @@ alert("Please mark transaction to decline.");
 function loads()  {
 $.ajax({
 method: "POST",
-url: "flexi_transaction_list.php?id=<?php echo $username; ?>",
+url: "express_transaction_list.php?id=<?php echo $username; ?>",
 dataType: "html",
 success:function(data){
 setTimeout(function(){
