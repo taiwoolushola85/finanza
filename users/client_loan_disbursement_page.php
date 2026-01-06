@@ -26,7 +26,7 @@ $id = $rows['id'];
 <button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
 <button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-briefcase"></i> Business Image</button>
 <button class="btn btn-light" onclick="updateLoan()"><i class="fa fa-plus"></i> Update Loan Amount</button>
-<button class="btn btn-light" onclick="updateCrc()"><i class="fa fa-file"></i> Customer CRC Data </button>
+<button class="btn btn-light" onclick="updateCRC()"><i class="fa fa-file"></i> Customer CRC Data </button>
 <button class="btn btn-light" onclick="updateUpfront()"><i class="fa fa-money-bill"></i> Upfront Payment </button>
 <button class="btn btn-light" onclick="updateRemark()"><i class="fa fa-comment"></i> Remark/Coment</button>
 <button class="btn btn-light" onclick="updateDisburse()"><i class="fa fa-star"></i> Disbursement</button>
@@ -313,6 +313,41 @@ $id = $rows['id'];
 </div>
 
 
+
+
+
+<div id="crc" style="display:none;">
+<br><br>
+CRC REPORT
+<br><br>
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT id, Location FROM document WHERE Reg_ID = '$regid' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bn = $rows['id'];
+$crc = $rows['Location'];
+?>
+<embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
+</tr>
+<?php
+} 
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo " No CRC Report Found  <br/> ";        
+}
+?>
+
+</div>
+
+
+
 <div id="loan" style="display:none;">
 <br><br>
 <b>UPDATE PRINCIPAL AMOUNT</b>
@@ -386,17 +421,34 @@ echo "<span style='color:red'>No Business Image Uploaded...  </span> ";
 <div id="fifth" style="display:none;">
 
 <div class="row">
-<div class="col-sm-8">
+<div class="col-sm-3" style="margin-top:10px;">
+<form action="" method="POST" enctype="multipart/form-data" id="uploadUpfront">
+<div style="width:250px">
+<label style="font-size:13px"><i style="color:red">*</i> Upfront Payment Mode</label>
+<input type="number" class="form-control form-control-md" name="id" value="<?php echo $regid; ?>" hidden required="required">
+<select type="text" class="form-control form-control-md" name="type" required="required">
+<option value="<?php echo $row['Upfront_Types']; ?>"><?php echo $row['Upfront_Types']; ?></option>
+<option value="Deduction">Deduction</option>
+<option value="Virtual Payment">Virtual Payment</option>
+<option value="Monie Point Payment">Monie Point Payment</option>
+<option value="Saving For Upfront">Saving For Upfront</option>
+</select>
+</div>
+<br>
+<div class="row">
+<div class="col-sm-5" style="margin-top:10px;">
+<button type="submit" class="btn btn-info btn-sm">Change Mode</button>
+</form>
+</div>
+<div class="col-sm-7" style="margin-top:10px;">
+<i style="display:none" id="up"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Payment Mode.! Please wait..</i>
+<i style="color: green; display:none" id="update"><i class="fa fa-check"></i> Upfront Payment Mode Updated..</i>
+</div>
+</div>
+</div>
 
-</div>
-<div class="col-sm-4">
-<center>
-<p><img src="" id="client" style="height: 150px; width:150px;" class="img-thumbnail" /></p>
-</center>
-</div>
-</div>
 
-<hr>
+<br>
 <div id="checks">
 <div class="row">
 <div class="col-sm-3">
@@ -448,33 +500,10 @@ echo number_format($row['Loan_Amount'],2);
 </div>
 </div>
 <hr>
-<div class="row">
-<div class="col-sm-3" style="margin-top:10px;">
-<form action="" method="POST" enctype="multipart/form-data" id="uploadUpfront">
-<div style="width:250px">
-<label style="font-size:13px"><i style="color:red">*</i> Upfront Payment Mode</label>
-<input type="number" class="form-control form-control-md" name="id" value="<?php echo $regid; ?>" hidden required="required">
-<select type="text" class="form-control form-control-md" name="type" required="required">
-<option value="<?php echo $row['Upfront_Types']; ?>"><?php echo $row['Upfront_Types']; ?></option>
-<option value="Deduction">Deduction</option>
-<option value="Virtual Payment">Virtual Payment</option>
-<option value="Monie Point Payment">Monie Point Payment</option>
-<option value="Saving For Upfront">Saving For Upfront</option>
-</select>
-</div>
-<br>
-<div class="row">
-<div class="col-sm-5" style="margin-top:10px;">
-<button type="submit" class="btn btn-info btn-sm">Change Mode</button>
-</form>
-</div>
-<div class="col-sm-7" style="margin-top:10px;">
-<i style="display:none" id="up"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Payment Mode.! Please wait..</i>
-<i style="color: green; display:none" id="update"><i class="fa fa-check"></i> Upfront Payment Mode Updated..</i>
-</div>
-</div>
-</div>
-<div class="col-sm-9" style="margin-top:10px;">
+
+
+
+<div class="col-sm-12" style="margin-top:10px;">
 <div id="check">
 <?php 
 if($row['Upfront_Types'] == 'Deduction' ){
@@ -484,41 +513,70 @@ echo "<i>Upfront payment need to be remove from the principal amount</i>";
 <span>Virtual Payment History</span>
 
 
+
+
 <?php 
 }else if($row['Upfront_Types'] == 'Monie Point Payment'){
 ?>
-<span>Confirm & Upload Payment Reciept</span>
-<div class="row">
-<div class="col-sm-4">
-<form action="" method="POST" id="recieptUpload" enctype="multipart/form-data">
-<input type="text" hidden class="form-control form-control-sm" name="id" placeholder="" value="<?php echo $regid; ?>">
-<input type="text" hidden class="form-control form-control-sm" name="type" placeholder="" value="<?php echo $row['Upfront_Types']; ?>">
-<input type="file" class="form-control form-control-sm" onchange="loadClient(event)" name="Pic" required>
-<br>
-<div id="btnload">
-<?php 
-include '../config/db.php';
-$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' AND Status = 'Paid'";
+
+
+
+<table style="font-size:9px;">
+<thead>
+<tr>
+<th style="font-size:8px">PAYMENT ID</th>
+<th style="font-size:8px">UPFRONT</th>
+<th style="font-size:8px">INSSURANCE</th>
+<th style="font-size:8px">FORM</th>
+<th style="font-size:8px">CARD</th>
+<th style="font-size:8px">STATUS</th>
+<th style="font-size:8px">RECIEPT</th>
+<th style="font-size:8px">ACTION</th>
+</tr>
+</thead>
+<tbody>
+<?php
+include('../config/db.php');
+$d = date('Y-m-d');
+//Get branch Details
+$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
-$row = mysqli_num_rows($result);
-if($row != 0){
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$feeid= $rows['id'];
+$regg_id= $rows['Reg_id'];
+$up = $rows['Upfront'];
+$in = $rows['Inssurance'];
+$form = $rows['Form'];
+$card = $rows['Card'];
+$status = $rows['Reciept_Status'];
+$reci = $rows['Reciept'];
 ?>
-<button type="button" disabled class="btn btn-info btn-sm">Confirm & Upload</button>
-<?php
-}else{
-?>
-<button type="submit" class="btn btn-info btn-sm">Confirm & Upload</button>
-<?php
+<tr style="font-size: 9px">
+<td  style="font-size:9px"><?php echo $feeid; ?></td>
+<td  style="font-size:9px"><?php echo number_format($up,2); ?></td>
+<td  style="font-size:9px"><?php echo number_format($in,2); ?></td>
+<td  style="font-size:9px"><?php echo number_format($form,2); ?></td>
+<td  style="font-size:9px"><?php echo number_format($card,2); ?></td>
+<td  style="font-size:9px"><?php echo $status; ?></td>
+<td  style="font-size:9px"><a href="#" class = "invk" data-toggle="modal" data-target="#recieptdata" id="<?php echo $feeid; ?>">
+<i class="fa fa-eye"></i> View Reciept</a></td>
+<td  style="font-size:9px"><a href="#" class = "inv" id="<?php echo $regg_id; ?>" style="color:green;"><i class="fa fa-check"></i> Confirm Payment</a></td>
+</tr>
+<?php  
+}
+}else {
+//$Available = false; 
+echo"<small> No Record Found  </small> ";       
 }
 ?>
-</div>
-</form>
-</div>
-<div class="col-sm-8">
-<i style="display:none" id="confirm"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Uploading Payment.! Please wait..</i>
-<i style="color: green; display:none" id="upload"><i class="fa fa-check"></i> Payment Confirmed & Uploaded..</i>
-</div>
-</div>
+</tbody>
+</table>
+
+
+
 <?php 
 }else if($row['Upfront_Types'] == 'Saving For Upfront'){
 ?>
@@ -556,6 +614,8 @@ $name= $rows['Savings_Account_No'];
 </div>
 <br>
 <button type="submit" class="btn btn-primary btn-sm">Confirm & Upload</button>
+
+
 <?php
 }else{
 echo "Invalid Payment Mode";
@@ -689,7 +749,7 @@ if($upty == "Deduction"){
 ?>
 <?php 
 include '../config/db.php';
-$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' AND Status = 'Paid'";
+$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' AND Reciept_Status = 'Reciept Confirmed'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_num_rows($result);
 if($row != 0){
@@ -768,7 +828,7 @@ $classname="evenRow";
 else
 $classname="oddRow";
 ?>
-<tr style="text-align:center; font-size: 9px" class="<?php if(isset($classname)) echo $classname;?>">
+<tr style="font-size: 9px" class="<?php if(isset($classname)) echo $classname;?>">
 <td  style="font-size:9px"><?php echo $regg_id; ?></td>
 <td  style="font-size:9px"><?php echo number_format($unn,2); ?></td>
 <td  style="font-size:9px"><?php echo number_format($svs,2); ?></td>
@@ -818,6 +878,68 @@ echo"<small> No Record Found  </small> ";
 
 
 
+
+
+
+
+
+
+<script>
+// to show data on a modal box
+$(document).ready(function() {
+$('.invk').on('click', function() {
+var recID = $(this).attr('id');
+if(recID) {
+$("#recieptdata").modal('show');
+$.ajax({
+url: 'upfront_reciept.php',
+type: "POST",
+data: {'id':recID},
+dataType: "json",
+success:function(data) {
+$('#recp').val(data.recieptLocation);
+$("#recp").attr("src",data.recieptLocation);
+}
+});
+}else{
+
+}
+});
+});
+</script>
+
+
+
+<script>
+// confirming upfront fee payment
+$(document).ready(function() {
+$('.inv').on('click', function() {
+WRN_PROFILE_DELETE = "You are about to disburse this customer loan application..";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+var recID = $(this).attr('id');
+if(recID) {
+$.ajax({
+url: 'confirm_upfront.php',
+type: "POST",
+data: {'id':recID},
+success:function(data) {
+if(data == 1){
+$("#check").load( "client_loan_disbursement_page.php?id=<?php echo $regid; ?> #check" );// 
+$("#disbtn").load( "client_loan_disbursement_page.php?id=<?php echo $regid; ?> #disbtn" );// 
+}else{
+alert(data);
+}
+}
+});
+}else{
+
+}
+}
+});
+});
+</script>
+
 <script>
 var load = function(event) {
 var image = document.getElementById('output');
@@ -839,6 +961,7 @@ var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'block';
 y.style.display = 'none';
 b.style.display = 'none';
@@ -847,6 +970,7 @@ a.style.display = 'none';
 c.style.display = 'none';
 d.style.display = 'none';
 e.style.display = 'none';
+k.style.display = 'none';
 }
 function updateDoc(){
 var x = document.getElementById("firsts");
@@ -857,6 +981,7 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 b.style.display = 'none';
 z.style.display = 'none';
@@ -864,6 +989,7 @@ a.style.display = 'none';
 c.style.display = 'none';
 d.style.display = 'none';
 e.style.display = 'none';
+k.style.display = 'none';
 y.style.display = 'block';
 }
 function updateVerification(){
@@ -875,6 +1001,7 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 b.style.display = 'none';
 z.style.display = 'block';
@@ -882,6 +1009,7 @@ y.style.display = 'none';
 a.style.display = 'none';
 c.style.display = 'none';
 d.style.display = 'none';
+k.style.display = 'none';
 e.style.display = 'none';
 }
 function updateApprove(){
@@ -893,6 +1021,7 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'block';
@@ -900,6 +1029,7 @@ y.style.display = 'none';
 b.style.display = 'none';
 c.style.display = 'none';
 d.style.display = 'none';
+k.style.display = 'none';
 e.style.display = 'none';
 }
 function updateLoan(){
@@ -911,12 +1041,14 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 b.style.display = 'block';
 a.style.display = 'none';
 y.style.display = 'none';
 c.style.display = 'none';
+k.style.display = 'none';
 d.style.display = 'none';
 e.style.display = 'none';
 }
@@ -929,6 +1061,7 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 c.style.display = 'block';
@@ -936,6 +1069,7 @@ b.style.display = 'none';
 a.style.display = 'none';
 y.style.display = 'none';
 d.style.display = 'none';
+k.style.display = 'none';
 e.style.display = 'none';
 }
 function updateRemark(){
@@ -947,6 +1081,7 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 d.style.display = 'block';
@@ -955,6 +1090,7 @@ b.style.display = 'none';
 a.style.display = 'none';
 y.style.display = 'none';
 e.style.display = 'none';
+k.style.display = 'none';
 }
 function updateDisburse(){
 var x = document.getElementById("firsts");
@@ -965,9 +1101,31 @@ var b = document.getElementById("loan");
 var c = document.getElementById("fifth");
 var d = document.getElementById("sixth");
 var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
 x.style.display = 'none';
 z.style.display = 'none';
 e.style.display = 'block';
+c.style.display = 'none';
+b.style.display = 'none';
+a.style.display = 'none';
+d.style.display = 'none';
+k.style.display = 'none';
+y.style.display = 'none';
+}
+function updateCRC(){
+var x = document.getElementById("firsts");
+var y = document.getElementById("seconds");
+var z = document.getElementById("thirds");
+var a = document.getElementById("fourth");
+var b = document.getElementById("loan");
+var c = document.getElementById("fifth");
+var d = document.getElementById("sixth");
+var e = document.getElementById("disburse");
+var k = document.getElementById("crc");
+x.style.display = 'none';
+z.style.display = 'none';
+k.style.display = 'block';
+e.style.display = 'none';
 c.style.display = 'none';
 b.style.display = 'none';
 a.style.display = 'none';

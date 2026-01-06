@@ -28,5 +28,7 @@ include 'customer_saving_report.php';
 include 'callover_report.php';
 }else if($type == '14'){
 include 'gaurantor_report.php';
+}else if($type == '16'){
+include 'team_lead_performance_report.php';
 }
 ?>

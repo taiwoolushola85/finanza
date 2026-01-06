@@ -48,12 +48,14 @@
 <option value="6" hidden>Expected Repayment Report</option>
 <option value="7">Branch Performance Report</option>
 <option value="8">Loan Officer Performance Report</option>
+<option value="16">Team Lead Performance Report</option>
 <option value="9">Repayment Collection Report</option>
 <option value="10">Upfront Payment Report</option>
 <option value="11">Savings Deposit Report</option>
 <option value="12">Customer Savings Report</option>
 <option value="13">Transaction Callover Report</option>
 <option value="14">Guarantor Schedule Report</option>
+<option value="15" hidden>Zone Performance Report</option>
 </select>
 </div>
 </div>

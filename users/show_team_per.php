@@ -117,7 +117,7 @@ type: "text/csv"
 // download process
 let temp_link = document.createElement('a');
 // Download csv file
-temp_link.download = "Credit_Officer_Performance_Report.csv";
+temp_link.download = "Team_Lead_Performance_Report.csv";
 let url = window.URL.createObjectURL(CSVFile);
 temp_link.href = url;
 // This link should not be displayed
@@ -134,7 +134,7 @@ document.body.removeChild(temp_link);
 <?php 
 include_once '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT COUNT(*) AS lm FROM users WHERE Status = 'Activate' AND User_Group = 'Loan Officers'";
+$sql = "SELECT COUNT(*) AS lm FROM users WHERE Status = 'Activate' AND User_Group = 'Team Leaders' ";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $lm = $data['lm'];
@@ -154,53 +154,50 @@ SELECT
     b.id,
     b.Name,
     b.Status,
-    b.Sale_Target,
     b.Branch,
     b.User_Group,
     b.Staff_ID,
 
     (SELECT COALESCE(COUNT(*), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status != 'Cancelled') AS `cont`,
 
     (SELECT COALESCE(SUM(r.Loan_Amount), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status != 'Cancelled') AS `act`,
        
         (SELECT COALESCE(SUM(r.Total_Bal), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status = 'Active') AS `bal`,
 
-          (SELECT COALESCE(SUM(r.Total_Bal), 0)
+    (SELECT COALESCE(SUM(r.Total_Bal), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status = 'Active' AND $d > Maturity_Date) AS `exp`,
        
     (SELECT COALESCE(SUM(r.Loan_Amount), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status != 'Cancelled' AND Date_Disbursed BETWEEN '$st' AND '$en') AS `pro`,
-
-    (SELECT COALESCE(SUM(r.Interest_Amt), 0)
+ 
+      (SELECT COALESCE(SUM(r.Interest_Amt), 0)
      FROM repayments r
-     WHERE r.User = b.Username
-       AND r.Status != 'Cancelled') AS `tb`
+     WHERE r.Team_Leader = b.Username AND r.Status != 'Cancelled') AS `tb`
 
-FROM users b WHERE User_Group = 'Loan Officers'
+FROM users b WHERE User_Group = 'Team Leaders'
 ORDER BY b.Name ASC
 ") or die("Bad Query.");
 
 mysqli_close($con);
 
 $results = array();
-while($row = mysqli_fetch_assoc($result))
-{
-    $results[] = $row; 
+while($row = mysqli_fetch_assoc($result)){
+$results[] = $row; 
 }
-$fp = fopen('../data/loan_officer_performance.json', 'w'); 
+$fp = fopen('../data/team_lead_performance.json', 'w'); 
 fwrite($fp, json_encode($results)); 
 fclose($fp);
 //echo json_encode($results);
@@ -210,20 +207,18 @@ fclose($fp);
 <thead>
 <tr style="font-size:9px;">
 <th scope="col">STAFF ID</th>
-<th scope="col">LOAN OFFICER</th>
+<th scope="col">TEAM LEAD</th>
 <th scope="col">BRANCH</th>
 <th scope="col">TOTAL PORTFOLIO SIZE</th>
 <th scope="col">TOTAL PORTFOLIO OUTSTANDING</th>
 <th scope="col">TOTAL EXPIRED LOAN</th>
 <th scope="col">PRINCIPAL DISBURSED</th>
 <th scope="col">TOTAL INTEREST</th>
-<th scope="col">TOTAL TARGET</th>
-<th scope="col">TARGET OUTSTANDING</th>
 <th scope="col">NO OF CLIENTS</th>
 </tr>
 <tbody>
 <?php
-$url = '../data/loan_officer_performance.json';
+$url = '../data/team_lead_performance.json';
 $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
@@ -237,8 +232,6 @@ foreach($json as $member){
 <td class="sort border-top"><?php echo number_format($member->exp,2)?></td>
 <td class="sort border-top"><?php echo number_format($member->pro,2)?></td>
 <td class="sort border-top"><?php echo number_format($member->tb,2)?></td>
-<td class="sort border-top"><?php echo number_format($member->Sale_Target,2)?></td>
-<td class="sort border-top"><?php echo number_format($member->Sale_Target - $member->act,2)?></td>
 <td class="sort border-top"><?php echo $member->cont?></td>
 </tr>
 <?php
@@ -313,7 +306,7 @@ echo number_format($lm,2);
 <?php 
 include_once '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Loan_Amount) AS lm FROM repayments WHERE Status != 'Cancelled' AND User_id = '$br'";
+$sql = "SELECT SUM(Loan_Amount) AS lm FROM repayments WHERE Status != 'Cancelled' AND Team_id = '$br'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $lm = $data['lm'];
@@ -326,7 +319,7 @@ echo number_format($lm,2);
 <?php 
 include_once '../config/db.php';
 $d = date('Y-m-d');
-$sql = "SELECT SUM(Interest_Amt) AS lm FROM repayments WHERE Status != 'Cancelled' AND User_id = '$br'";
+$sql = "SELECT SUM(Interest_Amt) AS lm FROM repayments WHERE Status != 'Cancelled' AND Team_id = '$br'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $lm = $data['lm'];
@@ -371,7 +364,7 @@ type: "text/csv"
 // download process
 let temp_link = document.createElement('a');
 // Download csv file
-temp_link.download = "Credit_Officer_Performance_Report.csv";
+temp_link.download = "Team_Lead_Performance_Report.csv";
 let url = window.URL.createObjectURL(CSVFile);
 temp_link.href = url;
 // This link should not be displayed
@@ -411,43 +404,42 @@ SELECT
     b.id,
     b.Name,
     b.Status,
-    b.Sale_Target,
     b.Branch,
     b.User_Group,
     b.Staff_ID,
 
     (SELECT COALESCE(COUNT(*), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status != 'Cancelled') AS `cont`,
 
     (SELECT COALESCE(SUM(r.Loan_Amount), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status != 'Cancelled') AS `act`,
        
         (SELECT COALESCE(SUM(r.Total_Bal), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status = 'Active') AS `bal`,
 
                (SELECT COALESCE(SUM(r.Total_Bal), 0)
      FROM repayments r
-     WHERE r.User = b.Username
+     WHERE r.Team_Leader = b.Username
        AND r.Status = 'Active' AND $d > Maturity_Date) AS `exp`,
        
     (SELECT COALESCE(SUM(r.Loan_Amount), 0)
      FROM repayments r
-     WHERE r.User = b.Username
-       AND r.Status != 'Cancelled' AND Date_Disbursed BETWEEN '$st' AND '$en' AND User_id = '$br') AS `pro`,
+     WHERE r.Team_Leader = b.Username
+       AND r.Status != 'Cancelled' AND Date_Disbursed BETWEEN '$st' AND '$en' AND Team_id = '$br') AS `pro`,
 
     (SELECT COALESCE(SUM(r.Interest_Amt), 0)
      FROM repayments r
-     WHERE r.User = b.Username
-       AND r.Status != 'Cancelled' AND Date_Disbursed BETWEEN '$st' AND '$en' AND User_id = '$br') AS `tb`
+     WHERE r.Team_Leader = b.Username
+       AND r.Status != 'Cancelled' AND Date_Disbursed BETWEEN '$st' AND '$en' AND Team_id = '$br') AS `tb`
 
 
-FROM users b WHERE User_Group = 'Loan Officers' AND id = '$br'
+FROM users b WHERE User_Group = 'Team Leaders' AND id = '$br'
 ORDER BY b.Name ASC
 ") or die("Bad Query.");
 
@@ -457,7 +449,7 @@ $results = array();
 while($row = mysqli_fetch_assoc($result)){
 $results[] = $row; 
 }
-$fp = fopen('../data/loan_officer_performance.json', 'w'); 
+$fp = fopen('../data/team_lead_performance.json', 'w'); 
 fwrite($fp, json_encode($results)); 
 fclose($fp);
 //echo json_encode($results);
@@ -467,20 +459,18 @@ fclose($fp);
 <thead>
 <tr style="font-size:9px;">
 <th scope="col">STAFF ID</th>
-<th scope="col">LOAN OFFICER</th>
+<th scope="col">TEAM LEAD</th>
 <th scope="col">BRANCH</th>
 <th scope="col">TOTAL PORTFOLIO SIZE</th>
 <th scope="col">TOTAL PORTFOLIO OUTSTANDING</th>
 <th scope="col">TOTAL EXPIRED LOAN</th>
 <th scope="col">PRINCIPAL DISBURSED</th>
 <th scope="col">TOTAL INTEREST</th>
-<th scope="col">TOTAL TARGET</th>
-<th scope="col">TARGET OUTSTANDING</th>
 <th scope="col">NO OF CLIENTS</th>
 </tr>
 <tbody>
 <?php
-$url = '../data/loan_officer_performance.json';
+$url = '../data/team_lead_performance.json';
 $data = file_get_contents($url);
 $json = json_decode($data);
 foreach($json as $member){
@@ -494,8 +484,6 @@ foreach($json as $member){
 <td class="sort border-top"><?php echo number_format($member->exp,2)?></td>
 <td class="sort border-top"><?php echo number_format($member->pro,2)?></td>
 <td class="sort border-top"><?php echo number_format($member->tb,2)?></td>
-<td class="sort border-top"><?php echo number_format($member->Sale_Target,2)?></td>
-<td class="sort border-top"><?php echo number_format($member->Sale_Target - $member->act,2)?></td>
 <td class="sort border-top"><?php echo $member->cont?></td>
 </tr>
 <?php

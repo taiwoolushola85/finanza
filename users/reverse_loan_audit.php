@@ -7,12 +7,12 @@ $Query = "SELECT id, Total_Loan,
 FROM repayments WHERE id = '$id'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
-$id = $row['id'];
+$repid = $row['id'];
 $tot = $row['Total_Loan'];
 $pd = $row['Total_Paid'];
 $balance = $tot - $pd;
 // repayment
-$Query = "UPDATE repayments SET Paid = '$pd', Total_Bal = '$balance' WHERE id = '$id'";
+$Query = "UPDATE repayments SET Paid = '$pd', Total_Bal = '$balance', Status = 'Active' WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 if($result == true){
 echo 1;

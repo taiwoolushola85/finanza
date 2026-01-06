@@ -1,5 +1,6 @@
 <?php 
 include '../config/db.php';
+include '../config/user_session.php';
 $d = date('Y-m-d');
 $id = $_POST['id'];
 $Query = "SELECT Reg_id, id, Total_Loan, User, Transaction_id, Paid, BVN, Maturity_Date, Total_Bal, Officer_Name,
@@ -19,12 +20,12 @@ $us = $row['User'];
 //
 if($tot == $pd){
 // repayment
-$Query = "UPDATE repayments SET Confirmed_Status = 'Valid Outstanding', Status = 'Closed', Reason = 'All Payment Made', Date_Closed = '$d', Closed_By = '$officer' 
+$Query = "UPDATE repayments SET Confirmed_Status = 'Valid Outstanding', Status = 'Closed', Reason = 'All Payment Made', Date_Closed = '$d', Closed_By = '$na' 
 WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 
 //
-$Query = "UPDATE savings SET Loan_Status = 'Closed', Repayments_id = '$id' WHERE Reg_id = '$reg'";
+$Query = "UPDATE savings SET Repayments_id = '$id' WHERE Reg_id = '$reg'";
 $result= mysqli_query($con, $Query);
 
 // repayment schedule

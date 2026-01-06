@@ -10,7 +10,7 @@
         "Loan_Amount": "450000",
         "Interest_Amt": "0",
         "Paid": "27000",
-        "Maturity_Status": "Runing",
+        "Maturity_Status": "Expired",
         "Expected_Amount": "56250",
         "Date_Disbursed": "2025-11-30",
         "Maturity_Date": "2025-12-30",
@@ -29,10 +29,10 @@
         "Interest_Amt": "6000",
         "Paid": "0",
         "Maturity_Status": "Runing",
-        "Expected_Amount": "17167",
+        "Expected_Amount": "31000",
         "Date_Disbursed": "2025-12-07",
         "Maturity_Date": "2026-01-06",
         "Status": "Active",
-        "Total_Bal": "206000"
+        "Total_Bal": "248000"
     }
 ]

@@ -105,7 +105,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">APPLICATION PROFILE</h5>
@@ -121,6 +121,26 @@
 </div>
 </div>
 
+
+
+<div class="modal" id="recieptdata" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:400px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">UPFRONT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" alt="" id="recp" style="height:520px" width="350px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 <script type="text/javascript">
