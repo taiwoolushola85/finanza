@@ -64,7 +64,7 @@ Total Record: <?php echo $total; ?>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">ADDRESS</th>
 <th style="font-size:8px">ZONE</th>
-<th style="font-size:8px">STATE</th>
+<th style="font-size:8px">LOCATION</th>
 <th style="font-size:8px">COUNTRY</th>
 <th style="font-size:8px">STATUS</th>
 <th style="font-size:8px">EDIT</th>

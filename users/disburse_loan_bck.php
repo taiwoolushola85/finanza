@@ -185,7 +185,7 @@ $result = mysqli_query($con, "INSERT INTO save (Session_No, History_id, Reps_id,
 Loan_Account_No, Transaction_id, Saving_Account, Firstname, Middlename, Lastname, Unions, Union_Code, Loan_Amount, Savings, Duration, Frequency, Rate, 
 Loan_Type, Product_id, Branch, Branch_Code, Status, User, User_id, Team_Leader, Officer_Name, Team_Name, Date_Paid, Time_Paid, Team_id, Payment_Method, 
 Posting_Method, Months, Years)
-VALUE('NA','$last_id', '$last_id', '$sku', '$dn', '$id', '$last_id', '$id$id', '$lon', '1010$id', '2000$id', '$fn', '$md', '$ln', '$un', '$un_id', '$la', '$up', 
+VALUE('NA', '$last_id', '$last_id', '$sku', '$dn', '$id', '$last_id', '$id$id', '$lon', '1010$id', '2000$id', '$fn', '$md', '$ln', '$un', '$un_id', '$la', '$up', 
 '$ten', '$dur', '$rt', '$pr', '$pr_id', '$br', '$br_id', 'Paid', '$us', '$user_id', '$tl', '$of', '$tn', '$d', '$s', '$tms_id', 'System Payment', 'Initial Deposit',
 '$mth', '$yrs')");
 

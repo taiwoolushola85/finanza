@@ -150,7 +150,7 @@ $name= $rows['Name'];// zone name
 </div>
 <div class="col-sm-6">
 <label>Branch Location</label>
-<input type="text" class="form-control form-control-md" required="required" name="ro" id="branchstate" placeholder="Enter Branch State">
+<input type="text" class="form-control form-control-md" required="required" name="ro" id="branchstate" placeholder="Enter Branch Location">
 </div>
 </div>
 <label>Zone</label><i style="color:red"> [ Please re-select the branch zone ]</i>

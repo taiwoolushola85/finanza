@@ -61,14 +61,14 @@
 </div>
 </div> <!-- end col-->
 <br>
-<i><b style="color:red">Note:</b> All fields in red border are required</i><br><br>
+<i><b style="color:red">Note:</b> All fields in red border are </i><br><br>
 
 <img src="" id="userPhoto" class="rounded-circle d-flex" style="height: 150px; width:150px; margin:auto">
 
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div style="margin: auto; width:250px">
 <label style="font-size:13px"><i style="color:red">*</i> BVN</label> 
-<input type="number" class="form-control form-control-sm" placeholder="Enter BVN" id="bvn" name="bvn" required>
+<input type="number" class="form-control form-control-sm" placeholder="Enter BVN" id="bvn" name="bvn" >
 <br>
 <center>
 <i id="check" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking BVN.! Please wait...</i>
@@ -79,31 +79,27 @@
 </div>
 <br>
 <b><i class="fa fa-star"></i> Personal Information</b><br>
-<div class="row" style="margin-top: 20px; ; display:none">
+<div class="row" style="margin-top: 20px; display:none">
 <div class="col-sm-4">
 <label style="font-size:13px; display:none"><i style="color:red">*</i> Surname</label>
-<input type="text" class="form-control form-control-sm" hidden name="img" id="img" required>
-<input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="sn" id="firstName" required>
+<input type="text" class="form-control form-control-sm" hidden name="img" id="img" >
+<input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="sn" id="firstName" style="text-transform: capitalize;" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px; display:none"><i style="color:red">*</i> Firstname</label>
-<input type="text" class="form-control form-control-sm" placeholder="Firstname" hidden name="fn" id="middleName" required>
+<input type="text" class="form-control form-control-sm" placeholder="Firstname" hidden name="fn" id="middleName" style="text-transform: capitalize;" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px; display:none"><i style="color:red">*</i> Lastname</label>
-<input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="ln" id="lastName" required>
+<input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="ln" id="lastName" style="text-transform: capitalize;" >
 </div>
 </div>
 
 
-<div class="row" style="margin-top: 20px;">
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Address</label>
-<input type="text" class="form-control form-control-sm" placeholder="Address" name="ad" required>
-</div>
+<div class="row" style="margin-top:20px;">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Education Level</label>
-<select class="form-control form-control-sm" name="ed" required>
+<select class="form-control form-control-sm" name="ed" >
 <option value="">Select Option</option>
 <option value="Primary School">Primary School</option>
 <option value="Secondary School">Secondary School</option>
@@ -112,49 +108,8 @@
 </select>
 </div>
 <div class="col-sm-4">
-<input type="text" class="form-control form-control-sm" placeholder="Phone No" hidden name="ph" id="ph" required>
-<label style="font-size:13px"><i style="color:red">*</i> Repayment Day</label>
-<select class="form-control form-control-sm"  name="repday" required>
-<option value="">Select Option</option>
-<option value="Mon">Monday</option>
-<option value="Tue">Tuesday</option>
-<option value="Wed">Wednesday</option>
-<option value="Thu">Thursday</option>
-<option value="Fri">Friday</option>
-<option value="Daily">Everyday</option>
-</select>
-</div>
-</div>
-<div class="row" style="margin-top: 20px; ; display:none">
-<div class="col-sm-4">
-<label style="font-size:13px; display:none"><i style="color:red">*</i> Gender</label>
-<input type="text" class="form-control form-control-sm" hidden name="gn" id="gender" required>
-</div>
-<div class="col-sm-4">
-<label style="font-size:13px; display:none"><i style="color:red">*</i> Date Of Birth</label>
-<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" hidden name="db" id="dateOfBirth" required>
-<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" disabled id="dateOfBirths" required>
-</div>
-</div>
-
-<b style="display:none"><i class="fa fa-star"></i> Means Of Identification</b><br>
-<div class="row" style="margin-top: 20px; display:none">
-<div class="col-sm-4">
-<label style="font-size:13px; display:none"><i style="color:red">*</i> Document Type</label>
-<input type="text" class="form-control form-control-sm" value="National ID Card" name="doc" hidden required>
-</div>
-<div class="col-sm-4">
-<label style="font-size:13px; display:none"><i style="color:red">*</i> NIN No</label>
-<input type="text" class="form-control form-control-sm" placeholder="Document No" hidden id="nin" name="docn" required>
-</div>
-</div>
-<br>
-<b><i class="fa fa-star"></i> Contact Information</b><br>
-<div class="row" style="margin-top: 20px;">
-<div class="col-sm-4">
-<input type="text" class="form-control form-control-sm" hidden name="sta" id="stateOfOrigin"  placeholder="State Of Origin" required>
 <label style="font-size:13px"><i style="color:red">*</i> Groups</label>
-<select type="text" class="form-control form-control-md" name="un" required>
+<select type="text" class="form-control form-control-md" name="un" >
 <option value="">Select Group</option>
 <?php 
 include '../config/db.php';
@@ -175,12 +130,61 @@ $name= $rows['Name'];
 </select>
 </div>
 <div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Town/City</label>
-<input type="text" class="form-control form-control-sm" placeholder="Town/City" name="cit" required>
+<input type="text" class="form-control form-control-sm" placeholder="Phone No" hidden name="ph" id="ph" >
+<label style="font-size:13px"><i style="color:red">*</i> Repayment Day</label>
+<select class="form-control form-control-sm"  name="repday" >
+<option value="">Select Option</option>
+<option value="Mon">Monday</option>
+<option value="Tue">Tuesday</option>
+<option value="Wed">Wednesday</option>
+<option value="Thu">Thursday</option>
+<option value="Fri">Friday</option>
+<option value="Daily">Everyday</option>
+</select>
+</div>
+</div>
+<div class="row" style="margin-top: 20px; ; display:none">
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Gender</label>
+<input type="text" class="form-control form-control-sm" hidden name="gn" id="gender" >
 </div>
 <div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Date Of Birth</label>
+<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" hidden name="db" id="dateOfBirth" >
+<input type="text" class="form-control form-control-sm" placeholder="Date Of Birth" disabled id="dateOfBirths" >
+</div>
+</div>
+
+<b style="display:none"><i class="fa fa-star"></i> Means Of Identification</b><br>
+<div class="row" style="margin-top: 20px; display:none">
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> Document Type</label>
+<input type="text" class="form-control form-control-sm" value="National ID Card" name="doc" hidden >
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px; display:none"><i style="color:red">*</i> NIN No</label>
+<input type="text" class="form-control form-control-sm" placeholder="Document No" hidden id="nin" name="docn" >
+</div>
+</div>
+<br>
+<b><i class="fa fa-star"></i> Contact Information</b><br>
+<div class="row" style="margin-top: 20px;">
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Phone No</label>
+<input type="text" class="form-control form-control-sm" placeholder="Phone No" name="ph" id="ph" >
+</div>
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Address</label>
+<input type="text" class="form-control form-control-sm" hidden name="sta" id="stateOfOrigin"  placeholder="State Of Origin" >
+<input type="text" class="form-control form-control-sm" placeholder="Address" name="ad" >
+</div>
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Town/City</label>
+<input type="text" class="form-control form-control-sm" placeholder="Town/City" name="cit" style="text-transform: capitalize;" >
+</div>
+<div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Maritial Status</label>
-<select class="form-control form-control-sm"  name="ms" required>
+<select class="form-control form-control-sm"  name="ms" >
 <option value="">Select Option</option>
 <option value="Single">Single</option>
 <option value="Married">Married</option>
@@ -227,40 +231,40 @@ if($mapped == 'Mapped'){
 </div>
 </div> <!-- end col-->
 <br>
-<i><b style="color:red">Note:</b> All fields in red border are required</i><br><br>
+<i><b style="color:red">Note:</b> All fields in red border are </i><br><br>
 <b><i class="fa fa-star"></i> Business Information</b><br><br>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Business Name</label>
-<input type="text" class="form-control form-control-sm" placeholder="Business Name" name="bsn" required>
+<input type="text" class="form-control form-control-sm" placeholder="Business Name" name="bsn" style="text-transform: capitalize;" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Business Type</label>
-<input type="text" class="form-control form-control-sm" placeholder="Business Type" name="bt" required>
+<input type="text" class="form-control form-control-sm" placeholder="Business Type" name="bt" style="text-transform: capitalize;" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> State</label>
-<input type="text" class="form-control form-control-sm" name="st2"  placeholder="State Of Origin" required>
+<input type="text" class="form-control form-control-sm" name="st2"  placeholder="State Of Origin" style="text-transform: capitalize;" >
 </div>
 </div>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Start Date</label>
-<input type="Date" class="form-control form-control-sm" name="sd" required>
+<input type="Date" class="form-control form-control-sm" name="sd" >
 </div>
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Address</label>
-<input type="text" class="form-control form-control-sm" placeholder="Address" name="ad2" required>
+<input type="text" class="form-control form-control-sm" placeholder="Address" name="ad2" >
 </div>
 </div>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Business Owner Name</label>
-<input type="text" class="form-control form-control-sm" placeholder="Business Owner Name" name="owner" required>
+<input type="text" class="form-control form-control-sm" placeholder="Business Owner Name" name="owner" style="text-transform: capitalize;" >
 </div>
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Shop Ownership</label>
-<select type="text" class="form-control form-control-sm" name="sh" required>
+<select type="text" class="form-control form-control-sm" name="sh" >
 <option value="">Select Option</option>
 <option value="Rented">Rented</option>
 <option value="Owned">Owned</option>
@@ -299,7 +303,7 @@ if($mapped == 'Mapped'){
 <br>
 <div style="margin: auto; width:250px">
 <label style="font-size:13px"><i style="color:red">*</i> NIN</label>
-<input type="number" class="form-control form-control-sm"  placeholder="Enter NIN" name="nin" oninput="validateNIN()" required>
+<input type="number" class="form-control form-control-sm"  placeholder="Enter NIN" name="nin" oninput="validateNIN()" >
 <br>
 <center>
 <i id="checks" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking NIN.! Please wait...</i>
@@ -309,45 +313,45 @@ if($mapped == 'Mapped'){
 </center>
 </div>
 <br>
-<i><b style="color:red">Note:</b> All fields in red border are required</i><br><br>
+<i><b style="color:red">Note:</b> All fields in red border are </i><br><br>
 <b><i class="fa fa-star"></i> Gaurantor Information</b><br>
 
 <div class="row" style="margin-top:20px; display:none">
 <div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Surname</label>
-<input type="text" class="form-control form-control-sm" hidden name="imgs" id="imgs" required>
-<input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="surname2" id="sn" required>
-<input type="text" class="form-control form-control-sm" placeholder="Surname" disabled id="sns" required>
+<input type="text" class="form-control form-control-sm" hidden name="imgs" id="imgs" >
+<input type="text" class="form-control form-control-sm" placeholder="Surname" hidden name="surname2" id="sn" style="text-transform: capitalize;" >
+<input type="text" class="form-control form-control-sm" placeholder="Surname" disabled id="sns" >
 </div>
 <div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Firstname</label>
-<input type="text" class="form-control form-control-sm" placeholder="Firstname" name="firstname2" hidden id="fn" required>
-<input type="text" class="form-control form-control-sm" placeholder="Firstname" disabled id="fns" required>
+<input type="text" class="form-control form-control-sm" placeholder="Firstname" name="firstname2" hidden id="fn" style="text-transform: capitalize;" >
+<input type="text" class="form-control form-control-sm" placeholder="Firstname" disabled id="fns" >
 </div>
 <div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Lastname</label>
-<input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="lastname2" id="ln" required>
-<input type="text" class="form-control form-control-sm" placeholder="Lastname" disabled id="lns" required>
+<input type="text" class="form-control form-control-sm" placeholder="Lastname" hidden name="lastname2" id="ln" style="text-transform: capitalize;" >
+<input type="text" class="form-control form-control-sm" placeholder="Lastname" disabled id="lns" >
 </div>
 </div>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Phone No</label>
-<input type="number" class="form-control form-control-sm" placeholder="Phone No" name="phone2" id="ph" required>
+<input type="number" class="form-control form-control-sm" placeholder="Phone No" name="phone2" id="ph" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Address</label>
-<input type="text" class="form-control form-control-sm" placeholder="Address" name="address3" required>
+<input type="text" class="form-control form-control-sm" placeholder="Address" name="address3" >
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Occupation</label>
-<input type="text" class="form-control form-control-sm" placeholder="Occupation" name="occupation" required>
+<input type="text" class="form-control form-control-sm" placeholder="Occupation" name="occupation" style="text-transform: capitalize;" >
 </div>
 </div>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Relationship</label>
-<select class="form-control form-control-sm" name="relationship" required>
+<select class="form-control form-control-sm" name="relationship" >
 <option value="">Select Type</option>
 <option value="Sister">Sister</option>
 <option value="Brother">Brother</option>
@@ -367,7 +371,7 @@ if($mapped == 'Mapped'){
 </div>
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> Gender</label>
-<select class="form-control form-control-sm" name="gender3" required>
+<select class="form-control form-control-sm" name="gender3" >
 <option value="">Select Gender</option>
 <option value="Male">Male</option>
 <option value="Female">Female</option>
@@ -377,19 +381,19 @@ if($mapped == 'Mapped'){
 <div class="row" style="margin-top:20px; display:none">
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> ID Type</label>
-<input type="text" class="form-control form-control-sm" value="National ID Card" hidden name="idtype" required>
-<input type="text" class="form-control form-control-sm" value="National ID Card" disabled required>
+<input type="text" class="form-control form-control-sm" value="National ID Card" hidden name="idtype" >
+<input type="text" class="form-control form-control-sm" value="National ID Card" disabled >
 </div>
 <div class="col-sm-6">
 <label style="font-size:13px"><i style="color:red">*</i> ID Card No</label>
-<input type="text" class="form-control form-control-sm" placeholder="ID Number" hidden name="idno" id="ninData" required>
-<input type="text" class="form-control form-control-sm" placeholder="ID Number" disabled id="ninDatas" required>
+<input type="text" class="form-control form-control-sm" placeholder="ID Number" hidden name="idno" id="ninData" >
+<input type="text" class="form-control form-control-sm" placeholder="ID Number" disabled id="ninDatas" >
 </div>
 </div>
 <div class="row" style="margin-top:20px;">
 <div class="col-sm-12">
 <label style="font-size:13px"><i style="color:red">*</i> Remark/Comment</label>
-<textarea type="text" class="form-control form-control-sm" name="remark" cols="6" rows="6" placeholder="Type your comment here....." required></textarea>
+<textarea type="text" class="form-control form-control-sm" name="remark" cols="6" rows="6" placeholder="Type your comment here....." ></textarea>
 </div>
 </div>
 <br>
@@ -575,7 +579,6 @@ $('#nin').val(data.nin || 'N/A');
 $('#stateOfOrigin').val(data.stateOfOrigin || 'N/A');
 // disabled value
 $('#fullName').text([data.firstName, data.middleName, data.lastName].filter(Boolean).join(' ') || 'N/A');
-
 // Handle phone numbers array
 //const phones = data.phones ? data.phones.filter(p => p).join(', ') : 'N/A';
 $('#ph').val(phones || 'N/A');

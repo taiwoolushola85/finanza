@@ -122,6 +122,7 @@ XLSX.writeFile(workbook, "loan_book.xlsx");
 <th style="font-size:8px">CREDIT OFFICER</th>
 <th style="font-size:8px">DATE DISBURSED</th>
 <th style="font-size:8px">DATE EXPIRED</th>
+<th style="font-size:8px">LAST PAYMENT DATE</th>
 <th style="font-size:8px">STATUS</th>
 </tr>
 </thead>
@@ -147,6 +148,7 @@ $datedisburse = htmlspecialchars($member['Date_Disbursed'], ENT_QUOTES, 'UTF-8')
 $maturitydate = htmlspecialchars($member['Maturity_Date'], ENT_QUOTES, 'UTF-8');
 $status = htmlspecialchars($member['Maturity_Status'], ENT_QUOTES, 'UTF-8');
 $ofn = htmlspecialchars($member['Officer_Name'], ENT_QUOTES, 'UTF-8');
+$lst = htmlspecialchars($member['Transaction_Date'], ENT_QUOTES, 'UTF-8');
 $id = (int)$member['id'];
 ?>
 <tr style="font-size:8px">
@@ -164,6 +166,7 @@ $id = (int)$member['id'];
 <td><?php echo $ofn; ?></td>
 <td><?php echo $datedisburse; ?></td>
 <td><?php echo $maturitydate; ?></td>
+<td><?php echo $lst; ?></td>
 <td><?php echo $status; ?></td>
 </tr>
 <?php

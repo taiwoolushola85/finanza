@@ -3,7 +3,7 @@
 include '../config/db.php';
 include '../config/user_session.php';
 $bv = trim($_POST['bvn']);// client bvn
-$fn = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['sn']); // surname
+$fn =  str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['sn']); // surname
 $mn = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['fn']); // firstname
 $ln = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['ln']); //nlastname
 $ad = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['ad']); // address
@@ -51,13 +51,72 @@ $s = date('h:m:sa');// time
 $mth = date('M');// time
 $yrs = date('Y');// time
 //checking if all filed has been filled
-if(empty($bv) || empty($fn) || empty($mn) || empty($ln) || empty($ad) || empty($union) || empty($education) || empty($ph) || empty($gn) || empty($age) || empty($ms) 
-|| empty($doc) || empty($docn) || empty($st1) || empty($ct1) || empty($bsn) || empty($bt) || empty($st) || empty($sd) || empty($add) || empty($sh) || empty($owner) 
-|| empty($nin) || empty($fn2) || empty($mn2) || empty($ln2) || empty($occupation) || empty($ph2) || empty($ad2) || empty($re2) || empty($gn2) || empty($remark)
-|| empty($id_no2) || empty($id_type2) || empty($img)){
-echo 1;
-exit();
-}else{
+$rules = [
+['label'=>'BVN', 'value'=>$bv, 'required'=>true, 'numeric'=>true, 'length'=>11],
+['label'=>'Surname', 'value'=>$fn, 'required'=>true],
+['label'=>'Middle Name', 'value'=>$mn, 'required'=>true],
+['label'=>'Last Name', 'value'=>$ln, 'required'=>true],
+['label'=>'Address', 'value'=>$ad, 'required'=>true],
+['label'=>'Union', 'value'=>$union, 'required'=>true],
+['label'=>'Education', 'value'=>$education, 'required'=>true],
+['label'=>'Phone Number', 'value'=>$ph, 'required'=>true, 'numeric'=>true, 'min'=>11],
+['label'=>'Gender', 'value'=>$gn, 'required'=>true],
+['label'=>'Date of Birth', 'value'=>$age, 'required'=>true],
+['label'=>'Marital Status', 'value'=>$ms, 'required'=>true],
+['label'=>'Document Type', 'value'=>$doc, 'required'=>true],
+['label'=>'Document Number', 'value'=>$docn, 'required'=>true],
+['label'=>'State', 'value'=>$st1, 'required'=>true],
+['label'=>'Town', 'value'=>$ct1, 'required'=>true],
+['label'=>'Business Name', 'value'=>$bsn, 'required'=>true],
+['label'=>'Business Type', 'value'=>$bt, 'required'=>true],
+['label'=>'Business State', 'value'=>$st, 'required'=>true],
+['label'=>'Business Start Date', 'value'=>$sd, 'required'=>true],
+['label'=>'Business Address', 'value'=>$add, 'required'=>true],
+['label'=>'Shop Ownership', 'value'=>$sh, 'required'=>true],
+['label'=>'Business Owner', 'value'=>$owner, 'required'=>true],
+['label'=>'Guarantor BVN', 'value'=>$nin, 'required'=>true, 'numeric'=>true, 'length'=>11],
+['label'=>'Guarantor First Name', 'value'=>$fn2, 'required'=>true],
+['label'=>'Guarantor Middle Name', 'value'=>$mn2, 'required'=>true],
+['label'=>'Guarantor Last Name', 'value'=>$ln2, 'required'=>true],
+['label'=>'Guarantor Occupation', 'value'=>$occupation, 'required'=>true],
+['label'=>'Guarantor Phone', 'value'=>$ph2, 'required'=>true, 'numeric'=>true, 'min'=>11],
+['label'=>'Guarantor Address', 'value'=>$ad2, 'required'=>true],
+['label'=>'Relationship', 'value'=>$re2, 'required'=>true],
+['label'=>'Guarantor Gender', 'value'=>$gn2, 'required'=>true],
+['label'=>'Remark', 'value'=>$remark, 'required'=>true],
+['label'=>'Guarantor ID Number', 'value'=>$id_no2, 'required'=>true],
+['label'=>'Guarantor ID Type', 'value'=>$id_type2, 'required'=>true],
+['label'=>'Client Image', 'value'=>$img, 'required'=>true]
+];
+
+
+function validate(array $rules) {
+$errors = [];
+foreach ($rules as $field) {
+$label = $field['label'];
+$value = trim($field['value']);
+// Required check
+if (!empty($field['required']) && $value === '') {
+$errors[] = "$label is required.";
+continue;
+}
+// Numeric check
+if (!empty($field['numeric']) && !is_numeric($value)) {
+$errors[] = "$label must contain only numbers.";
+}
+// Exact length check
+if (isset($field['length']) && strlen($value) != $field['length']) {
+$errors[] = "$label must be exactly {$field['length']} digits.";
+}
+// Minimum length check
+if (isset($field['min']) && strlen($value) < $field['min']) {
+$errors[] = "$label must be at least {$field['min']} characters.";
+}
+}
+return $errors;
+}
+
+
 // getting team leader info
 $Query = "SELECT * FROM mapping WHERE Loan_Officer='$user'";
 $result = mysqli_query($con, $Query);
@@ -105,7 +164,6 @@ if($result == true){
 echo 2;
 }else{
 echo("Error description: " . mysqli_error($con));
-}
 }
 mysqli_close($con);
 ?>
