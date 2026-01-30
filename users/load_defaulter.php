@@ -55,7 +55,7 @@ mysqli_stmt_close($stmt);
 
 // Data query using prepared statement
 $dataQuery = "SELECT id, Loan_Account_No, Firstname, Lastname, Middlename, Product, Branch, Phone,
-Total_Loan, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Officer_Name,
+Total_Loan, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Officer_Name, Recovery_Name,
 Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY Firstname ASC";
 
 if ($maxRows > 0) {
@@ -106,7 +106,7 @@ mysqli_close($con);
 
 <style>
 #table-container {
-    height: 340px;
+    height: 300px;
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -162,11 +162,11 @@ Total Expired Loans: <strong><?php echo htmlspecialchars($total, ENT_QUOTES, 'UT
 </div>
 
 <?php if (empty($results) && !empty($search)): ?>
-<div class="alert alert-warning">
+<div class="alert alert-warning" style="display:none;">
 <i class="fa fa-info-circle"></i> No results found for "<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>"
 </div>
 <?php elseif (empty($results)): ?>
-<div class="alert alert-info">
+<div class="alert alert-info" style="display:none;">
 <i class="fa fa-check-circle"></i> No expired loans found. All loans are up to date!
 </div>
 <?php endif; ?>
@@ -185,6 +185,7 @@ Total Expired Loans: <strong><?php echo htmlspecialchars($total, ENT_QUOTES, 'UT
 <th>OUTSTANDING</th>
 <th>EXPECTED AMT</th>
 <th>CREDIT OFFICER</th>
+<th>RECOVERY OFFICER</th>
 <th>DATE DISBURSED</th>
 <th>DATE EXPIRED</th>
 <th>STATUS</th>
@@ -210,6 +211,7 @@ $totalbal = (float)($member['Total_Bal'] ?? 0);
 $datedisburse = htmlspecialchars($member['Date_Disbursed'] ?? '', ENT_QUOTES, 'UTF-8');
 $maturitydate = htmlspecialchars($member['Maturity_Date'] ?? '', ENT_QUOTES, 'UTF-8');
 $ofn = htmlspecialchars($member['Officer_Name'] ?? '', ENT_QUOTES, 'UTF-8');
+$recov = htmlspecialchars($member['Recovery_Name'] ?? '', ENT_QUOTES, 'UTF-8');
 $id = (int)$member['id'];
 // Calculate days overdue
 $daysOverdue = 0;
@@ -231,6 +233,7 @@ $daysOverdue = $interval->days;
 <td><?php echo number_format($totalbal, 2); ?></td>
 <td><?php echo number_format($exp, 2); ?></td>
 <td><?php echo $ofn; ?></td>
+<td><?php echo $recov; ?></td>
 <td><?php echo date('d M Y', strtotime($datedisburse)); ?></td>
 <td><?php echo date('d M Y', strtotime($maturitydate)); ?></td>
 <td><span class="expired-badge">Expired</span></td>
@@ -243,7 +246,7 @@ $daysOverdue = $interval->days;
 <?php
 }
 } else {
-echo '<tr><td colspan="15" style="text-align:center; padding: 20px;">No expired loans found</td></tr>';
+echo '<tr><td colspan="15" style="text-align:center;">No expired loans found</td></tr>';
 }
 ?>
 </tbody>

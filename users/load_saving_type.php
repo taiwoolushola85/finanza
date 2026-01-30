@@ -6,10 +6,6 @@ $gr = $_POST['gr'];// saving type
 if($gr == 'Express'){
 // code for express saving type
 ?>
-
-
-<br>
-<br>
 <br>
 <b>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +56,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-responsive" style="overflow: auto; height:300px; font-size:9px">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr style="font-size:8px" id="table1"> 
@@ -271,10 +267,6 @@ error: function(){
 
 
 <br>
-<br>
-<br>
-<br>
-<br>
 <b>
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M2 5C2 4.44772 2.44772 4 3 4H8.66667H21C21.5523 4 22 4.44772 22 5V8H15.3333H8.66667H2V5Z" fill="currentColor" stroke="currentColor" />
@@ -307,9 +299,10 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
+include '../config/user_session.php';
 $d = date('Y-m-d');
 $result = mysqli_query($con, "SELECT id, Firstname, Surname, Othername, Plan, Flexi_Account_No, Frequency, Total_Bal, Status, Date_Start
-FROM flexi_account WHERE User = '$User' AND Status = 'Active' ORDER BY Surname ASC ") or die("Bad Query.");
+FROM flexi_account WHERE User = '$User' ORDER BY Surname ASC ") or die("Bad Query.");
 
 
 mysqli_close($con);
@@ -324,7 +317,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-responsive" style="overflow: auto; height:300px; font-size:9px">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr style="font-size:8px" id="table1"> 

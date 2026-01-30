@@ -20,6 +20,7 @@ exit();
 $result = mysqli_query($con, "SELECT * FROM repayments WHERE Loan_Account_No = '$lon' AND Status = 'Active'");
 $row= mysqli_fetch_array($result);
 $id = $row['id'];
+$reg = $row['Reg_id'];
 $virtaul_acct = $row['Account_Number'];
 $dis = $row['Disbursement_No'];
 $tr = $row['Transaction_id'];
@@ -47,7 +48,6 @@ $du = $row['Duration'];
 $tim = $row['Team_id'];
 $exp_amt = $row['Expected_Amount'];
 $int_amt = $row['Interest_Amt'];
-$reg = $row['Reg_id'];
 $total_loan = $row['Total_Loan'];
 $bal = $row['Total_Bal'];// balance
 $ph = $row['Phone'];
@@ -58,7 +58,10 @@ $yrs = date('Y');
 $mth = date('M');
 $rand = rand();
 $ran = uniqid();
-
+//getting saving if
+$result = mysqli_query($con, "SELECT * FROM savings WHERE Savings_Account_No = '$sa' AND Status = 'Active'");
+$row= mysqli_fetch_array($result);
+$sav = $row['Savings_Account_No'];
 // saving for repayment request
 $Query = "UPDATE saving_rep SET Status = 'Paid', Management_Approve = '$na', Date_Approved = '$d' WHERE id = '$request_id'";
 $result = mysqli_query($con, $Query);
@@ -72,44 +75,55 @@ VALUES ('NA', 'NA', '$id', '$virtaul_acct', '$dis', '$reg', '$id', '$ln', '$tr',
 '$total_loan', 'No Reciept', '$bal', '$ph', 'Saving For Repayment', 'Payment Confirmed', '$alert', 'System Posting', 'No Reciept No', 'Denied', 'Denied', '$mth',
 '$yrs')";
 $result = mysqli_query($con, $Query);
+
+// getting total sum of payment history
+$sql = "SELECT SUM(Amount) AS lm FROM history WHERE Status = 'Paid' AND Register_id = '$reg' ";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$pmt = $data['lm'];
+
+
 // savings history
-$sql = "SELECT SUM(Savings) AS lm FROM save WHERE Status ='Paid' AND Saving_Account = '$sa'";
+$sql = "SELECT SUM(Savings) AS lm FROM save WHERE Status = 'Paid' AND Saving_Account = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmd = $data['lm'];
 // withdraw history
-$sql = "SELECT SUM(Amount_Withdraw) AS lm FROM withdraw WHERE Status ='Paid' AND Saving_Account_No = '$sa'";
+$sql = "SELECT SUM(Amount_Withdraw) AS lm FROM withdraw WHERE Status = 'Paid' AND Saving_Account_No = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmw = $data['lm'];
 // saving transfer
-$sql = "SELECT SUM(Amount) AS lm FROM transfers WHERE Status ='Paid' AND Saving_Account_No = '$sa'";
+$sql = "SELECT SUM(Amount) AS lm FROM transfers WHERE Status = 'Paid' AND Saving_Account_No = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmtr = $data['lm'];
 // savings for repayment
-$sql = "SELECT SUM(Amount) AS lm FROM saving_rep WHERE Status ='Paid' AND Saving_Account_No = '$sa'";
+$sql = "SELECT SUM(Amount) AS lm FROM saving_rep WHERE Status = 'Paid' AND Saving_Account_No = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmr = $data['lm'];
 //savings upfront
-$sql = "SELECT SUM(Amount) AS lm FROM saving_upfront WHERE Status ='Paid' AND Saving_Account_No = '$sa'";
+$sql = "SELECT SUM(Amount) AS lm FROM saving_upfront WHERE Status = 'Paid' AND Saving_Account_No = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmu = $data['lm'];
 /// credit savings
-$sql = "SELECT SUM(Amount) AS lm FROM credit WHERE Status ='Paid' AND Reciever_Account = '$sa'";
+$sql = "SELECT SUM(Amount) AS lm FROM credit WHERE Status = 'Paid' AND Reciever_Account = '$sav'";
 $result=mysqli_query($con,$sql);
 $data=mysqli_fetch_assoc($result);
 $pmc = $data['lm'];
 // getting total balance
 $bal = ($pmd - $pmw - $pmr - $pmtr) + $pmc;
-//
-$Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sa'";
+//updating reciever loan balance
+$Query = "UPDATE repayments SET Paid = Paid + $amt, Total_Bal = Total_Loan - $pmt WHERE Loan_Account_No = '$lon'";
 $result = mysqli_query($con, $Query);
-//
+//updating sender saving balance
+$Query = "UPDATE repayments SET Savings_Bal = '$bal' WHERE Savings_Account_No = '$sav'";
+$result = mysqli_query($con, $Query);
+// updating saving balance
 $Query = "UPDATE savings SET Balance = '$bal', Savings_Paid = '$pmd', Withdraw_Savings = '$pmw', Savings_Repayment = '$pmr', Savings_Transfer = '$pmtr', 
-Savings_Upfront = '$pmu', Savings_Recieved = '$pmc' WHERE Savings_Account_No = '$sa'";
+Savings_Upfront = '$pmu', Savings_Recieved = '$pmc' WHERE Savings_Account_No = '$sav'";
 $result = mysqli_query($con, $Query);
 // updating reciever schedule 
 $Query = "UPDATE schedule SET Amount_Paid = '$amt', Savings = '0', Payment_Status = 'Paid', Date_Paid = '$d', Payment_Method = 'Savings Method' 

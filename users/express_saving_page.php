@@ -28,7 +28,21 @@ $up = $reg['Upfront'];
 ?>
 
 <center>
-<img src="<?php echo $rows['Location']; ?>" alt="Header Avatar" class="img-fluid" style=" height:120px; width:120px; border-radius:100px">
+<?php
+$img = $rows['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>"class="img-fluid" style=" height:120px; width:120px; border-radius:100px" onerror="this.src='../assets/no-image.png';">
 <br><br>
 <span style="font-size:15px; text-transform:capitalize">[ <?php echo $rows['Firstname']." ".$rows['Middlename']." ".$rows['Lastname']; ?> ] </span>
 <br><br>
@@ -301,7 +315,7 @@ echo number_format($over,2);
 include('../config/db.php');
 $d = date('Y-m-d');
 //Get branch Details
-$Query = "SELECT * FROM withdraw  WHERE Saving_Account_No = '$sv' AND  Status ='Paid' ORDER BY id ASC";
+$Query = "SELECT * FROM withdraw  WHERE Saving_Account_No = '$sv' AND Status ='Paid' ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -799,7 +813,7 @@ setTimeout(function () {
 // ajax function start here to load table data
 $.ajax({
 method: "GET",
-url: "gens.php?id=<?php echo $id; ?>",
+url: "gens.php?id=<?php echo $savid; ?>",
 dataType: "html",
 success:function(data){
 $("#mydivs").load("client_saving_page.php?id=<?php echo $id; ?>" + " #mydivs");

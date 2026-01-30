@@ -139,6 +139,7 @@ fclose($fp);
 <th>EXPECTED AMT</th>
 <th>AMOUNT</th>
 <th>SAVING</th>
+<th>PAYMENT METHOD</th>
 <th>DATE</th>
 <th>TIME</th>
 <th>RECIEPT</th>
@@ -157,6 +158,7 @@ foreach($json as $member){
 <td class="sort border-top" ><?php echo number_format($member->Expected_Amount,2)?></td>
 <td class="sort border-top" ><?php echo number_format($member->Amount,2)?></td>
 <td class="sort border-top" ><?php echo number_format($member->Savings,2)?></td>
+<td class="sort border-top" ><?php echo $member->Payment_Method?></td>
 <td class="sort border-top" >
 <?php 
 $date=date_create($member->Date_Paid);
@@ -166,7 +168,7 @@ echo date_format($date,"d-M-Y");
 <td class="sort border-top" style="text-transform:uppercase"><?php echo $member->Time_Paid?></td>
 <td class="sort border-top" >
 <?php
-if ($member->Payment_Method == 'Cash Payment'){
+if ($member->Payment_Method == 'Wema Bank'){
 ?>  
 <span>No Reciept</span></td>
 <?php 

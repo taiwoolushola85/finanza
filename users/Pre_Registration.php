@@ -61,7 +61,7 @@
 </div>
 </div> <!-- end col-->
 <br>
-<i><b style="color:red">Note:</b> All fields in red border are </i><br><br>
+<i><b style="color:red">Note:</b> Only new client be register here. </i><br><br>
 
 <img src="" id="userPhoto" class="rounded-circle d-flex" style="height: 150px; width:150px; margin:auto">
 
@@ -73,7 +73,6 @@
 <center>
 <i id="check" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking BVN.! Please wait...</i>
 <i id="bvnerror" style="color:red; margin-left:10px; display:none">Invalid BVN !! Please Check...</i>
-
 <h5 id="fullName"></h5>
 </center>
 </div>
@@ -463,6 +462,7 @@ y.style.display = 'none';
 <script type="text/javascript">
 $(document).ready(function(){
 $("#bvn").focusout(function(){
+$("#fullName").hide();
 $("#check").show();
 var bvn = document.getElementById("bvn").value;
 if($('#bvn').val().length != 11){
@@ -484,23 +484,30 @@ data: {'bvn': bvn},
 success:function(data){
 $("#check").hide();
 if(data == 1){
-alert("🚫 Customer application already submited for loan review.!! please check application list to confirm..");
+alert("🚫 Customer application already submited for review.!! please check application list to confirm..");
 $("#cli").attr("disabled", "disabled");
+$("#check").hide();
 }else if(data == 2){
 alert("🚫 Customer already has a running active loan.!! please check..");
 $("#cli").attr("disabled", "disabled");
+$("#check").hide();
 }else if(data == 3){
 alert("🚫 Customer BVN has been blacklisted.!! please check..");
 $("#cli").attr("disabled", "disabled");
+$("#check").hide();
 }else if(data == 4){
 alert("🚫 Systen show that customer has been used as a gaurantor for another client having a runing loan.!! please check..");
 $("#cli").attr("disabled", "disabled");
+$("#check").hide();
 }else if(data == 5){
 alert("🚫 System show's that the customer is an existing customer. please go to create loan to proceed with the registration..");
+$("#check").hide();
 }else{
 $("#check").hide();
 $("#bvnerror").hide();
+$("#fullName").show();
 $("#cli").removeAttr('disabled');
+verifyBVN(); // BVN validation
 }
 }
 });
@@ -685,7 +692,6 @@ contentType: false,
 cache: false, 
 processData:false,
 success: function(data){
-$("#uploadForm")[0].reset();
 if(data == 1){
 alert("🚫 Please fill all required fields before submitting the application.!");
 $("#please").hide();
@@ -698,6 +704,8 @@ $("#toast").show();
 setTimeout(function(){
 $("#please").hide();
 $("#toast").hide();
+///$("#uploadForm")[0].reset();
+window.location.reload();
 }, 6000);
 }else{
 $("#please").hide();

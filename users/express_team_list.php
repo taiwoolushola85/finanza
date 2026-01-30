@@ -32,7 +32,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div id="table-container" style="overflow-y:auto; height:330px">
+<div id="table-container" style="overflow-y:auto; height:300px">
 <table>
 <thead>
 <tr>
@@ -76,34 +76,46 @@ foreach($json as $member){
 
 
 <script>
-// Display data in modal
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');// username
-if(id) {
-$.ajax({
-url: 'express_transaction_list.php',
-type: "GET",
-data: {'id': id},// username
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#result').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading transaction: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') "cleans the slate" before adding the listener.
+    // This stops the "One Click = 5 Requests" bug.
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Prevents conflict with other click listeners
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profileContainer = $('#result');
+
+        // 2. Open the modal immediately
+        $modal.modal('show');
+
+        // 3. Set a Loading State with min-height (Prevents the modal from "collapsing/blinking")
+        $profileContainer.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted">Loading repayment transactions...</p>
+            </div>`);
+
+        // 4. Optimized AJAX call
+        $.ajax({
+            url: 'express_transaction_list.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject content instantly. 
+                // .stop(true, true) cancels any active animation queues for a snappy feel.
+                $profileContainer.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profileContainer.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Could not retrieve express transactions.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>
 

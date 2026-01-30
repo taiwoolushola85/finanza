@@ -20,15 +20,20 @@ exit;
 
 $gr = $_POST['gr'];
 
-// Prepare statement - count records
-$stmt = $con->prepare("SELECT COUNT(*) AS overs FROM repayments WHERE Union_id = ? AND Status = 'Active' AND Recovery_Status = 'No'");
+$stmt = $con->prepare("SELECT COUNT(*) AS total FROM repayments WHERE Union_id = ? AND Status = 'Active' AND Recovery_Status = 'No'");
+
+if ($stmt) {
 $stmt->bind_param("s", $gr);
 $stmt->execute();
-$result = $stmt->get_result();
-$data = $result->fetch_assoc();
-$over = $data['overs'];
-echo "Total Records: <span>$over</span>";
+$stmt->bind_result($total);
+$stmt->fetch();
 $stmt->close();
+$count = (int)($total ?? 0);
+} else {
+error_log("Count query failed: " . $con->error);
+$count = 0;
+}
+echo "Total Records: <span>{$count}</span>";
 ?>
 </div>
 </div>
@@ -36,16 +41,44 @@ $stmt->close();
 <br>
 
 <?php
-$d = date('Y-m-d');
-// Fetch repayment list
-$stmt = $con->prepare("SELECT id, Firstname, Middlename, Lastname, Unions, Loan_Account_No, Product, Expected_Amount, Paid, Total_Loan, Total_Bal, Signed_Date, 
-Maturity_Date, Maturity_Status FROM repayments WHERE User = ? AND Union_id = ? AND Status = 'Active' AND Recovery_Status = 'No' ORDER BY id ASC");
+// Create index (run once in database)
+// CREATE INDEX idx_user_union_status ON repayments (User, Union_id, Status, Recovery_Status, Firstname);
+
+$stmt = $con->prepare("
+    SELECT 
+        id, 
+        CONCAT_WS(' ', Firstname, Middlename, Lastname) AS full_name,
+        Unions, 
+        Loan_Account_No, 
+        Product, 
+        Expected_Amount, 
+        Paid, 
+        Total_Loan, 
+        Total_Bal, 
+        Maturity_Date,
+        CASE WHEN Maturity_Date < CURDATE() THEN 'Expired' ELSE 'Running' END AS loan_status,
+        CASE WHEN Maturity_Date < CURDATE() THEN 'text-danger' ELSE 'text-success' END AS status_class
+    FROM repayments 
+    WHERE User = ? 
+      AND Union_id = ? 
+      AND Status = 'Active' 
+      AND Recovery_Status = 'No' 
+    ORDER BY Firstname ASC
+    LIMIT 100
+");
+
+if (!$stmt) {
+    error_log("Query failed: " . $con->error);
+    echo "<div class='alert alert-danger'>Database error. Please contact support.</div>";
+    exit;
+}
+
 $stmt->bind_param("ss", $User, $gr);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -61,35 +94,29 @@ $result = $stmt->get_result();
 <th style="font-size:8px">LOAN STATUS</th> 
 </tr> 
 </thead>
-
 <tbody>
-<?php while ($member = $result->fetch_assoc()) { ?>
-<tr style="font-size:8px" class="invks" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member['id']; ?>">
-<td><?php echo $member['Loan_Account_No']; ?></td>
-<td style="text-transform:uppercase;">
-<?php echo $member['Firstname']." ".$member['Middlename']." ".$member['Lastname']; ?>
-</td>
-<td><?php echo $member['Unions']; ?></td>
-<td><?php echo $member['Product']; ?></td>
-<td><?php echo number_format($member['Total_Loan'], 2); ?></td>
-<td><?php echo number_format($member['Paid'], 2); ?></td>
-<td><?php echo number_format($member['Expected_Amount'], 2); ?></td>
-<td><?php echo number_format($member['Total_Bal'], 2); ?></td>
-<td><?php $date = date_create($member['Maturity_Date']);
-echo date_format($date, "d-M-Y");
-?>
-</td>
-<td>
-<?php 
-if ($member['Maturity_Date'] < $d) {
-echo "<span style='color:red'>Expired</span>";
-} else {
-echo "<span style='color:green'>Running</span>";
-}
-?>
-</td>
-</tr>
-<?php } ?>
+
+<!-- In your table loop: -->
+<?php while ($member = $result->fetch_assoc()): ?>
+    <tr style="font-size:8px" class="invks" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member['id']; ?>">
+        <td><?= htmlspecialchars($member['Loan_Account_No']) ?></td>
+        <td class="text-uppercase"><?= htmlspecialchars($member['full_name']) ?></td>
+        <td><?= htmlspecialchars($member['Unions']) ?></td>
+        <td><?= htmlspecialchars($member['Product']) ?></td>
+        <td ><?= number_format($member['Total_Loan'], 2) ?></td>
+        <td ><?= number_format($member['Paid'], 2) ?></td>
+        <td ><?= number_format($member['Expected_Amount'], 2) ?></td>
+        <td ><?= number_format($member['Total_Bal'], 2) ?></td>
+        <td><?= date('d-M-Y', strtotime($member['Maturity_Date'])) ?></td>
+        <td>
+            <span class="<?= $member['status_class'] ?> fw-bold">
+                <?= $member['loan_status'] ?>
+            </span>
+        </td>
+    </tr>
+<?php endwhile; ?>
+
+<?php $stmt->close(); ?>
 </tbody>
 
 </table>

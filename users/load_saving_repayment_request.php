@@ -32,7 +32,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-container" style="height:320px;">
+<div class="table-container" style="height:330px;">
 <table>
 <thead>
 <tr style="font-size:8px"> 

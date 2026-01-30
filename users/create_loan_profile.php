@@ -26,11 +26,11 @@ $reg_status = $row['Status'];
 <div class="row">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Loan Products</label>
-<select type="text" class="form-control form-control-md" name="pr" id="pr" oninput="getProduct()" required="required">
+<select type="text" class="form-control form-control-md" name="pr" id="prn" oninput="getProduct()" required="required">
 <option value="">Select Loan Product</option>
 <?php 
 include '../config/db.php';
-$Query = "SELECT id, Product_Name FROM product WHERE Status = 'Activated' ORDER BY id DESC";
+$Query = "SELECT id, Product_Name FROM product WHERE Status = 'Activated' ORDER BY Product_Name ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -48,7 +48,7 @@ $name= $rows['Product_Name'];// product
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Tenure</label>
-<select type="text" class="form-control form-control-md" name="ten" id="hey" required="required">
+<select type="text" class="form-control form-control-md" name="ten" id="loadtenure" required="required">
 <option value="">Select Option</option>
 </select>
 </div>
@@ -98,16 +98,16 @@ $name= $rows['Bank_Name'];// product
 
 <script type="text/javascript">
 function getProduct()  {
-var pr = document.getElementById("pr").value;
+var prn = document.getElementById("prn").value;
 // ajax function start here
 $.ajax({
 method: "POST",
 url: "load_tenure.php",
 dataType: "html",  
-data: {'pr': pr},
+data: {'prn': prn},
 success:function(data){
 setTimeout(function(){
-$("#hey").html(data);
+$("#loadtenure").html(data);
 }, 100);
 }
 });

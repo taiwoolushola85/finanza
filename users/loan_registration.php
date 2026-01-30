@@ -3,9 +3,9 @@
 include '../config/db.php';
 include '../config/user_session.php';
 $bv = trim($_POST['bvn']);// client bvn
-$fn =  str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['sn']); // surname
-$mn = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['fn']); // firstname
-$ln = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['ln']); //nlastname
+$fn = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['sn'])); // surname
+$mn = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['fn'])); // firstname
+$ln = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['ln'])); // lastname
 $ad = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['ad']); // address
 $union = $_POST['un'];// union
 $education = $_POST['ed'];// education
@@ -23,18 +23,18 @@ $docn = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`"
 $st1 = $_POST['sta']; // customer state
 $ct1 = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['cit']); // customer town
 // business info
-$bsn = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['bsn']); // bussiness name
+$bsn = ucfirst(str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['bsn'])); // bussiness name
 $bt = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['bt']);// bussiness type
 $st = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['st2']); // bussiness state
 $sd = $_POST['sd']; // bussiness start date
 $add = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['ad2']); // bussiness address
 $sh = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['sh']);// shop ownership
-$owner = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['owner']);
+$owner = ucfirst(str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['owner']));
 //guarantor info
 $nin = trim($_POST['nin']);// guarantor nin
-$fn2 = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['surname2']);// guarantor first name
-$mn2 = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['firstname2']); // guarantor middle name
-$ln2 = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ",", " "), '', $_POST['lastname2']); // guarantor lastname
+$fn2 = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['surname2']));
+$mn2 = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['firstname2']));
+$ln2 = ucfirst(str_replace(array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['lastname2']));
 $occupation = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['occupation']); // guarantor occupation
 $ph2 = $_POST['phone2']; //guarantor phone
 $ad2 = str_replace( array("#", "'", ";", "/", "-", "@", "_", "$", "%", "!", "`", ":", ".", "?", ","), '', $_POST['address3']);// guarantor addres
@@ -51,76 +51,48 @@ $s = date('h:m:sa');// time
 $mth = date('M');// time
 $yrs = date('Y');// time
 //checking if all filed has been filled
-$rules = [
-['label'=>'BVN', 'value'=>$bv, 'required'=>true, 'numeric'=>true, 'length'=>11],
-['label'=>'Surname', 'value'=>$fn, 'required'=>true],
-['label'=>'Middle Name', 'value'=>$mn, 'required'=>true],
-['label'=>'Last Name', 'value'=>$ln, 'required'=>true],
-['label'=>'Address', 'value'=>$ad, 'required'=>true],
-['label'=>'Union', 'value'=>$union, 'required'=>true],
-['label'=>'Education', 'value'=>$education, 'required'=>true],
-['label'=>'Phone Number', 'value'=>$ph, 'required'=>true, 'numeric'=>true, 'min'=>11],
-['label'=>'Gender', 'value'=>$gn, 'required'=>true],
-['label'=>'Date of Birth', 'value'=>$age, 'required'=>true],
-['label'=>'Marital Status', 'value'=>$ms, 'required'=>true],
-['label'=>'Document Type', 'value'=>$doc, 'required'=>true],
-['label'=>'Document Number', 'value'=>$docn, 'required'=>true],
-['label'=>'State', 'value'=>$st1, 'required'=>true],
-['label'=>'Town', 'value'=>$ct1, 'required'=>true],
-['label'=>'Business Name', 'value'=>$bsn, 'required'=>true],
-['label'=>'Business Type', 'value'=>$bt, 'required'=>true],
-['label'=>'Business State', 'value'=>$st, 'required'=>true],
-['label'=>'Business Start Date', 'value'=>$sd, 'required'=>true],
-['label'=>'Business Address', 'value'=>$add, 'required'=>true],
-['label'=>'Shop Ownership', 'value'=>$sh, 'required'=>true],
-['label'=>'Business Owner', 'value'=>$owner, 'required'=>true],
-['label'=>'Guarantor BVN', 'value'=>$nin, 'required'=>true, 'numeric'=>true, 'length'=>11],
-['label'=>'Guarantor First Name', 'value'=>$fn2, 'required'=>true],
-['label'=>'Guarantor Middle Name', 'value'=>$mn2, 'required'=>true],
-['label'=>'Guarantor Last Name', 'value'=>$ln2, 'required'=>true],
-['label'=>'Guarantor Occupation', 'value'=>$occupation, 'required'=>true],
-['label'=>'Guarantor Phone', 'value'=>$ph2, 'required'=>true, 'numeric'=>true, 'min'=>11],
-['label'=>'Guarantor Address', 'value'=>$ad2, 'required'=>true],
-['label'=>'Relationship', 'value'=>$re2, 'required'=>true],
-['label'=>'Guarantor Gender', 'value'=>$gn2, 'required'=>true],
-['label'=>'Remark', 'value'=>$remark, 'required'=>true],
-['label'=>'Guarantor ID Number', 'value'=>$id_no2, 'required'=>true],
-['label'=>'Guarantor ID Type', 'value'=>$id_type2, 'required'=>true],
-['label'=>'Client Image', 'value'=>$img, 'required'=>true]
-];
 
 
-function validate(array $rules) {
-$errors = [];
-foreach ($rules as $field) {
-$label = $field['label'];
-$value = trim($field['value']);
-// Required check
-if (!empty($field['required']) && $value === '') {
-$errors[] = "$label is required.";
-continue;
-}
-// Numeric check
-if (!empty($field['numeric']) && !is_numeric($value)) {
-$errors[] = "$label must contain only numbers.";
-}
-// Exact length check
-if (isset($field['length']) && strlen($value) != $field['length']) {
-$errors[] = "$label must be exactly {$field['length']} digits.";
-}
-// Minimum length check
-if (isset($field['min']) && strlen($value) < $field['min']) {
-$errors[] = "$label must be at least {$field['min']} characters.";
-}
-}
-return $errors;
+$missing = [];
+$fields = ['bvn'=>'Client BVN', 'sn'=>'Client Surname', 'fn'=>'Client Firstname', 'ln'=>'Client Lastname', 
+           'ad'=>'Client Address', 'un'=>'Union', 'ed'=>'Education', 'ph'=>'Client Phone', 
+           'img'=>'Client Image', 'imgs'=>'Guarantor Image', 'gn'=>'Gender', 
+           'db'=>'Date of Birth', 'repday'=>'Repayment Day', 'ms'=>'Marital Status',
+           'doc'=>'Document Type', 'docn'=>'Document Number', 'sta'=>'State', 
+           'cit'=>'Town', 'bsn'=>'Business Name', 'bt'=>'Business Type', 
+           'st2'=>'Business State', 'sd'=>'Start Date', 'ad2'=>'Business Address',
+           'sh'=>'Shop Ownership', 'owner'=>'Owner', 'nin'=>'Guarantor BVN',
+           'surname2'=>'Guarantor Surname', 'firstname2'=>'Guarantor First Name',
+           'lastname2'=>'Guarantor Last Name', 'occupation'=>'Gaurantor Occupation',
+           'phone2'=>'Guarantor Phone', 'address3'=>'Guarantor Address',
+           'relationship'=>'Relationship', 'gender3'=>'Guarantor Gender',
+           'remark'=>'Comment', 'idno'=>'ID Number', 'idtype'=>'ID Type'];
+
+foreach($fields as $key => $name) {
+if(empty(trim($_POST[$key] ?? ''))) $missing[] = $name;
 }
 
+if($missing) {
+echo "You missed the following filed: " . implode(', ', $missing);
+exit();
+}
 
 // getting team leader info
 $Query = "SELECT * FROM mapping WHERE Loan_Officer='$user'";
 $result = mysqli_query($con, $Query);
-$row = mysqli_fetch_array($result);
+if ($row = mysqli_fetch_array($result)) {
+$map_id = $row['id'];
+$off_id = $row['Officer_id'];
+$tm_id = $row['Team_id'];
+$ofn = $row['Officer_Name'];
+$tmn = $row['Team_Name'];
+$tlm = $row['Team_Leader'];
+$br = $row['Branch'];
+} else {
+echo "You are required to be mapped to a team lead before you can can complete the registration..'";
+mysqli_close($con);
+exit();
+}
 $map_id = $row['id'];
 $off_id = $row['Officer_id'];
 $tm_id = $row['Team_id'];
@@ -134,19 +106,25 @@ $fll = $fn." ".$mn." ".$ln;
 // getting union id for registration
 $Query = "SELECT * FROM groups WHERE id='$union'";
 $result = mysqli_query($con, $Query);
-$row = mysqli_fetch_array($result);
+if ($row = mysqli_fetch_array($result)) {
 $un_id = $row['id'];
 $un_name = $row['Name'];
+} else {
+echo "You did not select group on the registration form";
+mysqli_close($con);
+exit();
+}
+
 // inserting the customer information
 $sql = "INSERT INTO register (Virtual_Account, Firstname, Middlename, Lastname, Address, Education, Phone, Gender, Branch, Years, Birthday_Month, Maritial_Status,
 Branch_id, State, Town, Location, Product, Product_id, Tenure, Frequency, Rate, Unions, Union_id, Loan_Amount, Bank, Account_Name, Account_No, BVN, Document,
 Document_No, Business, Biz_Type, Biz_State, Start_Date, Cash_Flow, Biz_Address, Biz_Owner, Shop_Owner, Date_Reg, Time_Reg, Status, User, User_id, Team_Leader,
 Team_id, Officer_Name, Team_Name, Map_id, Verification_Status, Interest_Amt, Monthly_Interest, Repayment_Amt, Total_Loan, Upfront, Inssurance, Form, Card,
-Schedule_Status, Application_Status, Saving_Type, Repayment_Day, Loan_Status, Months, Year_Booked, Stage) 
+Schedule_Status, Application_Status, Saving_Type, Repayment_Day, Loan_Status, Months, Year_Booked, Approval_Type) 
 VALUES ('NA', '$fn', '$mn', '$ln', '$ad', '$education', '$ph', '$gn', '$brss', '$age', '$date_month', '$ms', '$brss_id', '$st1', '$ct1', '$img', '-', '-',
 '-', '-', '-', '$un_name', '$un_id', '0', '-', '-', '-', '$bv', '$doc', '$docn', '$bsn', '$bt', '$st', '$sd', '-', '$add', '$owner', 
 '$sh', '$d', '$s', 'Under Review', '$User', '$usd_id', '$tlm', '$tm_id', '$ofn', '$tmn', '$map_id', 'Waiting', '0', '0', '0', '0', '0', '0', '0', '0', 
-'Not Confirmed', 'Registered', 'Express Savings', '$repday', 'New Client', '$mth', '$yrs', '1')";
+'Not Confirmed', 'Registered', 'Express Savings', '$repday', 'New Client', '$mth', '$yrs', 'NA')";
 $result= mysqli_query($con, $sql);
 $last_id = mysqli_insert_id($con);// last insert id
 // gaurantor information

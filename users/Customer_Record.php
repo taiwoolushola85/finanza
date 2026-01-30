@@ -35,7 +35,6 @@
 
 <br><br>
 <br><br>
-<br>
 <div class="row">
 <div class="col-sm-10" style="margin-top: 10px;">
 <label>Show Entries</label>
@@ -120,28 +119,29 @@ $('#result').html(data);
 
 
 
+
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "load_customer_record.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search
+search: search
 },
-success:function(data){
+success: function (data) {
 $('#result').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
-
-
 
 
 <script type="text/javascript">
@@ -159,7 +159,6 @@ $('#result').html(data);
 }
 </script> 
 
-
-
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

@@ -32,7 +32,24 @@ $bal = $rep['Total_Bal'];
 <div class="col-sm-3">
 <br>
 <center>
-<img src="<?php echo $row['Location']; ?>" class="rounded-circle" width="200" height="200px"><br><br>
+<?php
+$img = $rep['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:200px; width:200px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
+
+<br><br>
 <h4><b style="text-transform:capitalize"><?php echo $row['Firstname']." ".$row['Middlename']." ".$row['Lastname']; ?></b></h4>
 <p class="text-secondary mb-1">[ <?php echo $row['Status']; ?> ]</p><br>
 <button class="btn btn-outline-success btn-sm w-100" style="font-size: 12px; margin-top:5px" onclick="customerInfo()">Customer Info</button>
@@ -425,6 +442,9 @@ echo" No Record Found";
 <h5><i class="fa fa-file"></i> CRC REPORT</h5>
 <br>
 <?php 
+if($row['Approval_Type'] == 'CRC Approval'){
+?>
+<?php 
 include '../config/db.php';
 //Get Transactions Details
 $Query = "SELECT id, Location FROM document WHERE BVN = '$bvn' ORDER BY id DESC LIMIT 1";
@@ -445,6 +465,38 @@ $crc = $rows['Location'];
 //No Transaction History for the account
 $Available = false; 
 echo " No CRC Report Found  <br/> ";        
+}
+?>
+
+
+<?php 
+}else{
+?>
+
+<span>Approval Status:</span> <b style="color:chocolate"><?php echo $row['Approval_Type']; ?></b>
+<br>
+<?php 
+include '../config/db.php';
+//
+$Query = "SELECT * FROM reason WHERE RegNo='$regid'";
+$result = mysqli_query($con, $Query);
+$row = mysqli_fetch_array($result);
+$reason = $row['Reason'];
+$reason_by = $row['Stated_By'];
+$reason_bvn = $row['BVN_ID'];
+?>
+<hr>
+<b>Reason:</b> <?php echo $reason; ?><br>
+<b>Stated By:</b> <?php echo $reason_by; ?><br>
+
+
+
+
+
+
+
+
+<?php 
 }
 ?>
 

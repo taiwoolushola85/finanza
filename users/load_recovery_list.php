@@ -1,6 +1,7 @@
 <div>
 <b><i class="fa fa-table"></i> Active Customer Table</b>
-<br><br>
+<br>
+<br>
 
 <div class="row">
 <div class="col-sm-3">
@@ -33,7 +34,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -68,7 +69,7 @@ while ($member = $result->fetch_assoc()) { ?>
 <?php } 
 } else { ?>
 <tr>
-<td colspan="10" style="text-align:center; font-size:10px;">No record found</td>
+<td colspan="20" style="text-align:center; font-size:10px;">No record found</td>
 </tr>
 <?php } ?>
 </tbody>

@@ -181,7 +181,7 @@
 </div>
 <div class="form-group col-md-6">
 <label class="form-label" for="pno">Staff ID:</label>
-<input type="number" class="form-control" name="staffid" placeholder="Staff ID" required="required">
+<input type="text" class="form-control" name="staffid" placeholder="Staff ID" required="required">
 </div>
 </div>
 <hr>
@@ -304,27 +304,27 @@ $('#result').html(data);
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "load_user_json.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search
+search: search
 },
-success:function(data){
+success: function (data) {
 $('#result').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
-
-
 
 <script type="text/javascript">
 function load()  {
@@ -391,5 +391,6 @@ error: function(){
 }));
 });
 </script>
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

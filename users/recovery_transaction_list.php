@@ -149,7 +149,7 @@ echo date_format($date,"d-M-Y");
 <td class="sort border-top" style="text-transform:uppercase"><?php echo $member->Time_Pay?></td>
 <td class="sort border-top" >
 <?php
-if ($member->Payment_Method == 'Cash Payment'){
+if ($member->Payment_Method == 'Wema Bank'){
 ?>  
 <span>No Reciept</span></td>
 <?php 
@@ -293,7 +293,7 @@ alert("Please mark transaction to decline.");
 function loads()  {
 $.ajax({
 method: "POST",
-url: "transaction_list.php?id=<?php echo $username; ?>",
+url: "recovery_transaction_list.php?id=<?php echo $username; ?>",
 dataType: "html",
 success:function(data){
 setTimeout(function(){

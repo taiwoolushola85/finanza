@@ -90,6 +90,7 @@ fclose($fp);
 <th style="font-size:8px;">DATE DISBURSED</th>
 <th style="font-size:8px;">DATE CLOSED</th>
 <th style="font-size:8px;">ACTION</th>
+<th style="font-size:8px;">ACTION</th>
 </tr>
 <tbody>
 <?php
@@ -118,6 +119,8 @@ echo date("d-M-Y", strtotime($member->Date_Closed));
 ?></td>
 <td style="font-size:8px;"><a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" id="<?php echo $member->id?>" style="font-size:9px;">
 +  Manage Account</a></td>
+<td style="font-size:8px;"><a class="inva" href="#!" id="<?php echo $member->id?>" style="font-size:9px; color:orange">
+<i class="fa fa-check"></i> Activate Loan</a></td>
 </tr>
 <?php
 }
@@ -161,8 +164,37 @@ alert ("🚫" + data)
 </script>
 
 
+
+<script>
+// to show data on a modal box
+$(document).ready(function() {
+$('.inva').on('click', function() {
+var id = $(this).attr('id');
+if(id) {
+$.ajax({
+url: 'activate_loan.php?id' + id,
+type: "GET",
+data: {'id':id},
+success:function(data) { 
+if(data == 1){
+setTimeout(function(){
+load();
+}, 100);
+}else{
+alert(data)
+}
+}
+});
+}else{
+alert ("🚫" + data)
+}
+});
+});
+</script>
+
+
 <script type="text/javascript">
-function load()  {
+function load() {
 // ajax function start here to load table data
 $.ajax({
 method: "GET",

@@ -11,47 +11,35 @@ header("Access-Control-Allow-Origin: *");
 
 include '../config/db.php';
 include '../config/user_session.php';
-
 // Escape user input for SQL
 $search_escaped = mysqli_real_escape_string($con, $search);
-
 // Build query based on conditions
 $whereClause = "";
 if (!empty($search)) {
 $whereClause = "WHERE Product LIKE '%$search_escaped%'";
 }
-
 // Count query (without LIMIT - LIMIT doesn't apply to COUNT)
 $countQuery = "SELECT COUNT(*) FROM product_list $whereClause";
 $countResult = mysqli_query($con, $countQuery);
 $row = mysqli_fetch_array($countResult);
 $total = $row[0];
-
 // Data query
-$dataQuery = "SELECT id, Product, Tenure, Frequency, Inssurance, Rate
-              FROM product_list
-              $whereClause 
-              ORDER BY Product ASC";
-
+$dataQuery = "SELECT id, Product, Tenure, Frequency, Inssurance, Rate FROM product_list $whereClause ORDER BY Product ASC";
 if ($maxRows > 0) {
-    $dataQuery .= " LIMIT $maxRows";
+$dataQuery .= " LIMIT $maxRows";
 } elseif (empty($search) && $maxRows == 0) {
-    $dataQuery .= " LIMIT 10";
+$dataQuery .= " LIMIT 10";
 }
-
 $result = mysqli_query($con, $dataQuery) or die("Database query failed: " . mysqli_error($con));
-
 // Fetch results
 $results = array();
 while($row = mysqli_fetch_assoc($result)) {
-    $results[] = $row; 
+$results[] = $row; 
 }
-
 // Save to JSON file
 $fp = fopen('../data/product_list.json', 'w'); 
 fwrite($fp, json_encode($results)); 
 fclose($fp);
-
 mysqli_close($con);
 ?>
 
@@ -59,7 +47,6 @@ mysqli_close($con);
 Total Record: <?php echo $total; ?>
 </small>
 <br><br>
-
 <div class="table-container" style="height:200px;">
 <table>
 <thead>
@@ -224,6 +211,7 @@ loadup();
 setTimeout(function() {
 $("#updatep").hide();
 }, 7000);
+window.location.reload();
 } else {
 $("#please").hide();
 alert('Update failed: ' + data);

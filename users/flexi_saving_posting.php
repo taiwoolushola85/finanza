@@ -77,8 +77,6 @@ exit();
 }
 
 
-
-
 if (empty($sa)){
 // do nothing
 

@@ -1,122 +1,155 @@
-<br>
-<small>
-Total: 
-<?php 
-include '../config/db.php';
-$result = mysqli_query($con, "SELECT COUNT(*) FROM bank");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo $total;
-mysqli_close($con);
-?>
-</small>
-<br><br>
 <?php
-// Get and sanitize the search parameter
-$nm = isset($_POST['search']) ? trim($_POST['search']) : '';
-
-// Set CORS headers at the top (before any output if possible)
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Set CORS and Headers
 header("Access-Control-Allow-Origin: *");
+header("Content-Type: text/html; charset=UTF-8");
 
 include '../config/db.php';
+include '../config/user_session.php';
 
-// Use prepared statements to prevent SQL injection
-if($nm == ''){
-// No search term - get all records
-$stmt = mysqli_prepare($con, "SELECT id, Bank_Name, Date_Created, Time_Created FROM bank ORDER BY Bank_Name ASC LIMIT 10");
-} else {
-// Search term provided
-$searchTerm = "%$nm%";
-$stmt = mysqli_prepare($con, "SELECT id, Bank_Name, Date_Created, Time_Created FROM bank WHERE Bank_Name LIKE ? ORDER BY Bank_Name ASC");
-mysqli_stmt_bind_param($stmt, "s", $searchTerm);
+// 1. Inputs & Sanitization
+$search = isset($_POST['search']) ? trim($_POST['search']) : '';
+$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 10;
+$page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+
+if ($maxRows <= 0) $maxRows = 10;
+if ($page < 1) $page = 1;
+
+// 2. Build WHERE clause
+$whereClause = "";
+$params = [];
+$types = "";
+
+if (!empty($search)) {
+    $whereClause = " WHERE Bank_Name LIKE ?";
+    $params[] = "%$search%";
+    $types = "s";
 }
 
+// 3. Get Total Record Count
+$countQuery = "SELECT COUNT(*) FROM bank" . $whereClause;
+$countStmt = mysqli_prepare($con, $countQuery);
+if (!empty($search)) {
+    mysqli_stmt_bind_param($countStmt, $types, ...$params);
+}
+mysqli_stmt_execute($countStmt);
+$total = mysqli_stmt_get_result($countStmt)->fetch_row()[0];
+mysqli_stmt_close($countStmt);
+
+// 4. Pagination Math
+$totalPages = ceil($total / $maxRows);
+if ($page > $totalPages && $totalPages > 0) $page = $totalPages;
+$offset = ($page - 1) * $maxRows;
+
+// 5. Data Query
+$dataQuery = "SELECT id, Bank_Name, Date_Created, Time_Created FROM bank " . $whereClause . " ORDER BY Bank_Name ASC LIMIT ? OFFSET ?";
+$dataParams = array_merge($params, [$maxRows, $offset]);
+$dataTypes = $types . "ii";
+
+$stmt = mysqli_prepare($con, $dataQuery);
+mysqli_stmt_bind_param($stmt, $dataTypes, ...$dataParams);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
-$results = array();
-while($row = mysqli_fetch_assoc($result)){
-$results[] = $row; 
-}
+$results = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
+
+// Save to JSON
+file_put_contents('../data/bank_lists.json', json_encode($results));
+
 mysqli_close($con);
-// Save to JSON file
-$fp = fopen('../data/bank_lists.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
+
+$startRecord = ($total > 0) ? ($offset + 1) : 0;
+$endRecord = min($offset + $maxRows, $total);
 ?>
+<br>
+<br>
+<div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <small>
+        <strong>Total Banks: <?= number_format($total) ?></strong> 
+        | Showing: <?= $startRecord ?>-<?= $endRecord ?>
+    </small>
+
+    <?php if ($totalPages > 1): ?>
+    <div style="display: flex; gap: 3px;">
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeBankPage(1)" <?= ($page <= 1) ? 'disabled' : '' ?> >Next</button>
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeBankPage(<?= $page - 1 ?>)" <?= ($page <= 1) ? 'disabled' : '' ?> >Prev</button>
+        <span style="font-size: 10px; align-self: center; padding: 0 5px;">Pg <?= $page ?>/<?= $totalPages ?></span>
+        <button type="button" class="btn btn-xs btn-primary" onclick="changeBankPage(<?= $page + 1 ?>)" <?= ($page >= $totalPages) ? 'disabled' : '' ?>>Next</button>
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeBankPage(<?= $totalPages ?>)" <?= ($page >= $totalPages) ? 'disabled' : '' ?> >Prev</button>
+    </div>
+    <?php endif; ?>
+</div>
 
 <div id="table-container" style="overflow:auto; height:240px;">
-<table>
-<thead>
-<tr>
-<th style="font-size:8px">ID</th>
-<th style="font-size:8px">BANK</th>
-<th style="font-size:8px">DATE</th>
-<th style="font-size:8px">TIME</th>
-<th style="font-size:8px">ACTION</th>
-</tr>
-</thead>
-<tbody>
-<?php
-// Read from JSON file
-$url = '../data/bank_lists.json';
-$data = file_get_contents($url);
-$json = json_decode($data);
-
-if($json && is_array($json)){
-foreach($json as $member){
-?>
-<tr style="font-size:8px">
-<td><?php echo htmlspecialchars($member->id); ?></td>
-<td style="text-transform:capitalize"><?php echo htmlspecialchars($member->Bank_Name); ?></td>
-<td><?php echo htmlspecialchars($member->Date_Created); ?></td>
-<td><?php echo htmlspecialchars($member->Time_Created); ?></td>
-<td><a class="invks" href="#!" data-id="<?php echo htmlspecialchars($member->id); ?>" style="color:red;"><i class="fa fa-trash"></i> Remove</a></td>
-</tr>
-<?php
-}
-}
-?>
-</tbody>
-</table>
-</div>
+    <table>
+        <thead>
+            <tr style="font-size:8px">
+                <th>ID</th>
+                <th>BANK</th>
+                <th>DATE</th>
+                <th>TIME</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($results)): ?>
+                <?php foreach($results as $member): ?>
+                <tr style="font-size:8px">
+                    <td><?= htmlspecialchars($member['id']) ?></td>
+                    <td style="text-transform:capitalize"><span><?= htmlspecialchars($member['Bank_Name']) ?></span></td>
+                    <td><?= htmlspecialchars($member['Date_Created']) ?></td>
+                    <td><?= htmlspecialchars($member['Time_Created']) ?></td>
+                    <td>
+                        <a class="invks" href="#!" data-id="<?= $member['id'] ?>" style="color:red;">
+                            <i class="fa fa-trash"></i> Remove
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="5" class="text-center p-3">No banks found.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
+<input type="hidden" id="bankSearch" value="<?= htmlspecialchars($search) ?>">
+<input type="hidden" id="bankMaxRows" value="<?= $maxRows ?>">
 
 <script>
-// Display data in modal
+function changeBankPage(newPage) {
+    var search = $('#bankSearch').val();
+    var maxRows = $('#bankMaxRows').val();
+    
+    $('#table-container').css('opacity', '0.5');
+    
+    $.ajax({
+        url: 'load_bank_code_bck.php',
+        type: 'POST',
+        data: { page: newPage, search: search, maxRows: maxRows },
+        success: function(response) {
+            $('#result').html(response); 
+        }
+    });
+}
+
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to remove bank record from the database..";
-var checked = confirm(WRN_PROFILE_DELETE);
-if(checked == true) {
-var id = $(this).data('id');
-alert(id);
-if(id) {
-$.ajax({
-url: 'delete_bank_record.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-if(data == 1){
-setTimeout(function() {
-loadBank();
-}, 100);
-}else{
-alert("Error" + data)
-}
-},
-error: function(xhr, status, error) {
-alert('Error removing record: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-}
-}
-});
+    $('.invks').on('click', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        if(confirm("You are about to remove this bank record from the database?")) {
+            $.ajax({
+                url: 'delete_bank_record.php',
+                type: "GET",
+                data: {'id': id},
+                success: function(data) { 
+                    if(data == 1){
+                        changeBankPage(<?= $page ?>); // Refresh current page
+                    } else {
+                        alert("Error: " + data);
+                    }
+                }
+            });
+        }
+    });
 });
 </script>

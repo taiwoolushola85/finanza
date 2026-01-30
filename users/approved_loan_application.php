@@ -79,7 +79,7 @@ Total Record: <?php echo $total; ?>
 if (empty($results)) {
 ?>
 <tr>
-<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
+<td colspan="12" style="text-align:center; font-size:10px">
 <strong>No record found</strong>
 </td>
 </tr>
@@ -134,33 +134,47 @@ $badgeClass = 'badge-soft-danger';
 </div>
 
 <script>
-// Display data in modal
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'create_loan_profile.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. Use .off().on() with Event Delegation
+    // This fixes the "Double Click" bug and ensures it works after pagination/search
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profile = $('#profile');
+        const $loader = $("#view"); // Assuming this is your spinner/overlay
+
+        if(!id) {
+            alert('Invalid ID');
+            return;
+        }
+
+        // 2. Open modal immediately and show loading state
+        // DO NOT hide the whole modal; just show a loader inside or over it
+        $modal.modal('show');
+        $loader.show(); 
+        
+        // Clear previous content so the user doesn't see old data
+        $profile.html('<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>');
+
+        // 3. Optimized AJAX (No artificial 1000ms delay)
+        $.ajax({
+            url: 'create_loan_profile.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true,
+            success: function(data) { 
+                // 4. Update content instantly
+                $loader.hide();
+                $profile.hide().html(data).fadeIn(200);
+            },
+            error: function(xhr, status, error) {
+                $loader.hide();
+                $profile.html('<div class="alert alert-danger m-3">Error loading profile.</div>');
+            }
+        });
+    });
 });
 </script>

@@ -1,28 +1,109 @@
 <?php 
 include_once '../config/db.php';
 $id = $_GET['id']; // reg id
-// 
-$Query = "SELECT * FROM register WHERE id = '$id'";
-$result = mysqli_query($con, $Query);
-$row = mysqli_fetch_array($result);
+
+// Register info
+$query = "SELECT * FROM register WHERE id = '$id'";
+$result = mysqli_query($con, $query);
+$row = mysqli_fetch_assoc($result);
 $regid = $row['id'];
-$bvn = $row['BVN'];
+$vrt = $row['Virtual_Account'];
 $reg_status = $row['Status'];
-// gaurantor info
-$Query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
+$un = $row['Unions'];
+$bvn = $row['BVN'];
+$pr = $row['Product_id'];
+$ten = $row['Tenure'];
+$frq = $row['Frequency'];
+$lum = $row['Loan_Amount'];
+$up = $row['Upfront'];
+$inss = $row['Inssurance'];
+$form = $row['Form'];
+$card = $row['Card'];
+
+
+// Guarantor info
+$query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
+$result = mysqli_query($con, $query);
+$rows = mysqli_fetch_assoc($result);
+$gid = $rows['id'];
+//
+
+$Query = "SELECT Rate, Inssurance FROM product_list WHERE Product_id='$pr' AND Tenure = '$ten'";
 $result = mysqli_query($con, $Query);
-$rows = mysqli_fetch_array($result);
-$id = $rows['id'];
+$data = mysqli_fetch_array($result);
+$ins = $data['Inssurance'];
+$rt = $data['Rate'];
+
+//
+if($frq == 'Daily'){
+// expected repayment
+// expected repayment
+$dd = $lum + 0; // the intererst is 0
+$dailyrep_amt = $lum / $ten;// repayment amt
+$dailyrnd_rep = round($dailyrep_amt);// rounding up repayment amt
+// total loan balance
+$dailyt_loan = $lum + 0;
+$dailyrnd_tloan = round($dailyt_loan);// rounding up total loan
+
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '0', Monthly_Interest = '0', Repayment_Amt = '$dailyrnd_rep', Total_Loan = '$dailyrnd_tloan'
+WHERE id = '$id'";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+
+
+}else{
+// interest
+// interest
+$rr = 100 / $rt;
+$in_amt = $lum / $rr;// interest amt
+$rnds_int = round($in_amt); /// rounding up interest amount
+// expected repayment
+$dd = $lum + $in_amt; 
+$rep_amt = $dd / $ten;// repayment amt
+$rnd_rep = round($rep_amt);// rounding up repayment amt
+// total loan balanceRepayment_Day
+$t_loan = $lum + $in_amt;
+$rnd_tloan = round($t_loan);// rounding up total loan
+$int_per_repayment = round($rnds_int/$ten);
+
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '$rnds_int', Monthly_Interest = '$int_per_repayment', Repayment_Amt = '$rnd_rep', 
+Total_Loan = '$rnd_tloan' WHERE id = '$id'";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+} 
+
 ?>
 <div class="row">
-<div class="col-sm-8" style="margin-top:10px;">
-<div style="overflow-x: auto;">
-<div class="btn-group">
-<button class="btn btn-light" onclick="clientDash()"><i class="fa fa-user"></i> Loan Profile</button>
-<button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
-<button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-briefcase"></i> Business Image</button>
-<button class="btn btn-light" onclick="updateCRC()"><i class="fa fa-file"></i> CRC Report</button>
-<button class="btn btn-light" onclick="updateRemark()"><i class="fa fa-upload"></i> Upload Reciept / Comment</button>
+<div class="col-sm-2" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="clientDash()"><i class="fa fa-user"></i> <br>Loan Profile</button>
+</div>
+<button class="btn btn-light w-100" hidden onclick="updateDoc()"><i class="fa fa-eye"></i><br> Review Document</button>
+<div class="col-sm-2" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateVerification()"><i class="fa fa-briefcase"></i> <br>Business Image</button>
+</div>
+<div class="col-sm-2" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateCRC()"><i class="fa fa-file"></i> <br>CRC Report</button>
+</div>
+<div class="col-sm-2"style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateHistory()"><i class="fa fa-list"></i> <br>Loan History</button>
+</div>
+<div class="col-sm-2"style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateMode()"><i class="fa fa-star"></i> <br>Payment Mode</button>
+</div>
+<div class="col-sm-2"style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateRemark()"><i class="fa fa-upload"></i> Upload Reciept / Comment</button>
 </div>
 </div>
 <br>
@@ -52,18 +133,33 @@ $id = $rows['id'];
 </div>
 
 <div id="firsts" style="display:block;">
-<div class="row">
+<div class="row" style="font-size:11px;">
 <div class="col-sm-6">
 <br>
 <b><i class="fa fa-star"></i> CLIENT INFO</b>
 <br><br>
 <div class="card border-primary border border-dashed">
 <br>
-<img src="<?php echo $row['Location']; ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;">
+
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 <br>
 <div class="row">
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Firstname']." ". $row['Middlename']." ".$row['Lastname']; ?></span>
+<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Firstname']." ".$row['Lastname']; ?></span>
 </div>
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Phone:</b> <?php echo $row['Phone']; ?></span>
@@ -125,7 +221,22 @@ $id = $rows['id'];
 <br><br>
 <div class="card border-primary border border-dashed">
 <br>
-<img src="<?php echo $rows['Location']; ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;">
+
+<?php
+$img = $rows['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 <br>
 <div class="row">
 <div class="col-sm-6">
@@ -189,7 +300,7 @@ $id = $rows['id'];
 
 
 
-<div class="row">
+<div class="row" style="font-size:11px;">
 <div class="col-sm-6">
 
 <div class="card border-primary border border-dashed">
@@ -272,7 +383,7 @@ $id = $rows['id'];
 <br>
 <b><i class="fa fa-star"></i> BUSINESS INFO</b>
 <br><br>
-<div>
+<div class="table-responsive">
 <table>
 <thead>
 <tr>
@@ -301,49 +412,28 @@ $id = $rows['id'];
 
 
 
-<div id="seconds" style="display:none;">
-<br><br>
-<b>CLIENT DOCUMENT REVIEW</b>
-<br><br>
-<b>Select client document to review</b>
-<br><br>
-<div class="row">
-<div class="col-sm-4">
-<label>Select Document</label>
-<input type="number" class="form-control for-control-sm" hidden id="regid" value="<?php echo $regid; ?>">
-<select class="form-control for-control-sm" id="document" oninput="getDocument()">
-<option value="">Select Option</option>
-<option value="Loan Form">Loan Form</option>
-<option value="Utility Bill">Utility Bill</option>
-<option value="ID Card">ID Card</option>
-<option value="KYC Form">KYC Form</option>
-<option value="Other Documents">Other Documents</option>
-</select>
-</div>
-</div>
-<br><br>
-<div id="documentview"></div>
-</div>
-
-
 
 
 <div id="crc" style="display:none;">
 <br><br>
 CRC REPORT
 <br><br>
+
+<?php 
+if($row['Approval_Type'] == 'CRC Approval'){
+?>
 <?php 
 include '../config/db.php';
 //Get Transactions Details
-$Query = "SELECT id, Location FROM document WHERE Reg_ID = '$regid' ORDER BY id DESC LIMIT 1";
+$Query = "SELECT id, Location FROM document WHERE BVN = '$bvn' ORDER BY id DESC LIMIT 1";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
 $Available = true;
 for ($j=0 ; $j < $Count; $j++){
-$rows = mysqli_fetch_array($result);
-$bn = $rows['id'];
-$crc = $rows['Location'];
+$crcrecord = mysqli_fetch_array($result);
+$bn = $crcrecord['id'];
+$crc = $crcrecord['Location'];
 ?>
 <embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
 </tr>
@@ -355,6 +445,39 @@ $Available = false;
 echo " No CRC Report Found  <br/> ";        
 }
 ?>
+
+
+<?php 
+}else{
+?>
+
+<span>Approval Status:</span> <b style="color:chocolate"><?php echo $row['Approval_Type']; ?></b>
+<br>
+<?php 
+include '../config/db.php';
+//
+$Query = "SELECT * FROM reason WHERE RegNo='$regid'";
+$result = mysqli_query($con, $Query);
+$reasons = mysqli_fetch_array($result);
+$reason = $reasons['Reason'];
+$reason_by = $reasons['Stated_By'];
+$reason_bvn = $reasons['BVN_ID'];
+?>
+<hr>
+<b>Reason:</b> <?php echo $reason; ?><br>
+<b>Stated By:</b> <?php echo $reason_by; ?><br>
+
+
+
+
+
+
+
+
+<?php 
+}
+?>
+
 
 </div>
 
@@ -391,7 +514,21 @@ $lmm = $rows['Status'];
 $img = $rows['F_Image'];
 ?>
 <div class="col-sm-4">
-<img src="<?php echo $img?>" class="d-block w-100" alt="..." style="height:50vh; margin:10px">
+<?php
+$img = $rows['F_Image'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" class="d-block w-100" style="height:50vh; margin:10px;" onerror="this.src='../assets/no-image.png';">
 </div>
 <?php
 }
@@ -403,6 +540,9 @@ echo "<span style='color:red'>No Business Image Uploaded...  </span> ";
 ?>
 </div>
 </div>
+
+
+<div id="mydiv">
 
 <div id="sixth" style="display:none;">
 <br><br>
@@ -460,8 +600,27 @@ echo number_format($row['Loan_Amount'],2);
 </span>
 </div>
 </div>
-<br>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadRem">
+<br>
+<div class="row">
+<div class="col-sm-3">
+<label>Initial Saving</label>
+<input type="number" class="form-control form-control-sm" name="up" placeholder="Enter Initial Saving" required>
+</div>
+<div class="col-sm-3">
+<label>Insurance</label>
+<input type="number" class="form-control form-control-sm" name="ins" placeholder="Enter Inssurance" required>
+</div>
+<div class="col-sm-3">
+<label>Form</label>
+<input type="number" class="form-control form-control-sm" name="form" placeholder="Enter Form" required>
+</div>
+<div class="col-sm-3">
+<label>Card</label>
+<input type="number" class="form-control form-control-sm" name="card" placeholder="Enter Card" required>
+</div>
+</div>
+<br>
 <input type="text" hidden class="form-control form-control-sm" name="type" placeholder="" value="<?php echo $row['Upfront_Types']; ?>">
 <input type="text" hidden class="form-control form-control-sm" name="sta" placeholder="" value="<?php echo $row['Loan_Status']; ?>">
 <input type="file" class="form-control form-control-sm" onchange="loadClient(event)" name="Pic" hidden>
@@ -481,11 +640,19 @@ echo number_format($row['Loan_Amount'],2);
 </form>
 </div>
 </div>
-<div class="col-sm-3">
-<form action="" method="POST" enctype="multipart/form-data" id="declineLoan">
+<div class="col-sm-3" style="display:none">
+<form action="" method="POST" enctype="multipart/form-data" id="reverseLoan">
 <div class="d-grid gap-2 mb-2">
 <input type="text" name="id" hidden value="<?php echo $regid; ?>">
 <button type="submit" class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse Application</button>
+</div>
+</form>
+</div>
+<div class="col-sm-4">
+<form action="" method="POST" enctype="multipart/form-data" id="deleteLoan">
+<div class="d-grid gap-2 mb-2">
+<input type="text" name="id" hidden value="<?php echo $regid; ?>">
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-trash"></i> Delete Application</button>
 </div>
 </form>
 </div>
@@ -510,7 +677,7 @@ echo number_format($row['Loan_Amount'],2);
 <div class="row">
 <div class="col-sm-4">
 <center>
-<p><img src="" id="client" style="height:400px; width:300px;" class="img-thumbnail" /></p>
+<p><img src="" id="client" style="height:500px; width:300px;" class="img-thumbnail" /></p>
 </center>
 </div>
 <div class="col-sm-8">
@@ -528,15 +695,6 @@ echo $row['Upfront_Types'];
 <span>
 <?php 
 echo number_format($row['Loan_Amount'],2);
-?>
-</span>
-</div>
-<div class="col-sm-3">
-<b>Upfront Amt:</b>
-<span>
-<?php 
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($fee,2);
 ?>
 </span>
 </div>
@@ -559,9 +717,26 @@ echo number_format($row['Loan_Amount'],2);
 <div class="col-sm-12">
 <br>
 <b style="color:red;">Note:</b><i> Upload customer registration fee and comment on the loan</i>
-<br>
-<br>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadRem">
+<div class="row">
+<div class="col-sm-3">
+<label>Initial Saving</label>
+<input type="number" class="form-control form-control-sm" name="up" placeholder="Enter Initial Saving" required>
+</div>
+<div class="col-sm-3">
+<label>Insurance</label>
+<input type="number" class="form-control form-control-sm" name="ins" placeholder="Enter Inssurance" required>
+</div>
+<div class="col-sm-3">
+<label>Form</label>
+<input type="number" class="form-control form-control-sm" name="form" placeholder="Enter Form" required>
+</div>
+<div class="col-sm-3">
+<label>Card</label>
+<input type="number" class="form-control form-control-sm" name="card" placeholder="Enter Card" required>
+</div>
+</div>
+<br>
 <input type="text" hidden class="form-control form-control-sm" name="type" placeholder="" value="<?php echo $row['Upfront_Types']; ?>">
 <input type="text" hidden class="form-control form-control-sm" name="sta" placeholder="" value="<?php echo $row['Loan_Status']; ?>">
 <input type="file" class="form-control form-control-sm" onchange="loadClient(event)" name="Pic" hidden>
@@ -581,11 +756,19 @@ echo number_format($row['Loan_Amount'],2);
 </form>
 </div>
 </div>
-<div class="col-sm-3">
-<form action="" method="POST" enctype="multipart/form-data" id="declineLoan">
+<div class="col-sm-3" style="display:none">
+<form action="" method="POST" enctype="multipart/form-data" id="reverseLoan">
 <div class="d-grid gap-2 mb-2">
 <input type="text" name="id" hidden value="<?php echo $regid; ?>">
-<button type="submit" class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse Application</button>
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse Application</button>
+</div>
+</form>
+</div>
+<div class="col-sm-4">
+<form action="" method="POST" enctype="multipart/form-data" id="deleteLoan">
+<div class="d-grid gap-2 mb-2">
+<input type="text" name="id" hidden value="<?php echo $regid; ?>">
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-trash"></i> Delete Application</button>
 </div>
 </form>
 </div>
@@ -612,7 +795,7 @@ echo number_format($row['Loan_Amount'],2);
 <div class="row">
 <div class="col-sm-4">
 <center>
-<p><img src="" id="client" style="height:400px; width:300px;" class="img-thumbnail" /></p>
+<p><img src="" id="client" style="height:500px; width:300px;" class="img-thumbnail" /></p>
 </center>
 </div>
 <div class="col-sm-8">
@@ -630,15 +813,6 @@ echo $row['Upfront_Types'];
 <span>
 <?php 
 echo number_format($row['Loan_Amount'],2);
-?>
-</span>
-</div>
-<div class="col-sm-3">
-<b>Upfront Amt:</b>
-<span>
-<?php 
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($fee,2);
 ?>
 </span>
 </div>
@@ -661,10 +835,30 @@ echo number_format($row['Loan_Amount'],2);
 <br>
 <br>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadRem">
-<label>Upload Reciept Payment</label>
+<label>Upload Reciept Payment</label><i style="color:red">only [jpg, png, jpeg]</i>
 <input type="text" hidden class="form-control form-control-sm" name="type" placeholder="" value="<?php echo $row['Upfront_Types']; ?>">
 <input type="text" hidden class="form-control form-control-sm" name="sta" placeholder="" value="<?php echo $row['Loan_Status']; ?>">
 <input type="file" class="form-control form-control-sm" onchange="loadClient(event)" name="Pic" required>
+<br>
+<div class="row">
+<div class="col-sm-3">
+<label>Initial Saving</label>
+<input type="number" class="form-control form-control-sm" name="up" placeholder="Enter Initial Saving" required>
+</div>
+<div class="col-sm-3">
+<label>Insurance</label>
+<input type="number" class="form-control form-control-sm" name="ins" placeholder="Enter Inssurance" required>
+</div>
+<div class="col-sm-3">
+<label>Form</label>
+<input type="number" class="form-control form-control-sm" name="form" placeholder="Enter Form" required>
+</div>
+<div class="col-sm-3">
+<label>Card</label>
+<input type="number" class="form-control form-control-sm" name="card" placeholder="Enter Card" required>
+</div>
+</div>
+
 <br>
 <b>Loan Application Approval Comment</b>
 <br><br>
@@ -675,17 +869,25 @@ echo number_format($row['Loan_Amount'],2);
 <textarea class="form-control form-control-sm" name="remark" cols="8" rows="8" required placeholder="type here...."></textarea>
 <br>
 <div class="row">
-<div class="col-sm-3">
+<div class="col-sm-4">
 <div class="d-grid gap-2">
 <button type="submit" class="d-block btn btn-outline-success btn-sm" style="font-size:10px;"><i class="fa fa-check"></i> Submit & Approve</button>
 </form>
 </div>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-4" style="display:none">
 <form action="" method="POST" enctype="multipart/form-data" id="declineLoan">
 <div class="d-grid gap-2 mb-2">
 <input type="text" name="id" hidden value="<?php echo $regid; ?>">
-<button type="submit" class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse Application</button>
+<button type="submit" class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse</button>
+</div>
+</form>
+</div>
+<div class="col-sm-4">
+<form action="" method="POST" enctype="multipart/form-data" id="deleteLoan">
+<div class="d-grid gap-2 mb-2">
+<input type="text" name="id" hidden value="<?php echo $regid; ?>">
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-trash"></i> Delete Application</button>
 </div>
 </form>
 </div>
@@ -713,7 +915,7 @@ echo number_format($row['Loan_Amount'],2);
 <div class="row">
 <div class="col-sm-4">
 <center>
-<p><img src="" id="client" style="height:400px; width:300px;" class="img-thumbnail" /></p>
+<p><img src="" id="client" style="height:500px; width:300px;" class="img-thumbnail" /></p>
 </center>
 </div>
 <div class="col-sm-8">
@@ -731,15 +933,6 @@ echo $row['Upfront_Types'];
 <span>
 <?php 
 echo number_format($row['Loan_Amount'],2);
-?>
-</span>
-</div>
-<div class="col-sm-3">
-<b>Upfront Amt:</b>
-<span>
-<?php 
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($fee,2);
 ?>
 </span>
 </div>
@@ -765,6 +958,25 @@ echo number_format($row['Loan_Amount'],2);
 <br>
 <br>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadRem">
+<div class="row">
+<div class="col-sm-3">
+<label>Initial Saving</label>
+<input type="number" class="form-control form-control-sm" name="up" placeholder="Enter Initial Saving" required>
+</div>
+<div class="col-sm-3">
+<label>Insurance</label>
+<input type="number" class="form-control form-control-sm" name="ins" placeholder="Enter Inssurance" required>
+</div>
+<div class="col-sm-3">
+<label>Form</label>
+<input type="number" class="form-control form-control-sm" name="form" placeholder="Enter Form" required>
+</div>
+<div class="col-sm-3">
+<label>Card</label>
+<input type="number" class="form-control form-control-sm" name="card" placeholder="Enter Card" required>
+</div>
+</div>
+<br>
 <input type="text" hidden class="form-control form-control-sm" name="type" placeholder="" value="<?php echo $row['Upfront_Types']; ?>">
 <input type="text" hidden class="form-control form-control-sm" name="sta" placeholder="" value="<?php echo $row['Loan_Status']; ?>">
 <input type="file" class="form-control form-control-sm" onchange="loadClient(event)" name="Pic" hidden>
@@ -778,17 +990,25 @@ echo number_format($row['Loan_Amount'],2);
 <textarea class="form-control form-control-sm" name="remark" cols="8" rows="8" required placeholder="type here...."></textarea>
 <br>
 <div class="row">
-<div class="col-sm-3">
+<div class="col-sm-4">
 <div class="d-grid gap-2">
 <button type="submit" class="d-block btn btn-outline-success btn-sm" style="font-size:10px;"><i class="fa fa-check"></i> Submit & Approve</button>
 </form>
 </div>
 </div>
-<div class="col-sm-3">
-<form action="" method="POST" enctype="multipart/form-data" id="declineLoan">
+<div class="col-sm-4" style="display:none">
+<form action="" method="POST" enctype="multipart/form-data" id="reverseLoan">
 <div class="d-grid gap-2 mb-2">
 <input type="text" name="id" hidden value="<?php echo $regid; ?>">
 <button type="submit" class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-exclamation-triangle"></i> Reverse Application</button>
+</form>
+</div>
+</div>
+<div class="col-sm-4">
+<form action="" method="POST" enctype="multipart/form-data" id="deleteLoan">
+<div class="d-grid gap-2 mb-2">
+<input type="text" name="id" hidden value="<?php echo $regid; ?>">
+<button type="submit" class="btn btn-outline-danger btn-sm" style="font-size:10px;"><i class="fa fa-trash"></i> Delete Application</button>
 </div>
 </form>
 </div>
@@ -814,6 +1034,196 @@ echo "Invalid Payment Mode";
 ?>
 
 </div>
+
+</div>
+</div>
+
+
+
+
+
+
+<div id="seconds" style="display:none;">
+<br><br>
+<b>UPFRONT PAYMENT MODE</b>
+<br><br>
+<form action="" method="POST" enctype="multipart/form-data" id="updateMode">
+<div class="row">
+<div class="col-sm-3" style="margin-top:10px;">
+<label style="font-size:13px"><i style="color:red">*</i> Upfront Payment Mode</label>
+<input type="number" class="form-control form-control-md" name="id" value="<?php echo $regid; ?>" hidden required="required">
+<select type="text" class="form-control form-control-md" name="type" required="required">
+<option value="<?php echo $row['Upfront_Types']; ?>"><?php echo $row['Upfront_Types']; ?></option>
+<option value="Deduction">Deduction</option>
+<option value="Virtual Payment">Virtual Payment</option>
+<option value="Monie Point Payment">Monie Point Payment</option>
+<option value="Saving For Upfront">Saving For Upfront</option>
+</select>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-2" style="margin-top:10px;">
+<button type="submit" class="btn btn-info btn-sm">Change Mode</button>
+</div>
+<div class="col-sm-10" style="margin-top:10px;">
+<i style="display:none" id="up"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Payment Mode.! Please wait..</i>
+<i style="color: green; display:none" id="update"><i class="fa fa-check"></i> Upfront Payment Mode Updated..</i>
+</div>
+</div>
+</form>
+
+
+
+</div>
+
+
+
+<div id="list" style="display:none;">
+<br>
+<b>LOAN HISTORY</b>
+<br>
+<div class="container-fluid mt-4">
+<!-- ================= SUMMARY DASHBOARD ================= -->
+<div class="row mb-4">
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Loans</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT count(*)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo $closed;
+?>
+</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Loan Amount</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Loan_Amount)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Paid</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Paid)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Outstanding</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Total_Bal)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- ================= LOAN HISTORY TABLE ================= -->
+
+<div id="table-container" style="height:280px;">
+<table>
+<thead>
+<tr style="font-size:8px">
+<th>LOAN ACCOUNT</th>
+<th>SAVING ACCOUNT</th>
+<th>BVN</th>
+<th>PRINCIPAL AMT</th>
+<th>OUTSTANDING</th>
+<th>STATUS</th>
+<th>DATE DISBURSED</th>
+<th>DATE CLOSED</th>
+</tr>
+</thead>
+<tbody>
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT Loan_Account_No, Savings_Account_No, BVN, Loan_Amount, Total_Bal, Status, Date_Disbursed, Date_Closed FROM repayments 
+WHERE BVN='$bvn' ORDER BY Date_Disbursed ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bn = $rows['Loan_Account_No'];
+$saa = $rows['Savings_Account_No'];
+$bt = $rows['BVN'];
+$ses = $rows['Loan_Amount'];
+$bal = $rows['Total_Bal'];
+$sd = $rows['Status'];
+$cf = $rows['Date_Disbursed'];
+$ba = $rows['Date_Closed'];
+?>
+<td><?php echo $bn; ?></td>
+<td><?php echo $saa; ?></td>
+<td><?php echo $bt; ?></td>
+<td><?php echo number_format($ses,2); ?></td>
+<td><?php echo number_format($bal,2); ?></td>
+<td><?php echo $sd; ?></td>
+<td><?php echo $cf; ?></td>
+<td><?php echo $ba; ?></td>
+</tr>
+<?php
+} 
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo " No Record Found  <br/> ";       
+}
+?>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+
+
+
+
+</div>
 <script>
 var load = function(event) {
 var image = document.getElementById('output');
@@ -833,26 +1243,30 @@ var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'block';
 y.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'none';
 b.style.display = 'none';
 k.style.display = 'none';
+f.style.display = 'none';
 }
-function updateDoc(){
+function updateMode(){
 var x = document.getElementById("firsts");
 var y = document.getElementById("seconds");
 var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'none';
 y.style.display = 'block';
 b.style.display = 'none';
 k.style.display = 'none';
+f.style.display = 'none';
 }
 function updateVerification(){
 var x = document.getElementById("firsts");
@@ -861,12 +1275,14 @@ var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'none';
 z.style.display = 'block';
 y.style.display = 'none';
 a.style.display = 'none';
 b.style.display = 'none';
 k.style.display = 'none';
+f.style.display = 'none';
 }
 function updateApprove(){
 var x = document.getElementById("firsts");
@@ -875,11 +1291,13 @@ var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'none';
 z.style.display = 'none';
 a.style.display = 'block';
 y.style.display = 'none';
 b.style.display = 'none';
+f.style.display = 'none';
 k.style.display = 'none';
 }
 function updateRemark(){
@@ -889,12 +1307,14 @@ var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'none';
 z.style.display = 'none';
 b.style.display = 'block';
 a.style.display = 'none';
 y.style.display = 'none';
 k.style.display = 'none';
+f.style.display = 'none';
 }
 function updateCRC(){
 var x = document.getElementById("firsts");
@@ -903,9 +1323,27 @@ var z = document.getElementById("thirds");
 var a = document.getElementById("fourth");
 var b = document.getElementById("sixth");
 var k = document.getElementById("crc");
+var f = document.getElementById("list");
 x.style.display = 'none';
 z.style.display = 'none';
 k.style.display = 'block';
+b.style.display = 'none';
+a.style.display = 'none';
+f.style.display = 'none';
+y.style.display = 'none';
+}
+function updateHistory(){
+var x = document.getElementById("firsts");
+var y = document.getElementById("seconds");
+var z = document.getElementById("thirds");
+var a = document.getElementById("fourth");
+var b = document.getElementById("sixth");
+var k = document.getElementById("crc");
+var f = document.getElementById("list");
+x.style.display = 'none';
+z.style.display = 'none';
+f.style.display = 'block';
+k.style.display = 'none';
 b.style.display = 'none';
 a.style.display = 'none';
 y.style.display = 'none';
@@ -913,61 +1351,34 @@ y.style.display = 'none';
 </script>
 
 
-<script type="text/javascript">
-function getDocument()  {
-var regid = document.getElementById("regid").value;
-var document_type = document.getElementById("document").value;
-// ajax function start here
-$.ajax({
-method: "POST",
-url: "preview_document_bck.php",
-dataType: "html",  
-data: {
-'regid': regid,
-'document_type': document_type
-},
-success:function(data){
-setTimeout(function(){
-$('#documentview').html(data);
-}, 100);
-}
-});
-// ajax function ends here
-}
-</script>
-
-
-
 
 <script type="text/javascript">
 $(document).ready(function (e){
-$("#approveLoan").on('submit',(function(e){ e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to submit and approve loan ..";
+$("#updateMode").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to update the upfront payment mode ..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
-$("#updateModal").modal('hide');
-$("#please").show();
+$("#up").show();
 $.ajax({
-url: "approve_loan_bck.php",
+url: "update_upfront_mode.php",
 type: "POST",
 data: new FormData(this),
 contentType: false, 
 cache: false, 
 processData:false,
 success: function(data){
-$("#approveLoan")[0].reset();
 if(data == 1){
 setTimeout(function(){
-$("#please").hide();
-$("#approve").show();
+$("#up").hide();
+$("#mydiv").load( "client_loan_profile.php?id=<?php echo $regid; ?> #mydiv" );// 
+$("#update").show();
 }, 3000);
 setTimeout(function(){
-$("#please").hide();
-loads();
-$("#approve").hide();
+$("#up").hide();
+$("#update").hide();
 }, 6000);
 }else{
-$("#please").hide();
+$("#up").hide();
 alert ("🚫" + data);
 }
 },
@@ -981,16 +1392,23 @@ error: function(){
 
 
 
+
+
+
+
+
+
+
 <script type="text/javascript">
 $(document).ready(function (e){
-$("#declineLoan").on('submit',(function(e){ e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to submit and reverse this application ..";
+$("#deleteLoan").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to delete this application to the verification officer ..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#updateModal").modal('hide');
 $("#please").show();
 $.ajax({
-url: "decline_loan_bck.php",
+url: "delete_loan.php",
 type: "POST",
 data: new FormData(this),
 contentType: false, 
@@ -1025,6 +1443,50 @@ error: function(){
 
 <script type="text/javascript">
 $(document).ready(function (e){
+$("#reverseLoan").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to reverse this loan ..";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+$("#updateModal").modal('hide');
+$("#please").show();
+$.ajax({
+url: "decline_loan_bck.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
+$("#reverseLoan")[0].reset();
+if(data == 1){
+setTimeout(function(){
+$("#please").hide();
+$("#decline").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+loads();
+$("#decline").hide();
+}, 6000);
+}else{
+$("#please").hide();
+alert ("🚫" + data);
+}
+},
+error: function(){
+}
+});
+}
+}));
+});
+</script>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function (e){
 $("#uploadRem").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to submit and approve loan ..";
 var checked = confirm(WRN_PROFILE_DELETE);
@@ -1044,14 +1506,14 @@ if(data == 1){
 setTimeout(function(){
 $("#please").hide();
 $("#approve").show();
+loads();
 }, 3000);
 setTimeout(function(){
 $("#please").hide();
-loads();
 $("#approve").hide();
 }, 6000);
 }else{
-$("#pls").hide();
+$("#please").hide();
 alert ("🚫" + data);
 }
 },

@@ -11,7 +11,7 @@ $user = $_SESSION['Username'];
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Finanza | Admin Dashboard</title>
+<title>Finanza Sign In </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="description" content="Loan management system for all kinds of loans - personal, business, and more. Streamline your lending process with our user-friendly platform.">
 <meta name="keywords" content="loan management system, loan processing, lending platform, personal loans, business loans">
@@ -19,7 +19,7 @@ $user = $_SESSION['Username'];
 <!-- layout setup -->
 <!-- <script type="module" src="assets/js/layout-setup.js"></script> -->
 <!-- App favicon -->
-<link rel="shortcut icon" href="../assets/images/logo-sm.png">
+<link rel="shortcut icon" href="../assets/images/logo.png">
 <!-- select2 -->
 <link href="../assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
 <!-- Simplebar Css -->

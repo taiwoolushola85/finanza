@@ -4,6 +4,7 @@ include('../config/db.php') ;
 $id = $_POST['id'];// user id
 $username = $_POST['us'];// username
 $password = $_POST['ps'];// password
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 // checking if login exist
 $Query = "SELECT * FROM users WHERE Username = '$username'";
 $result = mysqli_query($con, $Query);
@@ -13,7 +14,7 @@ echo 1;
 exit();
 }
 // updating login info
-$Query = "UPDATE users SET Username = '$username', Password = '$password' WHERE id = '$id'";
+$Query = "UPDATE users SET Username = '$username', Password = '$hashedPassword' WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 if($result == true){
 echo 2;

@@ -4,7 +4,7 @@ include '../config/db.php';
 include '../config/user_session.php';
 $id = trim($_POST['id']);// reg id
 $remark = $_POST['remark'];// 
-$name = $_POST['name'];// 
+$name = $_POST['nam'];// 
 $bvn = $_POST['bvn'];// 
 // other info
 $d = date('Y-m-d');// date
@@ -16,7 +16,7 @@ $result= mysqli_query($con, $sql);
 if($result == true){
 echo 1;
 //
-$Query = "UPDATE register SET Status = 'Pending', Verification_Status = 'Verified', Verified_By = '$na', Date_Verified = '$d', Stage = '2' WHERE id = '$id'";
+$Query = "UPDATE register SET Status = 'Pending', Verification_Status = 'Verified', Verified_By = '$na', Date_Verified = '$d' WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 }else{
 echo("Error description: " . mysqli_error($con));

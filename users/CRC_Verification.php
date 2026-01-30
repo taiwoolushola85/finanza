@@ -60,7 +60,7 @@
 <h5 class="modal-title" id="exampleModalLabel">CRC DATA</h5>
 </div>
 <div class="modal-body">
-<button id="downloadPdf" style="display:none; margin-bottom:15px; padding:8px 15px; background:#FF8C00; color:#fff; border:none; cursor:pointer;">
+<button hidden id="downloadPdf" style="display:none; margin-bottom:15px; padding:8px 15px; background:#FF8C00; color:#fff; border:none; cursor:pointer;">
 Download as PDF
 </button>
 <div id="result"></div>
@@ -108,20 +108,6 @@ $("#loaders").hide();
 </script>
 
 
-
-<script>
-$(document).on('click', '#downloadPdf', function () {
-var element = document.getElementById('pdfContent');
-var opt = {
-margin: 0.5,
-filename: 'CRC_Report_' + new Date().getTime() + '.pdf',
-image: { type: 'jpeg', quality: 0.98 },
-html2canvas: { scale: 2, useCORS: true },
-jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-};
-html2pdf().set(opt).from(element).save();
-});
-</script>
 
 
 <?php include '../footer.php'; ?>

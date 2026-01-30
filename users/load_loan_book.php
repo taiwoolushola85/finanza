@@ -27,7 +27,7 @@ if ($search !== '') {
 $where .= "AND (
 BVN LIKE ? OR Account_Number LIKE ? OR Loan_Account_No LIKE ?
 OR Disbursement_No LIKE ? OR Transaction_id LIKE ?
-OR Savings_Account_No LIKE ? OR Unions LIKE ?
+OR Savings_Account_No LIKE ? OR Branch LIKE ?
 OR Firstname LIKE ? OR Middlename LIKE ? OR Lastname LIKE ?
 )
 AND Status != 'Disbursed'";
@@ -48,7 +48,7 @@ $stmt->close();
 
 /* ================= DATA QUERY ================= */
 $dataSql = "SELECT id, Loan_Account_No, Firstname, Middlename, Lastname, BVN, Product, Branch, Phone, Total_Loan, Paid, Total_Bal, Savings_Bal, Expected_Amount,
-Officer_Name, Maturity_Status, Date_Disbursed, Maturity_Date FROM repayments WHERE $where ORDER BY id ASC";
+Duration, Officer_Name, Maturity_Status, Date_Disbursed, Maturity_Date, Transaction_Date FROM repayments WHERE $where ORDER BY id ASC";
 
 $dataParams = $params;
 $dataTypes  = $types;
@@ -82,17 +82,7 @@ Total Record: <?php echo htmlspecialchars($total); ?>
 </small>
 </div>
 <div class="col-sm-2">
-<button type="button" class="btn btn-outline-primary btn-sm btn-flat w-100" onclick="tableToExcel()"><i class="fa fa-download"></i> Export Data Excel</button>
-<script type="text/javascript">
-function tableToExcel() {
-// Get the table element (adjust selector to match your table)
-let table = document.querySelector('table');
-// Convert table to workbook
-let workbook = XLSX.utils.table_to_book(table, {sheet: "Expired Loans"});
-// Generate Excel file and trigger download
-XLSX.writeFile(workbook, "loan_book.xlsx");
-}
-</script>
+<button class="btn btn-outline-primary btn-sm w-100" onclick="tableToCSV('Loan_Book.csv')">Download CSV</button>
 </div>
 </div>
 
@@ -100,12 +90,11 @@ XLSX.writeFile(workbook, "loan_book.xlsx");
 
 <?php if (empty($results) && !empty($search)): ?>
 <?php elseif (empty($results)): ?>
-<i class="fas fa-info-circle"></i> No records available at this time.
-<br><br>
+<i class="fas fa-info-circle" style="display:none;"> No records available at this time.</i>
 <?php endif; ?>
 
-<div id="table-container" style="height:340px;">
-<table id="expiredLoansTable" style="font-size: 8px;">
+<div id="table-container" style="height:330px;">
+<table id="reportTable" style="font-size: 8px;">
 <thead>
 <tr>
 <th style="font-size:8px">LOAN ACCT</th>
@@ -114,6 +103,7 @@ XLSX.writeFile(workbook, "loan_book.xlsx");
 <th style="font-size:8px">PHONE</th>
 <th style="font-size:8px">BRANCH</th>
 <th style="font-size:8px">PRODUCT</th>
+<th style="font-size:8px">TENURE</th>
 <th style="font-size:8px">TOTAL LOAN</th>
 <th style="font-size:8px">PAID</th>
 <th style="font-size:8px">OUTSTANDING</th>
@@ -139,6 +129,7 @@ $lastname = htmlspecialchars($member['Lastname'], ENT_QUOTES, 'UTF-8');
 $ph = htmlspecialchars($member['Phone'], ENT_QUOTES, 'UTF-8');
 $branch = htmlspecialchars($member['Branch'], ENT_QUOTES, 'UTF-8');
 $product = htmlspecialchars($member['Product'], ENT_QUOTES, 'UTF-8');
+$tenure = htmlspecialchars($member['Duration'], ENT_QUOTES, 'UTF-8');
 $totalloan = htmlspecialchars($member['Total_Loan'], ENT_QUOTES, 'UTF-8');
 $paid = htmlspecialchars($member['Paid'], ENT_QUOTES, 'UTF-8');
 $saving = htmlspecialchars($member['Savings_Bal'], ENT_QUOTES, 'UTF-8');
@@ -158,6 +149,7 @@ $id = (int)$member['id'];
 <td><?php echo $ph; ?></td>
 <td><?php echo $branch; ?></td>
 <td><?php echo $product; ?></td>
+<td><?php echo $tenure; ?></td>
 <td><?php echo number_format((float)$totalloan, 2); ?></td>
 <td><?php echo number_format((float)$paid, 2); ?></td>
 <td><?php echo number_format((float)$totalbal, 2); ?></td>
@@ -172,10 +164,28 @@ $id = (int)$member['id'];
 <?php
 }
 } else {
-echo '<tr><td colspan="20" style="text-align:center; font-size:10px; padding: 10px;">No matching records</td></tr>';
+echo '<tr><td colspan="20" style="text-align:center; font-size:11px;">No matching records</td></tr>';
 }
 ?>
 </tbody>
 </table>
 </div>
 
+
+<!-- ===================== CSV SCRIPT ===================== -->
+<script>
+function tableToCSV(filename) {
+let csv = [];
+document.querySelectorAll("#reportTable tr").forEach(row => {
+let cols = row.querySelectorAll("th,td");
+let data = [];
+cols.forEach(col => data.push(col.innerText.replace(/,/g,'')));
+csv.push(data.join(","));
+});
+let blob = new Blob([csv.join("\n")], { type: "text/csv" });
+let a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = filename;
+a.click();
+}
+</script>

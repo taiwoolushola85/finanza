@@ -19,7 +19,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 include '../config/db.php';
-
+//
 $result = mysqli_query($con, "SELECT id, BVN, Firstname, Middlename, Lastname, Phone, Branch, Gender, Officer_Name, Date_Reg, Status FROM register
 WHERE BVN = '$bvn' ORDER BY id ASC") or die("Bad Query.");
 

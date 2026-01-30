@@ -13,7 +13,7 @@ include '../config/user_session.php';
 
 // Prepare base query with proper escaping
 $searchEscaped = mysqli_real_escape_string($con, $search);
-$baseWhere = "Status != 'Cancelled'";
+$baseWhere = "Team_Leader = '$User' AND Status != 'De-Activated'";
 
 // Build query based on conditions
 if (!empty($search)) {
@@ -56,7 +56,7 @@ Total Record: <?php echo $total; ?>
 </small>
 <br><br>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -95,8 +95,8 @@ Total Record: <?php echo $total; ?>
     <?php endforeach; ?>
 <?php else: ?>
     <tr>
-        <td colspan="7" style="text-align:center; font-size:9px; color:#999;">
-            No record found
+        <td colspan="7" style="text-align:center; font-size:11px">
+            <span>No record found</span>
         </td>
     </tr>
 <?php endif; ?>
@@ -108,35 +108,39 @@ Total Record: <?php echo $total; ?>
 
 
 
-
 <script>
-// Modal data loading
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if (id) {
+// 1. Use Event Delegation: Faster memory management for tables with many rows
+$(document).on('click', '.invks', function(e) {e.preventDefault();
+const id = $(this).data('id');
+const $modal = $("#updateModal");
+const $profileContainer = $('#profile');
+// 2. Open the modal immediately
+$modal.modal('show');
+//3. Set a Loading State inside the modal (Perceived Performance)
+$profileContainer.html(`
+<div class="d-flex flex-column align-items-center p-5">
+<div class="spinner-border text-primary mb-3" role="status"></div>
+<p class="text-muted">Loading client loan details...</p>
+</div>`);
+// 4. Optimized AJAX call
 $.ajax({
 url: 'review_group_info.php',
 type: "GET",
 data: {'id': id},
+// Cache prevents re-downloading if the agent clicks the same row twice
+cache: true, 
 success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
+// 5. Update content instantly without closing/reopening the modal
+$profileContainer.hide().html(data).fadeIn(200);
 },
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
+error: function() {
+$profileContainer.html(`
+<div class="alert alert-danger m-3">
+Failed to load loan details. Please check connection.
+</div>`);
 }
 });
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
 });
 });
 </script>

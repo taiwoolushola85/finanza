@@ -148,10 +148,6 @@ $("#result").html("<div class='alert alert-danger'>Failed to load customers.</di
 
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
 <div class="card">
 <div class="card-body">
 <div id="results"></div>
@@ -192,5 +188,6 @@ $('#results').html(data);
 
 }
 ?>
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

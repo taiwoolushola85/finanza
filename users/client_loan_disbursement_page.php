@@ -1,42 +1,161 @@
-
 <?php 
 include_once '../config/db.php';
-$id = $_GET['id']; // reg id
-// 
-$Query = "SELECT * FROM register WHERE id = '$id'";
-$result = mysqli_query($con, $Query);
-$row = mysqli_fetch_array($result);
+
+$id = intval($_GET['id']); // reg id
+
+// Register info
+$query = "SELECT * FROM register WHERE id = '$id'";
+$result = mysqli_query($con, $query);
+$row = mysqli_fetch_assoc($result);
 $regid = $row['id'];
-$reg_status = $row['Status'];
-$bvn = $row['BVN'];
-$upty = $row['Upfront_Types'];
-$la = $row['Loan_Amount'];
 $vrt = $row['Virtual_Account'];
-// gaurantor info
-$Query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
+$reg_status = $row['Status'];
+$un = $row['Unions'];
+$bvn = $row['BVN'];
+$pr = $row['Product_id'];
+$ten = $row['Tenure'];
+$frq = $row['Frequency'];
+$lum = $row['Loan_Amount'];
+$up = $row['Upfront'];
+$inss = $row['Inssurance'];
+$form = $row['Form'];
+$card = $row['Card'];
+$upty = $row['Upfront_Types'];
+
+
+// Guarantor info
+$query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
+$result = mysqli_query($con, $query);
+$rows = mysqli_fetch_assoc($result);
+$gid = $rows['id'];
+//
+
+$Query = "SELECT Rate, Inssurance FROM product_list WHERE Product_id='$pr' AND Tenure = '$ten'";
 $result = mysqli_query($con, $Query);
-$rows = mysqli_fetch_array($result);
-$id = $rows['id'];
+$data = mysqli_fetch_array($result);
+$ins = $data['Inssurance'];
+$rt = $data['Rate'];
+
+/*
+//
+if($frq == 'Daily'){
+// expected repayment
+// expected repayment
+$dd = $lum + 0; // the intererst is 0
+$dailyrep_amt = $lum / $ten;// repayment amt
+$dailyrnd_rep = round($dailyrep_amt);// rounding up repayment amt
+// total loan balance
+$dailyt_loan = $lum + 0;
+$dailyrnd_tloan = round($dailyt_loan);// rounding up total loan
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '0', Monthly_Interest = '0', Repayment_Amt = '$dailyrnd_rep', Total_Loan = '$dailyrnd_tloan'
+WHERE id = '$id'";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+
+
+}else{
+// interest
+// interest
+$rr = 100 / $rt;
+$in_amt = $lum / $rr;// interest amt
+$rnds_int = round($in_amt); /// rounding up interest amount
+// expected repayment
+$dd = $lum + $in_amt; 
+$rep_amt = $dd / $ten;// repayment amt
+$rnd_rep = round($rep_amt);// rounding up repayment amt
+// total loan balanceRepayment_Day
+$t_loan = $lum + $in_amt;
+$rnd_tloan = round($t_loan);// rounding up total loan
+$int_per_repayment = round($rnds_int/$ten);
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '$rnds_int', Monthly_Interest = '$int_per_repayment', Repayment_Amt = '$rnd_rep', 
+Total_Loan = '$rnd_tloan' WHERE id = '$id'";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+} 
+*/
 ?>
+
+<style>
+.section {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+}
+</style>
+
+
+<!-- BUTTONS -->
 <div class="row">
-<div class="col-sm-12" style="margin-top:10px;">
-<div style="overflow-x: auto;">
-<div class="btn-group">
-<button class="btn btn-light" onclick="clientDash()"><i class="fa fa-user"></i> Customer Profile</button>
-<button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
-<button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-briefcase"></i> Business Image</button>
-<button class="btn btn-light" onclick="updateLoan()"><i class="fa fa-plus"></i> Update Loan Amount</button>
-<button class="btn btn-light" onclick="updateCRC()"><i class="fa fa-file"></i> Customer CRC Data </button>
-<button class="btn btn-light" onclick="updateUpfront()"><i class="fa fa-money-bill"></i> Upfront Payment </button>
-<button class="btn btn-light" onclick="updateRemark()"><i class="fa fa-comment"></i> Remark/Coment</button>
-<button class="btn btn-light" onclick="updateDisburse()"><i class="fa fa-star"></i> Disbursement</button>
-</div>
-</div>
-<br>
-</div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('customer')">
+      <i class="fa fa-user"></i> Customer Profile
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('loan')">
+      <i class="fa fa-list"></i> Loan History
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('business')">
+      <i class="fa fa-image"></i> Business History
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+  <button class="btn btn-light w-100" onclick="showSection('upfront')">
+      <i class="fa fa-file"></i> Document
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+  <button class="btn btn-light w-100" onclick="showSection('repayment')">
+      <i class="fa fa-calendar"></i> Repayment Schedule
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('adjustment')">
+      <i class="fa fa-edit"></i> Loan Amount Adjustment
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('crc')">
+      <i class="fa fa-file"></i> CRC Record
+    </button>
+  </div>
+
+  <div class="col-sm-3 mt-2">
+    <button class="btn btn-light w-100" onclick="showSection('approval')">
+      <i class="fa fa-star"></i> Disbursement
+    </button>
+  </div>
+
 </div>
 
-<div id="firsts" style="display:block; font-size:12px">
+<!-- SECTIONS -->
+
+<div id="customer" class="section">
+
+<div id="firsts">
+
 <div class="row">
 <div class="col-sm-6">
 <br>
@@ -44,7 +163,21 @@ $id = $rows['id'];
 <br><br>
 <div class="card border-primary border border-dashed">
 <br>
-<img src="<?php echo $row['Location']; ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;">
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 <br>
 <div class="row">
 <div class="col-sm-6">
@@ -110,7 +243,22 @@ $id = $rows['id'];
 <br><br>
 <div class="card border-primary border border-dashed">
 <br>
-<img src="<?php echo $rows['Location']; ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;">
+
+<?php
+$img = $rows['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 <br>
 <div class="row">
 <div class="col-sm-6">
@@ -174,13 +322,12 @@ $id = $rows['id'];
 
 
 
-
-
 <div class="row">
 <div class="col-sm-6">
 
 <div class="card border-primary border border-dashed">
 <br>
+<div id="myDiv">
 <div class="row">
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Principal Amt:</b> <?php echo number_format($row['Loan_Amount'],2); ?></span>
@@ -197,6 +344,7 @@ $id = $rows['id'];
 <span style="margin-left:8px;"><b>Total Loan:</b> <?php echo number_format($row['Total_Loan'],2); ?></span>
 </div>
 </div>
+</div>
 <div class="row">
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Bank:</b> <?php echo $row['Bank']; ?></span>
@@ -206,8 +354,11 @@ $id = $rows['id'];
 </div>
 </div>
 <div class="row">
-<div class="col-sm-12">
+<div class="col-sm-6">
 <span style="margin-left:8px;"><b>Account No:</b> <?php echo $row['Account_No']; ?></span>
+</div>
+<div class="col-sm-6">
+<span style="margin-left:8px;"><b>Interest Per Repayment:</b> <?php echo number_format($row['Monthly_Interest'],2); ?></span>
 </div>
 </div>
 <br>
@@ -230,7 +381,7 @@ $id = $rows['id'];
 <span style="margin-left:8px;"><b>Tenure:</b> <?php echo $row['Tenure']; ?></span>
 </div>
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Rate:</b> <?php echo $row['Rate']; ?></span>
+<span style="margin-left:8px;"><b>Total Rate:</b> <?php echo $row['Rate']; ?></span>
 </div>
 </div>
 <div class="row">
@@ -253,6 +404,8 @@ $id = $rows['id'];
 </div>
 
 </div>
+</div>
+
 </div>
 
 
@@ -283,108 +436,174 @@ $id = $rows['id'];
 </tbody>
 </table>
 </div>
-</div>
-</div>
 
 
 
-<div id="seconds" style="display:none;">
-<br><br>
-<b>CLIENT DOCUMENT REVIEW</b>
-<br><br>
-<b>Select client document to review</b>
-<br><br>
-<div class="row">
-<div class="col-sm-4">
-<label>Select Document</label>
-<input type="number" class="form-control for-control-sm" hidden id="regid" value="<?php echo $regid; ?>">
-<select class="form-control for-control-sm" id="document" oninput="getDocument()">
-<option value="">Select Option</option>
-<option value="Loan Form">Loan Form</option>
-<option value="Utility Bill">Utility Bill</option>
-<option value="ID Card">ID Card</option>
-<option value="KYC Form">KYC Form</option>
-<option value="Other Documents">Other Documents</option>
-</select>
-</div>
-</div>
-<br><br>
-<div id="documentview"></div>
 </div>
 
+<div id="loan" class="section">
+<h4>Loan History</h4>
+<div class="container-fluid mt-4">
+<!-- ================= SUMMARY DASHBOARD ================= -->
+<div class="row mb-4">
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Loans</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT count(*)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo $closed;
+?>
+</h3>
+</div>
+</div>
+</div>
 
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Loan Amount</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Loan_Amount)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Total Paid</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Paid)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
 
+<div class="col-md-3">
+<div class="card card-summary shadow-sm">
+<div class="card-body text-center">
+<h6>Outstanding</h6>
+<h3>
+<?php 
+include '../config/db.php';
+$sql = "SELECT SUM(Total_Bal)  AS overs FROM repayments WHERE BVN = '$bvn' AND Status != 'Cancelled'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$closed = $data['overs'];
+echo number_format($closed,2);
+?>
+</h3>
+</div>
+</div>
+</div>
 
+</div>
 
-<div id="crc" style="display:none;">
-<br><br>
-CRC REPORT
-<br><br>
+<!-- ================= LOAN HISTORY TABLE ================= -->
+
+<div id="table-container" style="height:280px;">
+<table>
+<thead>
+<tr style="font-size:8px">
+<th>LOAN ACCOUNT</th>
+<th>SAVING ACCOUNT</th>
+<th>BVN</th>
+<th>PRINCIPAL AMT</th>
+<th>OUTSTANDING</th>
+<th>STATUS</th>
+<th>DATE DISBURSED</th>
+<th>DATE CLOSED</th>
+</tr>
+</thead>
+<tbody>
 <?php 
 include '../config/db.php';
 //Get Transactions Details
-$Query = "SELECT id, Location FROM document WHERE Reg_ID = '$regid' ORDER BY id DESC LIMIT 1";
+$Query = "SELECT Loan_Account_No, Savings_Account_No, BVN, Loan_Amount, Total_Bal, Status, Date_Disbursed, Date_Closed FROM repayments 
+WHERE BVN='$bvn' ORDER BY Date_Disbursed ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
 $Available = true;
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
-$bn = $rows['id'];
-$crc = $rows['Location'];
+$bn = $rows['Loan_Account_No'];
+$saa = $rows['Savings_Account_No'];
+$bt = $rows['BVN'];
+$ses = $rows['Loan_Amount'];
+$bal = $rows['Total_Bal'];
+$sd = $rows['Status'];
+$cf = $rows['Date_Disbursed'];
+$ba = $rows['Date_Closed'];
 ?>
-<embed src="<?php echo $crc; ?>" type="application/pdf" width="100%" height="430px" />.
+<td><?php echo $bn; ?></td>
+<td><?php echo $saa; ?></td>
+<td><?php echo $bt; ?></td>
+<td><?php echo number_format($ses,2); ?></td>
+<td><?php echo number_format($bal,2); ?></td>
+<td><?php echo $sd; ?></td>
+<td><?php echo $cf; ?></td>
+<td><?php echo $ba; ?></td>
 </tr>
 <?php
 } 
 }else {
 //No Transaction History for the account
 $Available = false; 
-echo " No CRC Report Found  <br/> ";        
+echo " No Record Found  <br/> ";       
 }
 ?>
+</tbody>
+</table>
+</div>
+</div>
 
 </div>
 
 
 
-<div id="loan" style="display:none;">
-<br><br>
-<b>UPDATE PRINCIPAL AMOUNT</b>
-<br><br>
-<form action="" method="POST" enctype="multipart/form-data" id="uploadAmt">
-<div class="col-sm-4">
-<label><i style="color:red">*</i> Loan Amount</label>
-<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $row['id']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="pr" value="<?php echo $row['Product_id']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="ten" value="<?php echo $row['Tenure']; ?>" required>
-<input type="number" class="form-control form-control-md" name="lum" value="<?php echo $row['Loan_Amount']; ?>" required placeholder="Enter Principal Amount">
+
 </div>
+
+<div id="business" class="section">
+
+<h4>Business History</h4>
+
+<br>
 <br>
 <div class="row">
-<div class="col-sm-2">
-<button type="submit" class="d-block btn btn-outline-info btn-sm"> Update Amount</button>
+<div class="col-6">
+<span style="color: #FF8C00;"><input type="checkbox" id="crcCheck"> New Upload</span>
 </div>
-<div class="col-sm-10">
-<i style="display:none" id="wait"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Principal Amount.! Please wait..</i>
-<i style="color: green; display:none" id="prin"><i class="fa fa-check"></i> Principal Amount Updated..</i>
+<div class="col-6">
+<span style="color:orangered"> <input type="checkbox" id="expCheck"> Previous Upload</span>
 </div>
-</div>
-</div>
-</form>
 </div>
 
-<div id="fourth" style="display:none;">
-<br><br>
-<b>CLIENT DOCUMENT REVIEW</b>
-<br><br>
-
-</div>
-
-
-<div id="thirds" style="display:none;">
-<br><br>
-<b>BUSINESS IMAGE</b><br><br>
+<br>
+<br>
+<div style="height:300px; overflow-y:auto; overflow-x:hidden;">
+<div style="display:none;" id="upload">
 
 <div class="row">
 <?php 
@@ -405,374 +624,101 @@ $lmm = $rows['Status'];
 $img = $rows['F_Image'];
 ?>
 <div class="col-sm-4">
-<img src="<?php echo $img?>" class="d-block w-100" alt="..." style="height:50vh; margin:10px">
+<?php
+$img = $rows['F_Image'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" class="d-block w-100" style="height:50vh; margin:10px;" onerror="this.src='../assets/no-image.png';">
 </div>
 <?php
 }
 }else {
 //No Transaction History for the account
 $Available = false; 
-echo "<span style='color:red'>No Business Image Uploaded...  </span> ";       
+echo "<span style='color:red'>No New Business Image Uploaded...  </span> ";       
 }
 ?>
 </div>
 </div>
 
-<div id="fifth" style="display:none;">
+<div style="display:none;" id="exp">
 
 <div class="row">
-<div class="col-sm-3" style="margin-top:10px;">
-<form action="" method="POST" enctype="multipart/form-data" id="uploadUpfront">
-<div style="width:250px">
-<label style="font-size:13px"><i style="color:red">*</i> Upfront Payment Mode</label>
-<input type="number" class="form-control form-control-md" name="id" value="<?php echo $regid; ?>" hidden required="required">
-<select type="text" class="form-control form-control-md" name="type" required="required">
-<option value="<?php echo $row['Upfront_Types']; ?>"><?php echo $row['Upfront_Types']; ?></option>
-<option value="Deduction">Deduction</option>
-<option value="Virtual Payment">Virtual Payment</option>
-<option value="Monie Point Payment">Monie Point Payment</option>
-<option value="Saving For Upfront">Saving For Upfront</option>
-</select>
-</div>
-<br>
-<div class="row">
-<div class="col-sm-5" style="margin-top:10px;">
-<button type="submit" class="btn btn-info btn-sm">Change Mode</button>
-</form>
-</div>
-<div class="col-sm-7" style="margin-top:10px;">
-<i style="display:none" id="up"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Payment Mode.! Please wait..</i>
-<i style="color: green; display:none" id="update"><i class="fa fa-check"></i> Upfront Payment Mode Updated..</i>
-</div>
-</div>
-</div>
-
-
-<br>
-<div id="checks">
-<div class="row">
-<div class="col-sm-3">
-<div id="mode">
-<b>Payment Mode:</b>
 <?php 
-echo $row['Upfront_Types'];
-?>
-</div>
-</div>
-<div class="col-sm-2">
-<b>Virtual Acct:</b>
-<span>
-<?php 
-echo $row['Virtual_Account'];
-?>
-</span>
-</div>
-<div class="col-sm-2">
-<b>Loan Amount:</b>
-<span>
-<?php 
-echo number_format($row['Loan_Amount'],2);
-?>
-</span>
-</div>
-<div class="col-sm-2">
-<b>Upfront Amt:</b>
-<span>
-<?php 
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($fee,2);
-?>
-</span>
-</div>
-<div class="col-sm-2">
-<b>Amt To Disburse:</b>
-<span>
-<?php 
-if($row['Upfront_Types'] == 'Deduction'){
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($row['Loan_Amount'] - $fee,2);
-}else{
-echo number_format($row['Loan_Amount'],2);
-}
-?>
-</span>
-</div>
-</div>
-</div>
-<hr>
-
-
-
-<div class="col-sm-12" style="margin-top:10px;">
-<div id="check">
-<?php 
-if($row['Upfront_Types'] == 'Deduction' ){
-echo "<i>Upfront payment need to be remove from the principal amount</i>";
-}else if($row['Upfront_Types'] == 'Virtual Payment'){
-?>
-<span>Virtual Payment History</span>
-
-
-
-
-<?php 
-}else if($row['Upfront_Types'] == 'Monie Point Payment'){
-?>
-
-
-
-<table style="font-size:9px;">
-<thead>
-<tr>
-<th style="font-size:8px">PAYMENT ID</th>
-<th style="font-size:8px">UPFRONT</th>
-<th style="font-size:8px">INSSURANCE</th>
-<th style="font-size:8px">FORM</th>
-<th style="font-size:8px">CARD</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">RECIEPT</th>
-<th style="font-size:8px">ACTION</th>
-</tr>
-</thead>
-<tbody>
-<?php
-include('../config/db.php');
-$d = date('Y-m-d');
-//Get branch Details
-$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' ORDER BY id ASC";
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT * FROM verify WHERE Bvn ='$bvn' ORDER BY id DESC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
+$Available = true;
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
-$feeid= $rows['id'];
-$regg_id= $rows['Reg_id'];
-$up = $rows['Upfront'];
-$in = $rows['Inssurance'];
-$form = $rows['Form'];
-$card = $rows['Card'];
-$status = $rows['Reciept_Status'];
-$reci = $rows['Reciept'];
+$vid = $rows['id'];
+$bn = $rows['Reg_id'];
+$bt = $rows['Bvn'];
+$ses = $rows['Comment_By'];
+$lmm = $rows['Status'];
+$img = $rows['F_Image'];
 ?>
-<tr style="font-size: 9px">
-<td  style="font-size:9px"><?php echo $feeid; ?></td>
-<td  style="font-size:9px"><?php echo number_format($up,2); ?></td>
-<td  style="font-size:9px"><?php echo number_format($in,2); ?></td>
-<td  style="font-size:9px"><?php echo number_format($form,2); ?></td>
-<td  style="font-size:9px"><?php echo number_format($card,2); ?></td>
-<td  style="font-size:9px"><?php echo $status; ?></td>
-<td  style="font-size:9px"><a href="#" class = "invk" data-toggle="modal" data-target="#recieptdata" id="<?php echo $feeid; ?>">
-<i class="fa fa-eye"></i> View Reciept</a></td>
-<td  style="font-size:9px"><a href="#" class = "inv" id="<?php echo $regg_id; ?>" style="color:green;"><i class="fa fa-check"></i> Confirm Payment</a></td>
-</tr>
-<?php  
+<div class="col-sm-4">
+<?php
+$img = $rows['F_Image'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" class="d-block w-100" style="height:50vh; margin:10px;" onerror="this.src='../assets/no-image.png';">
+</div>
+<?php
 }
 }else {
-//$Available = false; 
-echo"<small> No Record Found  </small> ";       
-}
-?>
-</tbody>
-</table>
-
-
-
-<?php 
-}else if($row['Upfront_Types'] == 'Saving For Upfront'){
-?>
-
-<span>Deduct Saving For Upfront</span>
-<hr>
-<div class="row">
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Select Savings Acct No</label>
-<select type="text" class="form-control form-control-md" name="sav" required>
-<option value="">Select Account</option>
-<?php 
-include '../config/db.php';
-$Query = "SELECT id, Savings_Account_No FROM savings WHERE Client_BVN='$bvn' AND Status = 'Active' ORDER BY id ASC";
-$result = mysqli_query($con, $Query);
-$Count = mysqli_num_rows($result);
-if ($Count > 0) {
-for ($j=0 ; $j < $Count; $j++){
-$rows = mysqli_fetch_array($result);
-$nx= $rows['id']; // id
-$name= $rows['Savings_Account_No'];
-?>
-<option value="<?php echo $nx; ?>"><?php echo $name; ?></option>
-<?php
-}
-}
-?>
-</select>
-</div>
-<div class="col-sm-4">
-<label style="font-size:13px"><i style="color:red">*</i> Amount To Deduct</label>
-<input type="text" class="form-control form-control-sm" name="amt" hidden value="<?php echo $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form']; ?>" required>
-<input type="text" class="form-control form-control-sm" disabled value="<?php echo $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form']; ?>" required>
-</div>
-</div>
-<br>
-<button type="submit" class="btn btn-primary btn-sm">Confirm & Upload</button>
-
-
-<?php
-}else{
-echo "Invalid Payment Mode";
+//No Transaction History for the account
+$Available = false; 
+echo "<span style='color:red'>No previous Business Image Uploaded...  </span> ";       
 }
 ?>
 </div>
 
 </div>
 
+
+
+
+
 </div>
 
-<br>
+</div>
+
+
+</div>
+
+<div id="repayment" class="section">
+<h4>Repayment Schedule</h4>
 <br>
 
-</div>
-
-
-<div id="sixth" style="display:none;">
-
-<div class="col-xl-12 col-xxl-12 col-sm-12">
-<div class="d-flex justify-content-between align-items-center">
-<h5 class="card-title mb-0">Recent Comment</h5>
-</div>
-<div>
-<div class="px-4 mx-n4 simplebar-scrollable-y" data-simplebar="init" style="max-height:350px;">
-<div class="simplebar-wrapper" style="margin: 0px -16px;">
-<div class="simplebar-height-auto-observer-wrapper">
-<div class="simplebar-height-auto-observer"></div>
-</div>
-<div class="simplebar-mask">
-<div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;">
-<div class="simplebar-content" style="padding: 0px 16px;">
-<div class="timeline">
-<?php 
-include '../config/db.php';
-$Query = "SELECT Comment, Comment_By, User_Role, Date_Comment, Time_Comment FROM comment WHERE Reg_No = '$regid' ORDER BY id ASC";
-$result = mysqli_query($con, $Query);
-$Count = mysqli_num_rows($result);
-if ($Count > 0) {
-for ($j=0 ; $j < $Count; $j++){
-$rows = mysqli_fetch_array($result);
-?>
-<div class="timeline-item">
-<div class="timeline-pin">
-<i class="marker marker-circle text-info"></i>
-</div>
-<p class="rich-list-title text-muted lh-lg">
-<strong class="text-body"><?php echo $rows['Comment_By']; ?>:</strong>
-<a href="#!" class="text-body fw-medium">Comment:</a> <?php echo $rows['Comment']; ?><br>
-<span class="badge badge-label-info">[ <?php echo $rows['User_Role']; ?> ]</span>.
-</p>
-<span class="rich-list-subtitle mb-2"><?php echo $rows['Date_Comment']; ?> <a href="#!"><?php echo $rows['Time_Comment']; ?></a></span>
-</div>
-
-<?php
-}
-}
-?>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="simplebar-placeholder" style="width: 920px; height: 437px;">
-</div>
-</div>
-<div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-<div class="simplebar-scrollbar" style="width: 0px; display: none;">
-</div>
-</div>
-<div class="simplebar-track simplebar-vertical" style="visibility: visible;">
-<div class="simplebar-scrollbar" style="height: 335px; transform: translate3d(0px, 47px, 0px); display: block;"></div>
-</div>
-</div>
-</div>
-</div>
-
-</div>
 
 
 
-<div id="disburse" style="display:none;">
-<div id="page">
-<br>
-<div class="row">
-<div class="col-sm-4">
-<b>Loan Disbursement</b>
-</div>
-<div class="col-sm-4">
-
-</div>
-<div class="col-sm-4">
-<b>Amt To Disburse:</b>
-<span>
-<?php 
-if($upty == 'Deduction'){
-$fee = $row['Upfront'] + $row['Inssurance'] + $row['Card'] + $row['Form'];
-echo number_format($row['Loan_Amount'] - $fee,2);
-}else{
-echo number_format($la,2);
-}
-?>
-</span>
-</div>
-</div>
-<br><br>
-<form action="" method="POST" enctype="multipart/form-data" id="approveLoan">
-<div class="row">
-<div  class="col-sm-6">
-<small>Loan Account No [From Germini]</small>
-<input type="text" class="form-control form-control-md" name="id" hidden value="<?php echo $regid; ?>" required>
-<input type="text" class="form-control form-control-md" name="bv" hidden value="<?php echo $bvn; ?>" required>
-<input type="text" class="form-control form-control-md" name="vrt" hidden value="<?php echo $vrt; ?>" required>
-<input type="number" class="form-control form-control-md" name="lon" placeholder="Enter Loan Account No" required>
-</div>
-<div  class="col-sm-6">
-<small>Disbursement No [From Germini]</small>
-<input type="number" class="form-control form-control-md" name="dis" placeholder="Enter Disbursement No" required>
-</div>
-</div>
-<div id="disbtn">
-<hr>
-<?php 
-if($upty == "Deduction"){
-?>
-<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()" id="save">Disburse Loan</button>
-<?php 
-}else{
-?>
-<?php 
-include '../config/db.php';
-$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' AND Reciept_Status = 'Reciept Confirmed'";
-$result = mysqli_query($con, $Query);
-$row = mysqli_num_rows($result);
-if($row != 0){
-?>
-<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()" id="save">Disburse Loan</button>
-<?php 
-}else{
-?>
-<b style="color:red;">Upfront payment need to be confirm by you before disbursing the loan</b>
-<?php
-}
-?>
-<?php
-}
-?>
-</div>
-</div>
-
-</form>
-<hr>
-
-
-<b class="fa fa-table"> Client Repayment Schedule Table</b>
 <br><br>
 <b style="font-size:11px">
 <?php 
@@ -786,7 +732,7 @@ $over = $data['overs'];
 Total Record: <?php echo $over; ?>
 </b>
 <br><br>
-<div style="overflow-x: auto; height:200px">
+<div style="overflow-x: auto; height:300px">
 <table style="font-size:9px;">
 <thead>
 <tr>
@@ -840,16 +786,283 @@ $classname="oddRow";
 }
 }else {
 //$Available = false; 
-echo"<small> No Record Found  </small> ";       
+//echo"<small> No Record Found  </small> ";       
 }
 ?>
 </tbody>
 </table>
+</div>
+
+
+
 
 
 </div>
 
+<div id="upfront" class="section" >
 
+
+
+<h4>Document</h4>
+<div style="overflow-x:auto; height:380px">
+
+<div class="row">
+<?php 
+include '../config/db.php';
+//Get Transactions Details
+$Query = "SELECT Location FROM document WHERE BVN = '$bvn' ORDER BY id ASC ";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+$Available = true;
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$vid = $doc['Location'];
+?>
+<div class="col-sm-4">
+<?php
+$img = $doc['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" class="d-block w-100" style="height:50vh; margin:10px;" onerror="this.src='../assets/no-image.png';">
+</div>
+<?php
+}
+}else {
+//No Transaction History for the account
+$Available = false; 
+echo "<span style='color:red'>No document Image Uploaded...  </span> ";       
+}
+?>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+<div id="adjustment" class="section">
+<h4>Loan Amount Adjustment</h4>
+
+<br><br>
+<form action="" method="POST" enctype="multipart/form-data" id="uploadAmt">
+<div class="col-sm-4">
+<label><i style="color:red">*</i> Loan Amount</label>
+<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $row['id']; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="pr" value="<?php echo $row['Product_id']; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="ten" value="<?php echo $row['Tenure']; ?>" required>
+<input type="number" class="form-control form-control-md" name="lum" value="<?php echo $row['Loan_Amount']; ?>" required placeholder="Enter Principal Amount">
+</div>
+<br>
+<div class="row">
+<div class="col-sm-2">
+<button type="submit" class="d-block btn btn-outline-info btn-sm"> Update Amount</button>
+</div>
+<div class="col-sm-10">
+<i style="display:none" id="waits"><i class="fa fa-refresh"></i><img src="../loader/loader.gif" style="height:18px">  Updating Principal Amount.! Please wait..</i>
+<i style="color: green; display:none" id="prin"><i class="fa fa-check"></i> Principal Amount Updated..</i>
+</div>
+</div>
+</div>
+</form>
+
+</div>
+
+<div id="crc" class="section">
+<h4>CRC Record</h4>
+<br>
+<br>
+<?php 
+if($row['Approval_Type'] == 'CRC Approval'){
+?>
+<?php 
+include '../config/db.php';
+// Get CRC document
+$query = "SELECT id, Location FROM document WHERE Reg_ID = '$regid' AND Type = 'CRC Document' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $query);
+
+if (mysqli_num_rows($result) > 0) {
+$row = mysqli_fetch_assoc($result);
+$crc = $row['Location'];
+// Determine correct path
+if (!empty($crc)) {
+if (strpos($crc, '../') === 0) {
+$crcPath = $crc;
+} else {
+$crcPath = '../' . $crc;
+}
+} else {
+$crcPath = '';
+}
+if (!empty($crcPath)) {
+?>
+<embed src="<?= htmlspecialchars($crcPath) ?>" type="application/pdf" width="100%" height="430px">
+<?php
+} else {
+echo "No CRC Report Found<br>";
+}
+} else {
+echo "No CRC Report Found<br>";
+}
+?>
+
+
+
+<?php 
+}else if ($row['Approval_Type'] == 'Exceptional Approval'){
+?>
+
+<span>Approval Status:</span> <b style="color:chocolate"><?php echo $row['Approval_Type']; ?></b>
+<br>
+<?php 
+include '../config/db.php';
+//
+$Query = "SELECT * FROM reason WHERE RegNo='$regid'";
+$result = mysqli_query($con, $Query);
+$row = mysqli_fetch_array($result);
+$reason = $row['Reason'];
+$reason_by = $row['Stated_By'];
+$reason_bvn = $row['BVN_ID'];
+?>
+<hr>
+<b>Reason:</b> <?php echo $reason; ?><br>
+<b>Stated By:</b> <?php echo $reason_by; ?><br>
+
+<?php 
+}else{
+?>
+
+
+<?php 
+include '../config/db.php';
+// Get CRC document
+$query = "SELECT id, Location FROM document WHERE Reg_ID = '$regid' AND Type = 'CRC Document' ORDER BY id DESC LIMIT 1";
+$result = mysqli_query($con, $query);
+
+if (mysqli_num_rows($result) > 0) {
+$row = mysqli_fetch_assoc($result);
+$crc = $row['Location'];
+// Determine correct path
+if (!empty($crc)) {
+if (strpos($crc, '../') === 0) {
+$crcPath = $crc;
+} else {
+$crcPath = '../' . $crc;
+}
+} else {
+$crcPath = '';
+}
+if (!empty($crcPath)) {
+?>
+<embed src="<?= htmlspecialchars($crcPath) ?>" type="application/pdf" width="100%" height="430px">
+<?php
+} else {
+echo "No CRC Report Found<br>";
+}
+} else {
+echo "No CRC Report Found<br>";
+}
+?>
+
+
+<?php
+}
+?>
+
+
+
+</div>
+
+<div id="approval" class="section">
+<h4>Disbursement</h4>
+
+<br>
+<div class="row">
+<div class="col-sm-4">
+<b>Principal Amount:</b>
+<?php echo number_format($lum,2); ?>
+</div>
+<div class="col-sm-4">
+<b>Total Upfront:</b>
+<span>
+<?php echo number_format($up + $inss + $form + $card,2); ?>
+</span>
+</div>
+<div class="col-sm-4">
+<b>Amt To Disburse:</b>
+<span>
+<?php 
+if($upty == 'Deduction'){
+$fee = $up + $inss + $form + $card;
+echo number_format($lum - $fee,2);
+}else{
+echo number_format($lum,2);
+}
+?>
+</span>
+</div>
+</div>
+<br><br>
+<form action="" method="POST" enctype="multipart/form-data" id="approveLoan">
+<div class="row">
+<div  class="col-sm-6">
+<small>Loan Account No [From Germini]</small>
+<input type="text" class="form-control form-control-md" name="id" hidden value="<?php echo $regid; ?>" required>
+<input type="text" class="form-control form-control-md" name="bv" hidden value="<?php echo $bvn; ?>" required>
+<input type="text" class="form-control form-control-md" name="vrt" hidden value="<?php echo $vrt; ?>" required>
+<input type="number" class="form-control form-control-md" name="lon" placeholder="Enter Loan Account No" required>
+</div>
+<div  class="col-sm-6">
+<small>Disbursement No [From Germini]</small>
+<input type="number" class="form-control form-control-md" name="dis" placeholder="Enter Disbursement No" required>
+</div>
+</div>
+<div id="disbtn">
+<hr>
+<?php 
+if($upty == "Deduction"){
+?>
+<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()" id="save">Disburse Loan</button>
+<?php 
+}else{
+?>
+<?php 
+include '../config/db.php';
+$Query = "SELECT * FROM fee WHERE Reg_id = '$regid' AND Reciept_Status = 'Reciept Confirmed'";
+$result = mysqli_query($con, $Query);
+$row = mysqli_num_rows($result);
+if($row != 0){
+?>
+<button type="submit" class="btn btn-outline-success btn-sm" onclick="data()" id="save">Disburse Loan</button>
+<?php 
+}else{
+?>
+<b style="color:red;">Upfront payment need to be confirm by you before disbursing the loan</b>
+<?php
+}
+?>
+<?php
+}
+?>
+</div>
+
+
+</form>
+<hr>
 
 <br>
 <div class="row">
@@ -875,70 +1088,73 @@ echo"<small> No Record Found  </small> ";
 </div>
 </div>
 
+</div>
 
+<!-- JAVASCRIPT -->
+<script>
+function showSection(sectionId) {
+  // hide all
+  document.querySelectorAll('.section').forEach(div => {
+    div.style.display = 'none';
+  });
 
+  // show selected
+  document.getElementById(sectionId).style.display = 'block';
+}
 
-
-
+// default view
+document.getElementById('customer').style.display = 'block';
+</script>
 
 
 
 
 <script>
-// to show data on a modal box
-$(document).ready(function() {
-$('.invk').on('click', function() {
-var recID = $(this).attr('id');
-if(recID) {
-$("#recieptdata").modal('show');
-$.ajax({
-url: 'upfront_reciept.php',
-type: "POST",
-data: {'id':recID},
-dataType: "json",
-success:function(data) {
-$('#recp').val(data.recieptLocation);
-$("#recp").attr("src",data.recieptLocation);
+$(document).ready(function () {
+$('#crcCheck').on('change', function () {
+if (this.checked) {
+// Uncheck other checkbox
+$('#expCheck').prop('checked', false);
+// Show CRC section, hide Exceptional
+$('#upload').slideDown();
+$('#exp').slideUp();
+} else {
+$('#upload').slideUp();
 }
 });
-}else{
 
+$('#expCheck').on('change', function () {
+if (this.checked) {
+// Uncheck other checkbox
+$('#crcCheck').prop('checked', false);
+// Show Exceptional section, hide CRC
+$('#exp').slideDown();
+$('#upload').slideUp();
+} else {
+$('#exp').slideUp();
 }
 });
 });
 </script>
 
-
-
-<script>
-// confirming upfront fee payment
-$(document).ready(function() {
-$('.inv').on('click', function() {
-WRN_PROFILE_DELETE = "You are about to disburse this customer loan application..";
-var checked = confirm(WRN_PROFILE_DELETE);
-if(checked == true) {
-var recID = $(this).attr('id');
-if(recID) {
-$.ajax({
-url: 'confirm_upfront.php',
-type: "POST",
-data: {'id':recID},
-success:function(data) {
-if(data == 1){
-$("#check").load( "client_loan_disbursement_page.php?id=<?php echo $regid; ?> #check" );// 
-$("#disbtn").load( "client_loan_disbursement_page.php?id=<?php echo $regid; ?> #disbtn" );// 
-}else{
-alert(data);
-}
-}
-});
-}else{
-
-}
-}
-});
+<script type="text/javascript">
+$(document).ready(function(){
+setTimeout(function(){
+///alert(data)
+$("#myDiv").load( "client_loan_disbursement_page.php?id=<?php echo $id; ?> #myDiv" );// 
+$("#amt").load( "client_loan_disbursement_page.php?id=<?php echo $id; ?> #amt" );// 
+//$("#hey").html(data);
+}, 100);
+// ajax function ends here
 });
 </script>
+
+
+
+
+
+
+
 
 <script>
 var load = function(event) {
@@ -1215,10 +1431,53 @@ error: function(){
 
 
 
+
+<script type="text/javascript">
+$(document).ready(function (e){
+$("#goBack").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to disburse this customer loan application..";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+$("#updateModal").modal('hide');
+$("#please").show();
+$.ajax({
+url: "loan_bck.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
+if(data == 1){
+setTimeout(function(){
+$("#please").hide();
+$("#toasts").show();
+loads();
+}, 4000);
+setTimeout(function(){
+$("#please").hide();
+$("#toasts").hide();
+}, 7000);
+}else{
+$("#please").hide();
+alert ("🚫" + data);
+}
+},
+error: function(){
+}
+});
+}
+}));
+});
+</script>
+
+
+
+
 <script type="text/javascript">
 $(document).ready(function (e){
 $("#declineLoan").on('submit',(function(e){ e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to decline this loan application..";
+WRN_PROFILE_DELETE = "You are about to reverse this loan application..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#updateModal").modal('hide');

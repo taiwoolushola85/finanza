@@ -148,9 +148,6 @@ $('#result').html(data);
 </script>
 
 
-
-
-
-
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

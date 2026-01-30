@@ -12,6 +12,12 @@ $result= mysqli_query($con, $Query);
 //
 $Query = "DELETE FROM comment WHERE Reg_No = '$id'";
 $result= mysqli_query($con, $Query);
+//
+$Query = "DELETE FROM document WHERE Reg_ID = '$id'";
+$result= mysqli_query($con, $Query);
+//
+$Query = "DELETE FROM reason WHERE RegNO = '$id'";
+$result= mysqli_query($con, $Query);
 if($result == true){
 echo 1;
 }else{

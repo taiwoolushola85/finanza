@@ -109,7 +109,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-xl" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-dialog-centered modal-xl" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">APPLICATION PROFILE</h5>
@@ -223,5 +223,9 @@ $('#result').html(data);
 });
 }
 </script> 
+<br>
+<br>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <?php include '../footer.php'; ?>

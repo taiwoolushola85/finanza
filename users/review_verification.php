@@ -6,30 +6,55 @@ $Query = "SELECT * FROM register WHERE id = '$id'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $regid = $row['id'];
+$name = $row['Firstname']." ".$row['Middlename']." ".$row['Lastname'];
 $reg_status = $row['Status'];
 $bvn = $row['BVN'];
+$loan_amt = $row['Loan_Amount'];
+$prid = $row['Product_id'];
+$ten = $row['Tenure'];
 // gaurantor info
 $Query = "SELECT * FROM gaurantors WHERE Regis_id = '$regid'";
 $result = mysqli_query($con, $Query);
 $rows = mysqli_fetch_array($result);
-$id = $rows['id'];
+$gid = $rows['id'];
 ?>
 <center>
-<img src="<?php echo $row['Location']; ?>" style="height:100px; width:100px; border-radius:50px">
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:100px; width:100px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
+<br>
 <br><br>
-<div style="overflow-x: auto;">
-<div class="btn-group">
-<button class="btn btn-light" onclick="clientDash()"><i class="fa fa-user"></i> Loan Profile</button>
-<button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-eye"></i> Review Document</button>
-<button class="btn btn-light" onclick="updateCRC()"><i class="fa fa-file"></i> CRC Report</button>
-<button class="btn btn-light" onclick="updateVerification()"><i class="fa fa-upload"></i> Upload Business Img</button>
-<button class="btn btn-light" onclick="updateApprove()"><i class="fa fa-star"></i> Remark/Comment </button>
+<div class="row">
+<div class="col-sm-3" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="clientDash()"><i class="fa fa-user"></i> Customer Info</button>
+</div>
+<button class="btn btn-light w-100" onclick="updateDoc()" style="display:none;"><i class="fa fa-eye"></i> Review Document</button>
+<div class="col-sm-3" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateCRC()"><i class="fa fa-file"></i> CRC Report</button>
+</div>
+<div class="col-sm-3" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateVerification()"><i class="fa fa-upload"></i> Upload Business Img</button>
+</div>
+<div class="col-sm-3" style="margin-top: 10px;">
+<button class="btn btn-light w-100" onclick="updateApprove()"><i class="fa fa-star"></i> Remark/Comment </button>
 </div>
 </div>
 </center>
 
 <div id="firsts" style="display:block;">
-<div class="row">
+<div class="row" style="font-size:11px;">
 <div class="col-sm-6">
 <br><br>
 <b><i class="fa fa-star"></i> CLIENT INFO</b>
@@ -38,7 +63,7 @@ $id = $rows['id'];
 <br>
 <div class="row">
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Firstname']." ". $row['Middlename']." ".$row['Lastname']; ?></span>
+<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Firstname']." ".$row['Lastname']; ?></span>
 </div>
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Phone:</b> <?php echo $row['Phone']; ?></span>
@@ -102,7 +127,7 @@ $id = $rows['id'];
 <br>
 <div class="row">
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Name:</b> <?php echo $rows['Firstname']." ".$rows['Middlename']." ".$rows['Lastname']; ?></span>
+<span style="margin-left:8px;"><b>Name:</b> <?php echo $rows['Firstname']." ".$rows['Lastname']; ?></span>
 </div>
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Phone:</b>  <?php echo $rows['Phone']; ?></span>
@@ -162,7 +187,7 @@ $id = $rows['id'];
 
 
 
-<div class="row">
+<div class="row" style="font-size:11px;">
 <div class="col-sm-6">
 
 <div class="card border-primary border border-dashed">
@@ -188,12 +213,12 @@ $id = $rows['id'];
 <span style="margin-left:8px;"><b>Bank:</b> <?php echo $row['Bank']; ?></span>
 </div>
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Account Name:</b> <?php echo $row['Account_Name']; ?></span>
+<span style="margin-left:8px;"><b>Acct Name:</b> <?php echo $row['Account_Name']; ?></span>
 </div>
 </div>
 <div class="row">
 <div class="col-sm-12">
-<span style="margin-left:8px;"><b>Account No:</b> <?php echo $row['Account_No']; ?></span>
+<span style="margin-left:8px;"><b>Acct No:</b> <?php echo $row['Account_No']; ?></span>
 </div>
 </div>
 <br>
@@ -245,7 +270,7 @@ $id = $rows['id'];
 <br>
 <b><i class="fa fa-star"></i> BUSINESS INFO</b>
 <br><br>
-<div>
+<div class="table-responsive">
 <table>
 <thead>
 <tr>
@@ -288,7 +313,7 @@ $id = $rows['id'];
 <option value="Loan Form">Loan Form</option>
 <option value="Utility Bill">Utility Bill</option>
 <option value="ID Card">ID Card</option>
-<option value="Other Documents">Other Documents</option>
+<option value="Other Document">Other Documents</option>
 </select>
 </div>
 </div>
@@ -297,21 +322,30 @@ $id = $rows['id'];
 </div>
 
 <div id="thirds" style="display:none;">
-<br><br>
 <b>BUSINESS VERIFICATION</b><br><br>
 <maquee> <b style="color: red">Note: </b>You are to capture 3 business image and upload before approving the loan</maquee><hr>
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
 <div id="upload" style="display: block;">
 <div class="row">
 <div class="col-12 col-sm-12 col-md-12" style="margin-top: 10px;">
-<div id="image"><img id="outver" width="270" height="270" style="border-radius:10px"/></div>
-<span><i style="color:red">*</i> Select Image</span>
+<div id="image"><img id="outver" style="border-radius:10px; width:1200; height:400" class="img-thumbnail"/></div><br>
+<div id="count">
+<?php 
+include '../config/db.php';
+// 
+$sql = "SELECT COUNT(*) AS overs FROM verify WHERE Reg_id = '$regid'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$total = $data['overs'];
+?>
+<span><i style="color:red">*</i> Select Image</span> <i style="margin-left:12px">[ You have uploaded <?php echo $total; ?> out of 3 ]</i>
+</div>
 <input type="text" hidden name="id" required="required" value="<?php echo $regid; ?>">
 <input type="file" class="form-control" name="Pic" required="required" onchange="loadver(event)" style="margin-top:10px; width:250px">
 </div>
 </div><br>
 <div class="row">
-<div class="col-sm-2">
+<div class="col-sm-3">
 <button type="submit" class="btn btn-outline-success btn-sm"  onclick="data()">Upload Business Image</button>
 </form>
 </div>
@@ -331,6 +365,9 @@ $id = $rows['id'];
 <br><br>
 CRC REPORT
 <br><br>
+<?php 
+if($row['Approval_Type'] == 'CRC Approval'){
+?>
 <?php 
 include '../config/db.php';
 //Get Transactions Details
@@ -352,6 +389,38 @@ $crc = $rows['Location'];
 //No Transaction History for the account
 $Available = false; 
 echo " No CRC Report Found  <br/> ";        
+}
+?>
+
+
+<?php 
+}else{
+?>
+
+<span>Approval Status:</span> <b style="color:chocolate"><?php echo $row['Approval_Type']; ?></b>
+<br>
+<?php 
+include '../config/db.php';
+//
+$Query = "SELECT * FROM reason WHERE RegNo='$regid'";
+$result = mysqli_query($con, $Query);
+$row = mysqli_fetch_array($result);
+$reason = $row['Reason'];
+$reason_by = $row['Stated_By'];
+$reason_bvn = $row['BVN_ID'];
+?>
+<hr>
+<b>Reason:</b> <?php echo $reason; ?><br>
+<b>Stated By:</b> <?php echo $reason_by; ?><br>
+
+
+
+
+
+
+
+
+<?php 
 }
 ?>
 
@@ -400,25 +469,42 @@ echo " No CRC Report Found  <br/> ";
 <div class="row">
 <div class="col-sm-12">
 <label>Remark/Comment</label>
-<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $row['id']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="bvn" value="<?php echo $row['BVN']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="name" value="<?php echo $row['Firstname']." ".$row['Middlename']." ".$row['Lastname']; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $regid; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="bvn" value="<?php echo $bvn; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="nam" value="<?php echo $name ?>" required>
 <textarea class="form-control form-control-sm" name="remark" cols="8" rows="8" required placeholder="type here...."></textarea>
 </div>
 </div>
 <br>
 <div class="row">
-<div class="col-sm-3">
+<div class="col-sm-6">
+<div id="chk">
+<?php 
+include '../config/db.php';
+// checking the number verification
+$sql = "SELECT COUNT(*) AS overs FROM verify WHERE Reg_id = '$regid'";
+$result=mysqli_query($con,$sql);
+$data=mysqli_fetch_assoc($result);
+$over = $data['overs'];
+if($over == 3){
+?>
 <div class="d-grid gap-2">
-<button type="submit" class="d-block btn btn-outline-success btn-sm"><i class="fa fa-check"></i> Submit & Proceed</button>
+<button type="submit" class="d-block btn btn-outline-success btn-sm w-100"><i class="fa fa-check"></i> Submit & Proceed</button>
+</div>
+<?php
+}else{
+echo "<i style='color:red'>Client verification is required before you approve this loan application</i>";
+}
+?>
+
 </div>
 </form>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-6">
 <form action="" method="POST" enctype="multipart/form-data" id="deleteApp">
 <input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $row['id']; ?>" required>
 <div class="d-grid gap-2">
-<button type="submit" class="d-block btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> Delete Application</button>
+<button type="submit" class="d-block btn btn-outline-danger btn-sm w-100"><i class="fa fa-trash"></i> Delete Application</button>
 </div>
 </form>
 </div>
@@ -435,11 +521,11 @@ echo " No CRC Report Found  <br/> ";
 <form action="" method="POST" enctype="multipart/form-data" id="uploadAmt">
 <div class="col-sm-4">
 <label><i style="color:red">*</i> Loan Amount</label>
-<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $row['id']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="pr" value="<?php echo $row['Product_id']; ?>" required>
-<input type="text" class="form-control form-control-md" hidden name="ten" value="<?php echo $row['Tenure']; ?>" required>
-<input type="text" hidden class="form-control form-control-md" name="amt" value="<?php echo $row['Loan_Amount']; ?>" required>
-<input type="number" class="form-control form-control-md" name="lum" value="<?php echo $row['Loan_Amount']; ?>" required placeholder="Enter Principal Amount">
+<input type="text" class="form-control form-control-md" hidden name="id" value="<?php echo $regid; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="pr" value="<?php echo $prid; ?>" required>
+<input type="text" class="form-control form-control-md" hidden name="ten" value="<?php echo $ten; ?>" required>
+<input type="text" hidden class="form-control form-control-md" name="amt" value="<?php echo $loan_amt ; ?>" required>
+<input type="number" class="form-control form-control-md" name="lum" value="<?php echo $loan_amt ; ?>" required placeholder="Enter Principal Amount">
 </div>
 <br>
 <div class="row">
@@ -551,6 +637,25 @@ $('#documentview').html(data);
 
 
 <script type="text/javascript">
+$(document).ready(function(){
+setTimeout(function(){
+// ajax function start here to load table data
+$.ajax({
+method: "POST",
+url: "vo_auto_interest.php?id=<?php echo $id; ?>",
+dataType: "html",
+success:function(data){
+///alert(data)
+$("#firsts").load( "review_verification.php?id=<?php echo $id; ?> #firsts" );// 
+//$("#hey").html(data);
+}
+});
+}, 100);
+// ajax function ends here
+});
+</script>
+
+<script type="text/javascript">
 $(document).ready(function (e){
 $("#uploadForm").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to upload this client business image ..";
@@ -584,6 +689,7 @@ $("#image").load( "review_verification.php?id=<?php echo $id; ?> #image" );//
 $("#please").hide();
 $("#toat").css("display", "block");
 $("#toat").show();
+$("#count").load( "review_verification.php?id=<?php echo $id; ?> #count" );// 
 }, 3000);
 setTimeout(function(){
 $("#updateModal").modal('show');
@@ -678,12 +784,12 @@ if(data == 1){
 setTimeout(function(){
 $("#please").hide();
 $("#toatver").show();
-}, 5000);
+load();
+}, 4000);
 setTimeout(function(){
 $("#please").hide();
-load();
 $("#toatver").hide();
-}, 9000);
+}, 6000);
 }else{
 $("#please").hide();
 alert ("🚫" + data);

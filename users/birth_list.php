@@ -38,17 +38,17 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr style="font-size:10px;">
-<th class="sort border-top border-translucent ps-3">Image</th>
-<th class="sort border-top">Name</th>
-<th class="sort border-top">Gender</th>
-<th class="sort border-top">Phone</th>
-<th class="sort border-top">Branch</th>
-<th class="sort border-top">Day</th>
-<th class="sort border-top">Months</th>
+<th>Image</th>
+<th >Name</th>
+<th >Gender</th>
+<th >Phone</th>
+<th >Branch</th>
+<th >Day</th>
+<th >Months</th>
 </tr>
 </thead>
 <tbody>
@@ -59,15 +59,15 @@ $json = json_decode($data);
 foreach($json as $member){
 ?>
 <tr style="font-size:10px;">
-<td class="sort border-top border-translucent ps-3">
+<td>
 <img src=" <?php echo $member->Location?>" style="height:30px; width: 30px; border-radius:30px">
 </td>
-<td class="sort border-top"><?php echo $member->Firstname." ".$member->Middlename." ".$member->Lastname?></td>
-<td class="sort border-top"><?php echo $member->Gender?></td>
-<td class="sort border-top"><?php echo $member->Phone?></td>
-<td class="sort border-top"><?php echo $member->Branch?></td>
-<td class="sort border-top"><?php echo date("d", strtotime($member->Years))?></td>
-<td class="sort border-top"><?php echo $member->Birthday_Month?></td>
+<td><?php echo $member->Firstname." ".$member->Middlename." ".$member->Lastname?></td>
+<td><?php echo $member->Gender?></td>
+<td><?php echo $member->Phone?></td>
+<td><?php echo $member->Branch?></td>
+<td><?php echo date("d", strtotime($member->Years))?></td>
+<td><?php echo $member->Birthday_Month?></td>
 </tr>
 <?php
 }

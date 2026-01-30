@@ -59,7 +59,7 @@ $row = mysqli_fetch_array($result);
 <input  class="form-control" hidden required="required" name="id" value="<?php echo $row['id']; ?>" required>
 <input  class="form-control" hidden required="required" name="us" value="<?php echo $row['Username']; ?>" required>
 <input  class="form-control" hidden required="required" name="bck" value="<?php echo $bck; ?>" required>
-<input type="password" class="form-control" name="ps" placeholder="********">
+<input type="password" class="form-control" name="pass" placeholder="********">
 </div>
 <div>
 </div>

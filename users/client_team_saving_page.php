@@ -27,7 +27,7 @@ $up = $reg['Upfront'];
 ?>
 
 <center>
-<img src="<?php echo $rows['Location']; ?>" alt="Header Avatar" class="img-fluid" style=" height:120px; width:120px; border-radius:100px">
+<img src="<?php echo $rows['Location']; ?>" class="img-fluid" style=" height:120px; width:120px; border-radius:100px">
 <br><br>
 <span style="font-size:15px; text-transform:capitalize">[ <?php echo $rows['Firstname']." ".$rows['Middlename']." ".$rows['Lastname']; ?> ] </span>
 <br><br>

@@ -22,10 +22,6 @@ $height = $size[1];
 //echo "$width x $height";
 $imgsize=filesize($ImageName);
 //if image is less than 75KB
-if($imgsize > 1895674){
-echo("Error description: " . mysqli_error($con));
-exit();
-}
 $path = "../business/" .$id."".$Image_Name;
 if(move_uploaded_file($ImageName,$path)){
 //

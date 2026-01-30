@@ -93,10 +93,28 @@ $users = $row['Username'];
 <form action="" method="post" id="updateUser">
 <div class="row">
 <div class="form-group col-md-6">
-<label class="form-label" for="fname">Upload Image:</label>
+<label class="form-label" for="fname">Branch:</label>
 <input type="text" class="form-control" name="id" placeholder="id" hidden value="<?php echo $row['id']; ?>" required="required">
 <input type="text" class="form-control" name="gr" placeholder="User Group" hidden value="<?php echo $row['User_Group']; ?>" required="required">
-<input type="file" class="form-control" name="Pic" onchange="loadUp(event)" value="<?php echo $row['Location']; ?>" required="required">
+<select class="selectpicker form-control" name="br" required="required">
+<option value="<?php echo $row['Branch_id']; ?>" ><?php echo $row['Branch']; ?> </option>
+<?php
+include '../config/db.php';
+$Query = "SELECT  * FROM branch ORDER BY Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$bri= $rows['id'];
+$name= $rows['Name'];
+?>
+<option value="<?php echo $bri; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
 </div>
 <div class="form-group col-md-6">
 <label class="form-label" for="lname">Name:</label>
@@ -132,30 +150,6 @@ $users = $row['Username'];
 </div>
 </div>
 
-<div class="row">
-<div class="form-group col-md-12">
-<label class="form-label">Branch:</label>
-<select class="selectpicker form-control" name="br" required="required">
-<option value="<?php echo $row['Branch_id']; ?>" ><?php echo $row['Branch']; ?> </option>
-<?php
-include '../config/db.php';
-$Query = "SELECT  * FROM branch ORDER BY Name ASC";
-$result = mysqli_query($con, $Query);
-$Count = mysqli_num_rows($result);
-if ($Count > 0) {
-for ($j=0 ; $j < $Count; $j++){
-$rows = mysqli_fetch_array($result);
-$bri= $rows['id'];
-$name= $rows['Name'];
-?>
-<option value="<?php echo $bri; ?>"><?php echo $name; ?></option>
-<?php
-}
-}
-?>
-</select>
-</div>
-</div>
 <br>
 <div class="row">
 <div class="col-sm-3">

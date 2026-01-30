@@ -80,7 +80,21 @@ $bals = ($pmd - $pmw - $pmr - $pmtr - $pmu)  + $pmc;
 <div class="row">
 <div class="col-sm-3">
 <div class="d-flex flex-column align-items-center text-center">
-<img src="<?php echo $loc; ?>"  class="rounded-circle" width="120" height="120px">
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?php echo $imgPath; ?>"  class="rounded-circle" width="120" height="120px">
 <div class="mt-3">
 <h4><b><?php echo $nam; ?></b></h4>
 <p class="text-secondary mb-1"><?php echo $pr; ?> </p>
@@ -769,7 +783,7 @@ error: function(){
 
 <script type="text/javascript">
 $(document).ready(function (e){
-$("#loanClosed").on('submit',(function(e){ e.preventDefault();
+$("#loanReverse").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to reverse this customer loan!!?";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {

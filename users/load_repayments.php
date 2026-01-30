@@ -249,6 +249,7 @@ contentType: false,
 cache: false, 
 processData:false,
 success: function(data){ 
+$("#please").hide();
 $('#updateForm')[0].reset();
 load();
 if(data==1){
@@ -282,10 +283,7 @@ $("#please").hide();
 alert(" 🚫 This customer currently has a saving posted waiting for approval. Please check..");
 }else if(data==20){
 $("#please").hide();
-alert(" 🚫 Do not enter zero for repayments amount, instead leave the field empty");
-}else if(data==21){
-$("#please").hide();
-alert(" 🚫 Do not enter zero for savings amount, instead leave the field empty");
+alert(" 🚫 Please enter the customer repayment amount and saving amout to proceed.. ");
 }else if(data==14){
 $("#please").hide();
 alert(" 🚫 You are not allowed to post only saving on the system, Please contact IT for further clarification.");

@@ -2,7 +2,8 @@
 include '../config/db.php';
 $id = $_POST['id'];// admin id
 $us = $_POST['us'];// admin username
-$pw = $_POST['pw'];// admin new password
+$password = $_POST['pw'];// admin new password
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 // admin image upload
 $imagenameg = $_FILES['Pic']['name'];
 $sourceg = $_FILES['Pic']['tmp_name'];
@@ -30,7 +31,7 @@ if ($infog['mime'] == 'image/jpeg'){
 imagecopyresampled($tng, $imageg, 0, 0, 0, 0, $width, $height, $width, $height);
 imagejpeg($tng, $saveg, 40);
 
-$Query = "UPDATE users SET Username='$us', Password = '$pw', Location= '$pathxg' WHERE id='$id'";
+$Query = "UPDATE users SET Username='$us', Password = '$hashedPassword', Location= '$pathxg' WHERE id='$id'";
 $result= mysqli_query($con, $Query);
 if($result){
 echo 1;

@@ -193,7 +193,7 @@ $('#list').html(data);
 function loads()  {
 $.ajax({
 method: "POST",
-url: "team_list.php",
+url: "recovery_list.php",
 dataType: "html",
 success:function(data){
 setTimeout(function(){
@@ -205,7 +205,6 @@ $('#list').html(data);
 </script> 
 
 
-
-
-
+<br>
+<br>
 <?php include "../footer.php"; ?>

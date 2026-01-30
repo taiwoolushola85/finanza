@@ -55,7 +55,7 @@ $total = $row['total'];
 mysqli_stmt_close($stmt);
 
 // Data query with Frequency field added
-$dataQuery = "SELECT id, Loan_Account_No, Firstname, Lastname, Middlename, Product, Branch, Phone,
+$dataQuery = "SELECT id, Loan_Account_No, Firstname, Lastname, Middlename, Product, Branch, Phone, BVN,
     Total_Loan, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, Officer_Name,
     Status, Total_Bal, Duration, Frequency, Savings_Bal, Disbursement_No 
     FROM repayments WHERE $whereClause ORDER BY Firstname ASC";
@@ -107,6 +107,7 @@ while($row = mysqli_fetch_assoc($result)) {
     $tenureRemain = 0;
     $expectedDueAmt = 0;
     $overdueDays = 0;
+    $missedRepayments = 0; // New field for missed payment count
 
     if ($dateDisbursed && $maturityDate) {
         try {
@@ -124,11 +125,14 @@ while($row = mysqli_fetch_assoc($result)) {
                     $overdueAmt = max(0, $expectedDueAmt - $paid);
                     if ($overdueAmt > 0) {
                         $overdueDays = round($overdueAmt / $expectedAmt);
+                        // Missed repayments = number of payment periods missed
+                        $missedRepayments = ceil($overdueAmt / $expectedAmt);
                     }
                 } else {
                     $expectedDueAmt = $row['Total_Loan'];
                     $overdueAmt = $totalBal;
                     $overdueDays = round($totalBal / $expectedAmt);
+                    $missedRepayments = ceil($totalBal / $expectedAmt);
                     $tenureRemain = 0;
                 }
                 
@@ -141,18 +145,22 @@ while($row = mysqli_fetch_assoc($result)) {
                     $expectedDueAmt = 0;
                     $overdueAmt = 0;
                     $overdueDays = 0;
+                    $missedRepayments = 0;
                 } elseif ($duration > $tenureUsed) {
                     $expectedDueAmt = $expectedAmt * $tenureUsed;
                     $overdueAmt = max(0, $expectedDueAmt - $paid);
                     if ($overdueAmt > 0) {
                         // Convert weeks to days for overdue period
                         $overdueDays = round(($overdueAmt / $expectedAmt) * 7);
+                        // Missed repayments in weeks
+                        $missedRepayments = ceil($overdueAmt / $expectedAmt);
                     }
                 } else {
                     $expectedDueAmt = $row['Total_Loan'];
                     $overdueAmt = $totalBal;
                     // Convert weeks to days for overdue period
                     $overdueDays = round(($totalBal / $expectedAmt) * 7);
+                    $missedRepayments = ceil($totalBal / $expectedAmt);
                     $tenureRemain = 0;
                 }
                 
@@ -165,18 +173,22 @@ while($row = mysqli_fetch_assoc($result)) {
                     $expectedDueAmt = 0;
                     $overdueAmt = 0;
                     $overdueDays = 0;
+                    $missedRepayments = 0;
                 } elseif ($duration > $tenureUsed) {
                     $expectedDueAmt = $expectedAmt * $tenureUsed;
                     $overdueAmt = max(0, $expectedDueAmt - $paid);
                     if ($overdueAmt > 0) {
                         // Convert months to days for overdue period
                         $overdueDays = round(($overdueAmt / $expectedAmt) * 30);
+                        // Missed repayments in months
+                        $missedRepayments = ceil($overdueAmt / $expectedAmt);
                     }
                 } else {
                     $expectedDueAmt = $row['Total_Loan'];
                     $overdueAmt = $totalBal;
                     // Convert months to days for overdue period
                     $overdueDays = round(($totalBal / $expectedAmt) * 30);
+                    $missedRepayments = ceil($totalBal / $expectedAmt);
                     $tenureRemain = 0;
                 }
             }
@@ -204,6 +216,7 @@ while($row = mysqli_fetch_assoc($result)) {
             $overdueAmt  = 0;
             $daysOverdue = 0;
             $tenureUsed = 0;
+            $missedRepayments = 0;
         }
     }
 
@@ -213,6 +226,7 @@ while($row = mysqli_fetch_assoc($result)) {
     $row['Tenure_Remain'] = $tenureRemain;
     $row['Expected_Due_Amount'] = round($expectedDueAmt, 2);
     $row['Overdue_Days_Count'] = $overdueDays;
+    $row['Missed_Repayments'] = $missedRepayments; // Add missed repayments to result
     $row['Repayment_Percent'] = $row['Total_Loan'] > 0 ? round(($paid / $row['Total_Loan']) * 100) : 0;
     
     $totalOverdue += $row['Overdue_Amount'];
@@ -275,12 +289,13 @@ mysqli_close($con);
 </div>
 <?php endif; ?>
 
-<div id="table-container" style="height:360px;">
+<div id="table-container" style="height:330px;">
 <table id="expiredLoansTable" style="font-size: 8px;">
 <thead>
 <tr>
                 <th>DISBURSEMENT NO</th>
                 <th>LOAN ACCT</th>
+                <th>BVN</th>
                 <th>NAME</th>
                 <th>BRANCH</th>
                 <th>PHONE</th>
@@ -298,6 +313,7 @@ mysqli_close($con);
                 <th>OVERDUE AMT</th>
                 <th>OVERDUE DAY</th>
                 <th>DAYS PAST DUE</th>
+                <th>MISSED REPAYMENTS</th>
                 <th>PAR STATUS</th>
                 <th>CREDIT OFFICER</th>
                 <th>DATE DISBURSED</th>
@@ -311,6 +327,7 @@ mysqli_close($con);
             foreach($results as $member) {
                 $disbursementNo = htmlspecialchars($member['Disbursement_No'] ?? '', ENT_QUOTES, 'UTF-8');
                 $loanAcct = htmlspecialchars($member['Loan_Account_No'] ?? '', ENT_QUOTES, 'UTF-8');
+                $bvn = htmlspecialchars($member['BVN'] ?? '', ENT_QUOTES, 'UTF-8');
                 $firstname = htmlspecialchars($member['Firstname'] ?? '', ENT_QUOTES, 'UTF-8');
                 $middlename = htmlspecialchars($member['Middlename'] ?? '', ENT_QUOTES, 'UTF-8');
                 $lastname = htmlspecialchars($member['Lastname'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -329,6 +346,7 @@ mysqli_close($con);
                 $overdueamt = (float)($member['Overdue_Amount'] ?? 0);
                 $expectedDueAmt = (float)($member['Expected_Due_Amount'] ?? 0);
                 $overdueDaysCount = (int)($member['Overdue_Days_Count'] ?? 0);
+                $missedRepayments = (int)($member['Missed_Repayments'] ?? 0);
                 $repaymentPercent = (int)($member['Repayment_Percent'] ?? 0);
                 $datedisburse = htmlspecialchars($member['Date_Disbursed'] ?? '', ENT_QUOTES, 'UTF-8');
                 $maturitydate = htmlspecialchars($member['Maturity_Date'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -366,10 +384,12 @@ mysqli_close($con);
                 }
 
                 $frequencyLabel = $frequency == 'Daily' ? 'Days' : ($frequency == 'Weekly' ? 'Weeks' : 'Months');
+                $missedLabel = $frequency == 'Daily' ? 'Day(s)' : ($frequency == 'Weekly' ? 'Week(s)' : 'Month(s)');
         ?>
                 <tr <?php echo $overdueClass; ?>>
                     <td><?php echo $disbursementNo; ?></td>
                     <td><?php echo $loanAcct; ?></td>
+                    <td><?php echo $bvn; ?></td>
                     <td style="text-transform:capitalize"><?php echo trim("$firstname $middlename $lastname"); ?></td>
                     <td><?php echo $branch; ?></td>
                     <td><?php echo $ph; ?></td>
@@ -387,6 +407,15 @@ mysqli_close($con);
                     <td><strong style="color: #d9534f; background: #ffe6e6; padding: 2px 6px; border-radius: 3px;"><?php echo number_format($overdueamt, 2); ?></strong></td>
                     <td><?php echo $overdueDaysCount . ' days'; ?></td>
                     <td><strong><?php echo $daysOverdue; ?> days</strong></td>
+                    <td>
+                        <?php if ($missedRepayments > 0): ?>
+                            <strong style="color: #fff; background: #dc3545; padding: 3px 8px; border-radius: 3px; font-size: 9px;">
+                                <?php echo $missedRepayments . ' ' . $missedLabel; ?>
+                            </strong>
+                        <?php else: ?>
+                            <span style="color: #28a745; font-weight: 600;">0</span>
+                        <?php endif; ?>
+                    </td>
                     <td><span style="background: <?php echo $parColor; ?>; color: white; padding: 3px 8px; border-radius: 3px; font-weight: 600; font-size: 9px;"><?php echo $parStatus; ?></span></td>
                     <td><?php echo $ofn; ?></td>
                     <td><?php echo !empty($datedisburse) ? date('d-M-Y', strtotime($datedisburse)) : 'N/A'; ?></td>
@@ -404,7 +433,7 @@ mysqli_close($con);
         <?php
             }
         } else {
-            echo '<tr><td colspan="20" style="text-align:center;  color: #6c757d;">No overdue loan records found</td></tr>';
+            echo '<tr><td colspan="31" style="text-align:center; ">No overdue loan records found</td></tr>';
         }
         ?>
         </tbody>

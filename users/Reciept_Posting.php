@@ -57,7 +57,7 @@ if($gr == 'Loan Officers'){
 include '../config/db.php';
 // sanitize $user only AFTER it is available
 $user_safe = mysqli_real_escape_string($con, $user); 
-$Query = "SELECT id, Name FROM groups WHERE User = ? AND Status = 'Activated' ORDER BY id ASC";
+$Query = "SELECT id, Name FROM groups WHERE User = ? AND Status = 'Activated' ORDER BY Name ASC";
 $stmt = mysqli_prepare($con, $Query);
 mysqli_stmt_bind_param($stmt, "s", $user_safe);
 mysqli_stmt_execute($stmt);
@@ -186,5 +186,5 @@ $('#results').html(data);
 
 }
 ?>
-
+<br><br>
 <?php include '../footer.php'; ?>

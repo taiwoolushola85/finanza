@@ -31,32 +31,37 @@ $flesid = $rows['id'];
 ?>
 
 
+<div class="row">
+<div class="col-sm-3">
 <center>
-<img src="<?php echo $row['Location']; ?>" style="height:150px; width:150px; border-radius:100px;">
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:150px; width:150px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
+<br>
 </center>
 <br>
-<div class="bd-example">
-<nav>
-<div class="mb-3 nav nav-tabs nav-iconly gap-3" id="nav-tab" role="tablist">
-<button class="nav-link active" id="pro-nav-home-tab" data-bs-toggle="tab" data-bs-target="#pro-nav-home" type="button" role="tab" aria-controls="pro-nav-home" aria-selected="true">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M17.294 7.29105C17.294 10.2281 14.9391 12.5831 12 12.5831C9.0619 12.5831 6.70601 10.2281 6.70601 7.29105C6.70601 4.35402 9.0619 2 12 2C14.9391 2 17.294 4.35402 17.294 7.29105ZM12 22C7.66237 22 4 21.295 4 18.575C4 15.8539 7.68538 15.1739 12 15.1739C16.3386 15.1739 20 15.8789 20 18.599C20 21.32 16.3146 22 12 22Z" fill="currentColor" />
-</svg>
-Client Info
-</button>
-<button class="nav-link" id="pro-nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pro-nav-profile" type="button" role="tab" aria-controls="pro-nav-profile" aria-selected="false">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M17.7689 8.3818H22C22 4.98459 19.9644 3 16.5156 3H7.48444C4.03556 3 2 4.98459 2 8.33847V15.6615C2 19.0154 4.03556 21 7.48444 21H16.5156C19.9644 21 22 19.0154 22 15.6615V15.3495H17.7689C15.8052 15.3495 14.2133 13.7975 14.2133 11.883C14.2133 9.96849 15.8052 8.41647 17.7689 8.41647V8.3818ZM17.7689 9.87241H21.2533C21.6657 9.87241 22 10.1983 22 10.6004V13.131C21.9952 13.5311 21.6637 13.8543 21.2533 13.8589H17.8489C16.8548 13.872 15.9855 13.2084 15.76 12.2643C15.6471 11.6783 15.8056 11.0736 16.1931 10.6122C16.5805 10.1509 17.1573 9.88007 17.7689 9.87241ZM17.92 12.533H18.2489C18.6711 12.533 19.0133 12.1993 19.0133 11.7877C19.0133 11.3761 18.6711 11.0424 18.2489 11.0424H17.92C17.7181 11.0401 17.5236 11.1166 17.38 11.255C17.2364 11.3934 17.1555 11.5821 17.1556 11.779C17.1555 12.1921 17.4964 12.5282 17.92 12.533ZM6.73778 8.3818H12.3822C12.8044 8.3818 13.1467 8.04812 13.1467 7.63649C13.1467 7.22487 12.8044 6.89119 12.3822 6.89119H6.73778C6.31903 6.89116 5.9782 7.2196 5.97333 7.62783C5.97331 8.04087 6.31415 8.37705 6.73778 8.3818Z" fill="currentColor" />
-</svg>
-Savings Info
-</button>
+<button class="btn btn-light btn-sm w-100" onclick="myDash()" style="margin-top:8px">Dashboard</button>
+<button class="btn btn-light btn-sm w-100" onclick="myHistory()" style="margin-top:8px">Payment History</button>
+<button class="btn btn-light btn-sm w-100" onclick="myWith()" style="margin-top:8px">Withdraw Savings</button>
 </div>
-</nav>
-<div class="tab-content iq-tab-fade-up" id="simple-tab-content">
-<div class="tab-pane  active" id="pro-nav-home" role="tabpanel" aria-labelledby="pro-nav-home-tab">
-<div style="font-size: 12px; text-transform:capitalize">
-<div >
-<div id="myPage">
+<div class="col-sm-9">
+<div id="dash" style="display:block">
+<b>DASHBOARD</b>
+<br>
+<br>
+<br>
 <div class="row">
 <div class="col-sm-6">
 <div class="card border-primary border border-dashed">
@@ -87,10 +92,10 @@ Savings Info
 </div>
 <div class="row">
 <div class="col-sm-6">
-<small style="margin-left:8px;"><b>Next Of Kin:</b> <?php echo $rows['NOK_Surname']." ".$rows['NOK_Firstname']." ".$rows['NOK_Othername']; ?></small>
+<small style="margin-left:8px;"><b>N-O-K:</b> <?php echo $rows['NOK_Surname']." ".$rows['NOK_Firstname']." ".$rows['NOK_Othername']; ?></small>
 </div>
 <div class="col-sm-6">
-<small style="margin-left:8px;"><b>Next Of Kin Phone:</b> <?php echo $rows['NOK_Phone'];; ?></small>
+<small style="margin-left:8px;"><b>N-O-K Phone:</b> <?php echo $rows['NOK_Phone'];; ?></small>
 </div>
 </div>
 <div class="row">
@@ -100,14 +105,14 @@ Savings Info
 </div>
 <br>
 </div>
-</div>
 
+</div>
 <div class="col-sm-6">
 <div class="card border-primary border border-dashed">
 <br>
 <div class="row">
 <div class="col-sm-6">
-<small style="margin-left:8px;"><b>Saving Plan:</b> <?php echo $rows['Plan']; ?></small>
+<small style="margin-left:8px;"><b>Plan:</b> <?php echo $rows['Plan']; ?></small>
 </div>
 <div class="col-6">
 <small style="margin-left:8px;"><b>Duration:</b> <?php echo $rows['Duration']; ?></small>
@@ -123,7 +128,7 @@ Savings Info
 </div>
 <div class="row">
 <div class="col-sm-6">
-<span id="mydiv" style="margin-left:8px;"><b>Total Balance:</b> <?php echo number_format($tot,2); ?></span>
+<span style="margin-left:8px;"><b>Total Balance:</b> <span id="mydiv"><?php echo number_format($tot,2); ?></span></span>
 </div>
 <div class="col-sm-6">
 <small style="margin-left:8px;"><b>Date Start:</b> <?php echo $row['Date_Start'];; ?></small>
@@ -151,169 +156,19 @@ echo $msg; ?></small>
 </div>
 <br>
 </div>
+
 </div>
 </div>
+
+
+
+
+
 </div>
-
-
-
-
-<div id="myDIV" style="display:none">
+<div id="his" style="display:none">
+<b>PAYMENT HISTORY</b>
 <br>
 <br>
-<span><b>Savings Withdrawal Form</b></span><br><br>
-<form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
-<div class="row">
-<div class="col-sm-3">
-<input type="text" name="id" class="form-control" hidden value="<?php echo $id;?>" required="required">
-<input type="text" name="bal" class="form-control" hidden value="<?php echo $tot;?>" required="required">
-<label>Amount</label>
-<input type="number" class="form-control" placeholder="Amount" name="amt"  required="required">
-</div>
-<div class="col-sm-3">
-<label>Account Name</label>
-<input type="text" class="form-control" placeholder="Account Name" name="actname"  required="required">
-</div>
-<div class="col-sm-3">
-<label>Account No</label>
-<input type="number" class="form-control" placeholder="Account No" name="acct"  required="required">
-</div>
-<div class="col-sm-3">
-<label>Bank</label>
-<select type="text" class="form-control form-control-md" name="bnk" required="required">
-<option value="">Select Bank</option>
-<?php 
-include '../config/db.php';
-$Query = "SELECT id, Bank_Name FROM bank ORDER BY Bank_Name ASC";
-$result = mysqli_query($con, $Query);
-$Count = mysqli_num_rows($result);
-if ($Count > 0) {
-for ($j=0 ; $j < $Count; $j++){
-$rows = mysqli_fetch_array($result);
-$pp= $rows['id']; // product id
-$name= $rows['Bank_Name'];// product
-?>
-<option value="<?php echo $name; ?>"><?php echo $name; ?></option>
-<?php
-}
-}
-?>
-</select>
-</div>
-</div><br>
-<label>Reason for Withdrawal</label>
-<textarea class="form-control" rows="3" name="reason" placeholder="Type withdrawal reason here....." required="required"></textarea>
-<br>
-<button type="submit" class="btn btn-primary btn-sm" onclick="data()" >Send Withdrawal Request</button>
-</form>
-</div>
-
-
-<div id="myDep" style="display:none">
-<span><b>Savings Deposit Form</b></span><hr>
-<form action="" method="POST" enctype="multipart/form-data" id="uploadDeposit">
-<div class="row">
-<div class="col-sm-6" style="margin-top:10px">
-<input type="text" name="id" class="form-control" hidden value="<?php echo $id; ?>" required="required">
-<input type="text" class="form-control" hidden="hidden" placeholder="Amount" name="sav" value="<?php echo $sv;?>" required="required">
-<label>Amount</label><br>
-<input type="number" class="form-control" placeholder="Amount" name="am"  required="required">
-</div>
-<div class="col-sm-6" id="reciept" style="margin-top:10px">
-<label style="font-size:13px"><i style="color:red">*</i> Reciept Image</label>
-<input type="file" class="form-control" name="Pic"  id="re">
-</div>
-</div><br>
-<button type="submit"  class="btn btn-primary btn-sm">Submit Deposit</button>
-</form>
-
-</div>
-<br>
-<?php 
-if($gr == 'Loan Officers'){
-?>
-<div class="row">
-<div class="col-sm-6" style="margin-top:15px; display:none">
-<button class="btn btn-light btn-sm w-100"onclick="myFunctions()">Deposit Savings</button>
-</div>
-<div class="col-sm-6" style="margin-top:15px">
-<button class="btn btn-light btn-sm w-100" onclick="myFunction()">Withdraw Savings</button>
-
-</div>
-</div>
-<?php 
-}else{
-    
-}
-?>
-
-<script>
-function show() {
-tt = document.getElementById('method').value;
-if(tt == 'Cash'){
-    document.getElementById("reciept").style.display = 'none'; 
-    document.getElementById("rec").style.display = 'none';  
-    document.getElementById("re").required = false;  
-    document.getElementById("rex").required = false;  
-    //alert('Cash Payment');
-}else{
-    document.getElementById("reciept").style.display = 'block';  
-    document.getElementById("rec").style.display = 'block';  
-    document.getElementById("re").required = true;  
-    document.getElementById("rex").required = true;  
-    alert('⛔ Please upload reciept for the transaction.');
-
-}
-}
-</script>
-
-
-<script>
-function myFunction() {
-var x = document.getElementById("myDIV");
-var y = document.getElementById("myDep");
-if (x.style.display === "none") {
-x.style.display = "block";
-y.style.display = "none";
-} else {
-x.style.display = "none";
-}
-}
-
-function myFunctions() {
-var y = document.getElementById("myDep");
-var x = document.getElementById("myDIV");
-if (y.style.display === "none") {
-x.style.display = "none";
-y.style.display = "block";
-} else {
-y.style.display = "none";
-}
-}
-
-
-</script>
-</div>
-</div>
-
-
-<?php 
-if($gr == 'Super User'){
-?>
-<div class="row" style="display:none;">
-<div class="col-sm-3" style="margin-top:15px">
-<button class="btn btn-light btn-sm w-100"onclick="myTransfer()">Transfer Client</button>
-</div>
-</div>
-<?php 
-}else{
-
-}
-?>
-
-
-
-</div>
 <div class="tab-pane" id="pro-nav-profile" role="tabpanel" aria-labelledby="pro-nav-profile-tab">
 <div class="bd-example" >
 <ul class="nav nav-pills" data-toggle="slider-tab" role="tablist" >
@@ -327,7 +182,6 @@ if($gr == 'Super User'){
 <div class="tab-content iq-tab-fade-up">
 <br>
 <div class="tab-pane show active" id="pills-home1" role="tabpanel">
-<div class="table-responsive" style="overflow: auto; height:300px">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -339,6 +193,7 @@ mysqli_close($con);
 ?>
 <b><?php echo "Total: ".number_format($over,2);?></b>
 <br><br>
+<div class="table-container" style="overflow: auto; height:200px">
 <table style="font-size:9px">
 <thead>
 <tr>
@@ -385,7 +240,7 @@ $pyy= $rows['Payment_Method'];
 <td  style="font-size:9px"><?php echo $ofd; ?></td>
 <td  style="font-size:9px"><?php echo $stt; ?></td>
 <td>
-<a href="#" class = "reciept" id="<?php echo $h_id;?>">View Reciept</a>
+<a href="#" class = "reciepts" id="<?php echo $h_id;?>">View Reciept</a>
 </td>
 
 </tr>
@@ -393,7 +248,7 @@ $pyy= $rows['Payment_Method'];
 }
 }else {
 //$Available = false; 
-echo"<small> No Record Found  </small> ";       
+//echo"<small> No Record Found  </small> ";       
 }
 ?>
 </tbody>
@@ -412,7 +267,7 @@ mysqli_close($con);
 ?>
 <b><?php echo "Total: ".number_format($over,2);?></b>
 <br><br>
-<div class="table-responsive" style="overflow: auto; height:300px">
+<div class="table-container" style="overflow: auto; height:200px">
 <table style="font-size:9px">
 <thead>
 <tr>
@@ -457,7 +312,7 @@ $off= $rows['Officer_Name'];
 }
 }else {
 //$Available = false; 
-echo"<small> No Record Found  </small> ";       
+//echo"<small> No Record Found  </small> ";       
 }
 ?>
 </tbody>
@@ -467,18 +322,143 @@ echo"<small> No Record Found  </small> ";
 
 </div>
 </div>
-
-</div>
-</div>
 </div>
 
 
+
+</div>
+<div id="with" style="display:none">
+
+<span><b>SAVING WITHDRAWAL</b></span><br><br>
+<form action="" method="POST" enctype="multipart/form-data" id="uploadWith">
+<div class="row">
+<div class="col-sm-3">
+<input type="text" name="id" class="form-control" hidden value="<?php echo $id;?>" required="required">
+<input type="text" name="bal" class="form-control" hidden value="<?php echo $tot;?>" required="required">
+<label>Amount</label>
+<input type="number" class="form-control" placeholder="Amount" name="amt"  required="required">
+</div>
+<div class="col-sm-3">
+<label>Account Name</label>
+<input type="text" class="form-control" placeholder="Account Name" name="actname"  required="required">
+</div>
+<div class="col-sm-3">
+<label>Account No</label>
+<input type="number" class="form-control" placeholder="Account No" name="acct"  required="required">
+</div>
+<div class="col-sm-3">
+<label>Bank</label>
+<select type="text" class="form-control form-control-md" name="bnk" required="required">
+<option value="">Select Bank</option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Bank_Name FROM bank ORDER BY Bank_Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$pp= $rows['id']; // product id
+$name= $rows['Bank_Name'];// product
+?>
+<option value="<?php echo $name; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
+</div><br>
+<label>Reason for Withdrawal</label>
+<textarea class="form-control" rows="3" name="reason" placeholder="Type withdrawal reason here....." required="required"></textarea>
+<br>
+<button type="submit" class="btn btn-primary btn-sm" onclick="data()" >Send Withdrawal Request</button>
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+
+
+
+<script>
+function myDash() {
+var x = document.getElementById("dash");
+var y = document.getElementById("his");
+var z = document.getElementById("with");
+if (x.style.display === "none") {
+x.style.display = "block";
+y.style.display = "none";
+z.style.display = "none";
+} else {
+x.style.display = "block";
+}
+}
+function myHistory() {
+var x = document.getElementById("dash");
+var y = document.getElementById("his");
+var z = document.getElementById("with");
+if (y.style.display === "none") {
+x.style.display = "none";
+y.style.display = "block";
+z.style.display = "none";
+} else {
+y.style.display = "block";
+}
+}
+function myWith() {
+var x = document.getElementById("dash");
+var y = document.getElementById("his");
+var z = document.getElementById("with");
+if (z.style.display === "none") {
+x.style.display = "none";
+y.style.display = "none";
+z.style.display = "block";
+} else {
+z.style.display = "block";
+}
+}
+
+
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+setTimeout(function () {
+// ajax function start here to load table data
+$.ajax({
+method: "GET",
+url: "flexi_update.php?id=<?php echo $idact; ?>",
+dataType: "html",
+success:function(data){
+alert(data)
+$("#mydiv").load("client_flexi_saving_page.php?id=<?php echo $idact; ?>" + " #mydiv");
+}
+});
+}, 100);
+// ajax function ends here
+});
+</script>
 
 
 <script>
 // to show data on a modal box
 $(document).ready(function() {
-$('.reciept').on('click', function() {
+$('.reciepts').on('click', function() {
 var recID = $(this).attr('id');
 $("#updateModal").modal('hide');
 $("#updateRec").modal('show');
@@ -509,7 +489,7 @@ $('#samt').empty();
 
 <script type="text/javascript">
 $(document).ready(function (e){
-$("#uploadForm").on('submit',(function(e){ e.preventDefault();
+$("#uploadWith").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to send this request for approval.?";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {

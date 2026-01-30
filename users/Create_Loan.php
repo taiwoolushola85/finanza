@@ -109,7 +109,10 @@
 <div style="margin: auto; width:250px">
 <label style="font-size:13px"><i style="color:red">*</i> BVN</label> 
 <input type="number" class="form-control form-control-sm" placeholder="Enter BVN" id="bvn" required>
+<br>
+<center>
 <h5 id="fullName"></h5>
+</center>
 <br>
 <center>
 <i id="check" style="margin-left:10px; display:none"><img src="../loader/loader.gif" style="height:18px"> Checking BVN.! Please wait...</i>
@@ -123,7 +126,7 @@
 <div class="row">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Fee Type</label>
-<input type="text" class="form-control form-control-sm" hidden name="id" id="reg" required>
+<input type="text" class="form-control form-control-sm"  name="id" hidden id="reg" required>
 <select type="text" class="form-control form-control-md" name="type" required="required">
 <option value="">Select Option</option>
 <option value="Deduction">Deduction</option>
@@ -172,7 +175,7 @@ $name= $rows['Name'];
 <div class="row">
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Loan Products</label>
-<select type="text" class="form-control form-control-md" name="pr" id="pr" oninput="getProduct()" required="required">
+<select type="text" class="form-control form-control-md" name="pr" id="prid" oninput="getProducts()" required="required">
 <option value="">Select Loan Product</option>
 <?php 
 include '../config/db.php';
@@ -194,7 +197,7 @@ $name= $rows['Product_Name'];// product
 </div>
 <div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Tenure</label>
-<select type="text" class="form-control form-control-md" name="ten" id="hey" required="required">
+<select type="text" class="form-control form-control-md" name="ten" id="heys" required="required">
 <option value="">Select Option</option>
 </select>
 </div>
@@ -240,6 +243,8 @@ $name= $rows['Bank_Name'];// product
 <br>
 <br>
 <b><i class="fa fa-star"></i> Gaurantor Information</b><br>
+<img src="" id="userPhotos" class="rounded-circle d-flex" style="height: 150px; width:150px; margin:auto">
+<br>
 <div style="margin: auto; width:250px">
 <label style="font-size:13px"><i style="color:red">*</i> NIN</label>
 <input type="number" class="form-control form-control-sm"  placeholder="Enter NIN" name="nin" oninput="validateNIN()" required>
@@ -389,17 +394,17 @@ image.src = URL.createObjectURL(event.target.files[0]);
 
 
 <script type="text/javascript">
-function getProduct()  {
-var pr = document.getElementById("pr").value;
+function getProducts()  {
+var prid = document.getElementById("prid").value;
 // ajax function start here
 $.ajax({
 method: "POST",
-url: "load_tenure.php",
+url: "load_product_tenure.php",
 dataType: "html",  
-data: {'pr': pr},
+data: {'prid': prid},
 success:function(data){
 setTimeout(function(){
-$("#hey").html(data);
+$("#heys").html(data);
 }, 100);
 }
 });
@@ -408,57 +413,70 @@ $("#hey").html(data);
 </script>
 
 
-<script type="text/javascript">
-$(document).ready(function () {
-$("#bvn").on("focusout", function () {
-const bvn = $("#bvn").val().trim();
-$("#check").show();
+
+
+
+<script>
+$(document).ready(function() {
+$("#bvn").on('keyup', function() {
+var bvn = $(this).val().trim(); 
+// Validate BVN is exactly 11 digits
+if (bvn.length !== 11 || !/^\d{11}$/.test(bvn)) {
+// Don't make AJAX call if BVN is not 11 digits
 $("#bvnerror").hide();
-// Validate BVN length
-if (bvn.length !== 11) {
-setTimeout(function () {
 $("#check").hide();
-$("#bvnerror").show();
-$("#cli").prop("disabled", true);
-}, 1000);
-setTimeout(function () {
-$("#bvnerror").hide();
-}, 4000);
-return;
+$("#submit").attr("disabled", "disabled");
+$("#fullName").text('').hide();
+$("#reg").val('');
+return; // Exit early
 }
-// AJAX validation
+// BVN is valid, proceed with AJAX
+$("#bvnerror").hide();
+$("#check").show();
+$("#submit").attr("disabled", "disabled");
 $.ajax({
-type: "POST",
-url: "check_existing.php",
-data: { bvn: bvn },
+method: "POST",
+url: "validate_customer.php",
+data: { 'bvn': bvn },
 dataType: "json",
-success: function (data) {
+success: function(response) {
 $("#check").hide();
-// Numeric responses (error states)
-if (data === 1) {
-alert("🚫 Customer application already submitted for loan review.");
-$("#cli").prop("disabled", true);
-}else if (data === 2){
-alert("🚫 Customer still has a running active loan.");
-$("#cli").prop("disabled", true);
-}else if (data === 3){
-alert("🚫 Customer BVN has been blacklisted.");
-$("#cli").prop("disabled", true);
-}else if (data === 4){
-alert("🚫 Customer has been used as a guarantor for another active loan.");
-$("#cli").prop("disabled", true);
-}else if (typeof data === "object") {
-// JSON object response (valid BVN)
-$("#cli").prop("disabled", false);
-$('#userPhoto').attr('src', data.imgLoc || 'https://placehold.net/avatar.svg');
-$('#reg').val(data.regId || '');
-$('#name').text([data.fName, data.mName, data.lName].filter(Boolean).join(' ') || 'N/A');
-$('#fullName').text([data.fName, data.mName, data.lName].filter(Boolean).join(' ') || 'N/A');
+$("#bvnerror").hide();
+// 1. Check for errors or active loans
+if (response.status == "1") {
+alert("🚫 Customer still has a running active loan!");
+$("#submit").attr("disabled", "disabled");
+$("#fullName").text('').hide();
+$("#reg").val('');
+$('#userPhoto').attr('src', '');
+} else if (response.status == "2") {
+alert("🚫 Application already submitted for review.");
+$("#submit").attr("disabled", "disabled");
+$("#fullName").text('').hide();
+$("#reg").val('');
+$('#userPhoto').attr('src', '');
+} else if (response.status == "success") {
+// 2. SUCCESS: Display data
+$("#bvnerror").hide();
+// Injecting values into the fields
+$("#fullName").text(response.full_name);
+$("#reg").val(response.customer_id);
+$('#userPhoto').attr('src', response.customer_img || 'default-avatar.png');
+// Show the hidden div container
+$("#fullName").fadeIn(); 
+$("#submit").removeAttr('disabled');
+} else {
+alert("🚫 BVN not found in records.");
+$("#submit").attr("disabled", "disabled");
+$("#fullName").text('').hide();
+$("#reg").val('');
+$('#userPhoto').attr('src', '');
 }
 },
-error: function () {
+error: function() {
 $("#check").hide();
-alert("⚠️ Error validating BVN. Please try again.");
+alert("⚠️ System error. Could not validate BVN.");
+$("#submit").attr("disabled", "disabled");
 }
 });
 });
@@ -466,10 +484,12 @@ alert("⚠️ Error validating BVN. Please try again.");
 </script>
 
 
+
+
 <script type="text/javascript">
 $(document).ready(function (e){
 $("#uploadEx").on('submit',(function(e){ e.preventDefault();
-WRN_PROFILE_DELETE = "You are about to create a loan profile for this customer ..";
+WRN_PROFILE_DELETE = "You are about to create a loan profile for this existing customer ..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
 $("#existingForm").modal('hide');
@@ -493,6 +513,7 @@ load();
 setTimeout(function(){
 $("#please").hide();
 $("#toast").hide();
+window.location.reload();
 }, 6000);
 }else{
 $("#please").hide();
@@ -564,8 +585,8 @@ $('#checks').hide();
 
 function displaySuccessResult(data) {
 // Populate fields with user data
-$('#userPhotos').attr('src', data.photo || 'https://via.placeholder.com/150');
-$('#imgs').val(data.photo || 'https://placehold.net/avatar.svg');
+$('#userPhotos').attr('src', data.photo || 'NA');
+$('#imgs').val(data.photo || 'NA');
 $('#ninData').val(data.nin || 'N/A');
 $('#ninDatas').val(data.nin || 'N/A');
 $('#sn').val(data.surname || data.firstName || 'N/A');
@@ -582,7 +603,7 @@ alert('Gaurantor Verification successful!');
 function displayErrorResult(message) {
 alert('Verification Error: ' + message);
 // Clear photo on error
-$('#userPhotos').attr('src', 'https://via.placeholder.com/150');
+$('#userPhotos').attr('src', 'NA');
 }
 </script>
 
@@ -701,5 +722,5 @@ $('#result').html(data);
 });
 }
 </script> 
-
+<br><br>
 <?php include '../footer.php'; ?>

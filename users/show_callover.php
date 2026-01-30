@@ -79,9 +79,9 @@ AND Posting_Method ='Basic Posting' $whereBranchHistory
 <br><br>
 
 <div class="table-responsive" style="overflow: auto; height:300px;">
-            <table >
-                <thead>
-                    <tr style="font-size:9px;">
+<table id="reportTable">
+<thead>
+<tr style="font-size:9px;">
 <th>LOAN ACCOUNT</th>
 <th>NAME</th>
 <th>PRODUCT</th>
@@ -157,9 +157,9 @@ $whereBranchFee
 <br><br>
 
 <div class="table-responsive" style="overflow: auto; height:300px;">
-            <table >
-                <thead>
-                    <tr style="font-size:9px;">
+<table id="reportTable">
+<thead>
+<tr style="font-size:9px;">
 <th>NAME</th>
 <th>BRANCH</th>
 <th>PRODUCT</th>
@@ -233,9 +233,9 @@ $whereBranchRecover
 <br><br>
 
 <div class="table-responsive" style="overflow: auto; height:300px;">
-            <table >
-                <thead>
-                    <tr style="font-size:9px;">
+<table  id="reportTable">
+<thead>
+<tr style="font-size:9px;">
 <th>LOAN ACCOUNT</th>
 <th>NAME</th>
 <th>GROUP</th>
@@ -308,9 +308,9 @@ $whereBranchFlexi
 <br><br>
 
 <div class="table-responsive" style="overflow: auto; height:300px;">
-            <table >
-                <thead>
-                    <tr style="font-size:9px;">
+<table  id="reportTable">
+<thead>
+<tr style="font-size:9px;">
 <th>NAME</th>
 <th>BRANCH</th>
 <th>PLAN</th>

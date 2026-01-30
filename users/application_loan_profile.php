@@ -7,6 +7,20 @@ $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $regid = $row['id'];
 $reg_status = $row['Status'];
+$pr = $row['Product_id'];
+$ten = $row['Tenure'];
+$frq = $row['Frequency'];
+$lum = $row['Loan_Amount'];
+$up = $row['Upfront'];
+$inss = $row['Inssurance'];
+$form = $row['Form'];
+$card = $row['Card'];
+//
+$Query = "SELECT Rate, Inssurance FROM product_list WHERE Product_id='$pr' AND Tenure = '$ten'";
+$result = mysqli_query($con, $Query);
+$data = mysqli_fetch_array($result);
+$ins = $data['Inssurance'];
+$rt = $data['Rate'];
 // gaurantor info
 $Query = "SELECT * FROM gaurantors WHERE Regis_id = '$reg_id'";
 $result = mysqli_query($con, $Query);
@@ -17,10 +31,74 @@ $Query = "SELECT * FROM comment WHERE Reg_No = '$reg_id'";
 $result = mysqli_query($con, $Query);
 $remarks = mysqli_fetch_array($result);
 
+/*
+//
+if($frq == 'Daily'){
+// expected repayment
+// expected repayment
+$dd = $lum + 0; // the intererst is 0
+$dailyrep_amt = $lum / $ten;// repayment amt
+$dailyrnd_rep = round($dailyrep_amt);// rounding up repayment amt
+// total loan balance
+$dailyt_loan = $lum + 0;
+$dailyrnd_tloan = round($dailyt_loan);// rounding up total loan
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '0', Monthly_Interest = '0', Repayment_Amt = '$dailyrnd_rep', Total_Loan = '$dailyrnd_tloan'
+WHERE id = '$reg_id '";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+
+
+}else{
+// interest
+// interest
+$rr = 100 / $rt;
+$in_amt = $lum / $rr;// interest amt
+$rnds_int = round($in_amt); /// rounding up interest amount
+// expected repayment
+$dd = $lum + $in_amt; 
+$rep_amt = $dd / $ten;// repayment amt
+$rnd_rep = round($rep_amt);// rounding up repayment amt
+// total loan balanceRepayment_Day
+$t_loan = $lum + $in_amt;
+$rnd_tloan = round($t_loan);// rounding up total loan
+$int_per_repayment = round($rnds_int/$ten);
+
+// inserting the customer information
+$sql = "UPDATE register SET Rate = '$rt', Loan_Amount = '$lum', Interest_Amt = '$rnds_int', Monthly_Interest = '$int_per_repayment', Repayment_Amt = '$rnd_rep', 
+Total_Loan = '$rnd_tloan' WHERE id = '$reg_id'";
+$result= mysqli_query($con, $sql);
+if($result == true){
+//echo 2;
+}else{
+echo("Error description: " . mysqli_error($con));
+}
+} 
+*/
+
 ?>
 <center>
 <div id="image">
-<img src="<?php echo $row['Location']; ?>" height="100" width="100" style="border-radius:50px">
+<?php
+$img = $row['Location'] ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:50px; width:50px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 </div>
 <br>
 [ Virtual Acct: <?php echo $row['Virtual_Account']; ?> ]
@@ -40,8 +118,8 @@ if($reg_status == 'Declined'){
 }
 ?>
 <button class="btn btn-light" onclick="updateInfo()"><i class="fa fa-edit"></i> Update Info</button>
-<button class="btn btn-light" onclick="updateDoc()"><i class="fa fa-folder"></i> Document Uploading</button>
-<button class="btn btn-light" onclick="uploadImage()" style="display:none;"><i class="fa fa-upload"></i> Upload Image</button>
+<button class="btn btn-light" onclick="updateDoc()" style="display:none"><i class="fa fa-folder"></i> Document Uploading</button>
+<button class="btn btn-light" onclick="uploadImage()" ><i class="fa fa-upload"></i> Upload Image</button>
 <button class="btn btn-light" onclick="uploadProduct()"><i class="fa fa-star"></i> Change Product</button>
 </div>
 </div>
@@ -60,7 +138,7 @@ if($reg_status == 'Declined'){
 <br>
 <div class="row">
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Name:</b> <?php echo $row['Firstname']." ". $row['Middlename']." ".$row['Lastname']; ?></span>
+<span style="margin-left:8px"><b>Name:</b> <span style="text-transform:capitalize"><?php echo $row['Firstname']." ". $row['Middlename']." ".$row['Lastname']; ?></span></span>
 </div>
 <div class="col-sm-6">
 <span style="margin-left:8px;"><b>Phone:</b> <?php echo $row['Phone']; ?></span>
@@ -244,7 +322,7 @@ if($reg_status == "Under Review"){
 <span style="margin-left:8px;"><b>Tenure:</b> <?php echo $row['Tenure']; ?></span>
 </div>
 <div class="col-sm-6">
-<span style="margin-left:8px;"><b>Rate:</b> <?php echo $row['Rate']; ?></span>
+<span style="margin-left:8px;"><b>Total Rate:</b> <?php echo $row['Rate']; ?></span>
 </div>
 </div>
 <div class="row">
@@ -292,12 +370,16 @@ if($reg_status == "Under Review"){
 <form action="" method="POST" enctype="multipart/form-data" id="updateForm">
 <b><i class="fa fa-star"></i> Personal Information</b><br>
 <div class="row" style="margin-top: 20px;">
-<div class="col-sm-6">
-<label style="font-size:13px"><i style="color:red">*</i> Address</label>
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Phone</label>
 <input type="text" class="form-control form-control-sm" placeholder="Address" name="id" hidden required value="<?php echo htmlspecialchars($row['id']); ?>">
+<input type="text" class="form-control form-control-sm" placeholder="Phone" name="phone" required required value="<?php echo htmlspecialchars($row['Phone']); ?>">
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Address</label>
 <input type="text" class="form-control form-control-sm" placeholder="Address" name="ad" required required value="<?php echo htmlspecialchars($row['Address']); ?>">
 </div>
-<div class="col-sm-6">
+<div class="col-sm-4">
 <label style="font-size:13px"><i style="color:red">*</i> Education Level</label>
 <select class="form-control form-control-sm" value="<?php echo htmlspecialchars($row['Education']); ?>" required  name="ed">
 <option value="<?php echo htmlspecialchars($row['Education']); ?>"><?php echo htmlspecialchars($row['Education']); ?></option>
@@ -355,6 +437,42 @@ if($reg_status == "Under Review"){
 </select>
 </div>
 </div>
+<hr>
+<b><i class="fa fa-star"></i> Bank Details</b><br><br>
+<div class="row">
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Bank Name</label>
+<select type="text" class="form-control form-control-md" name="bnk" value="<?php echo htmlspecialchars($row['Bank']); ?>" required="required">
+<option value="<?php echo htmlspecialchars($row['Bank']); ?>"><?php echo htmlspecialchars($row['Bank']); ?></option>
+<?php 
+include '../config/db.php';
+$Query = "SELECT id, Bank_Name FROM bank ORDER BY Bank_Name ASC";
+$result = mysqli_query($con, $Query);
+$Count = mysqli_num_rows($result);
+if ($Count > 0) {
+for ($j=0 ; $j < $Count; $j++){
+$rows = mysqli_fetch_array($result);
+$pp= $rows['id']; // product id
+$name= $rows['Bank_Name'];// product
+?>
+<option value="<?php echo $name; ?>"><?php echo $name; ?></option>
+<?php
+}
+}
+?>
+</select>
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Account No</label>
+<input type="number" class="form-control form-control-md" placeholder="Account No" value="<?php echo htmlspecialchars($row['Account_No']); ?>" name="an" required="required">
+</div>
+<div class="col-sm-4">
+<label style="font-size:13px"><i style="color:red">*</i> Account Name</label>
+<input type="text" class="form-control form-control-md" placeholder="Account Name" value="<?php echo htmlspecialchars($row['Account_Name']); ?>" name="ann" required="required">
+</div>
+</div>
+<br>
+
 <br>
 <b><i class="fa fa-star"></i> Business Information</b><br>
 <div class="row" style="margin-top:20px;">
@@ -400,15 +518,19 @@ if($reg_status == "Under Review"){
 <br>
 <b><i class="fa fa-star"></i> Gaurantor Information</b><br>
 <div class="row" style="margin-top:20px;">
-<div class="col-sm-4">
+<div class="col-sm-3">
+<label style="font-size:13px"><i style="color:red">*</i> Phone</label>
+<input type="text" class="form-control form-control-sm" placeholder="Phone" name="ph3" required value="<?php echo htmlspecialchars($rows['Phone']); ?>">
+</div>
+<div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Address</label>
 <input type="text" class="form-control form-control-sm" placeholder="Address" name="address3" required value="<?php echo htmlspecialchars($rows['Address']); ?>">
 </div>
-<div class="col-sm-4">
+<div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Occupation</label>
 <input type="text" class="form-control form-control-sm" placeholder="Occupation" name="occupation" required value="<?php echo htmlspecialchars($rows['Occupation']); ?>">
 </div>
-<div class="col-sm-4">
+<div class="col-sm-3">
 <label style="font-size:13px"><i style="color:red">*</i> Relationship</label>
 <select class="form-control form-control-sm" name="relationship" value="<?php echo htmlspecialchars($rows['Relationship']); ?>" required>
 <option value="<?php echo htmlspecialchars($rows['Relationship']); ?>"><?php echo htmlspecialchars($rows['Relationship']); ?></option>
@@ -481,7 +603,6 @@ if($reg_status == "Under Review"){
 <option value="Loan Form">Loan Form</option>
 <option value="Utility Bill">Utility Bill</option>
 <option value="ID Card">ID Card</option>
-<option value="Other Document">Other Document</option>
 </select>
 <input type="text" hidden class="form-control form-control-sm" name="id" placeholder="" value="<?php echo $reg_id; ?>"><br>
 <input type="file" class="form-control form-control-sm" name="Pic" required="required" onchange="loadDocument(event)"><br><br>
@@ -560,20 +681,20 @@ $name= $rows['Product_Name'];
 
 <div id="thirds" style="display:none;">
 <div class="row">
-<div class="col-sm-4">
+<div class="col-sm-6">
 <form action="" method="POST" id="imageupload" enctype="multipart/form-data">
 <center>
-<p><img src="<?php echo $row['Location']; ?>" id="client" style="height: 250px; width:250px; border-radius:50px;" class="img-thumbnail" /></p>
+<p><img src="<?php echo $row['Location']; ?>" id="client" style="height: 250px; width:250px; border-radius:100px;" class="img-thumbnail" /></p>
 </center>
 <input type="text" hidden class="form-control form-control-sm" name="id" placeholder="" value="<?php echo $reg_id; ?>"><br>
 <input type="file" class="form-control form-control-sm" name="Pic" required="required" onchange="loadClient(event)"><br><br>
 <button type="submit" class="btn btn-outline-primary btn-sm btn-block" id="saveimg" onclick="data()">Upload Client Image</button>
 </form>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-6">
 <form action="" method="POST" enctype="multipart/form-data" id="guarantorupload">
 <center>
-<p><img id="ga" src="<?php echo $rows['Location']; ?>" style="height: 250px; width:250px; border-radius:50px;"  class="img-thumbnail"/></p>
+<p><img id="ga" src="<?php echo $rows['Location']; ?>" style="height: 250px; width:250px; border-radius:100px;"  class="img-thumbnail"/></p>
 </center>
 <input type="text"  hidden = "hidden" class="form-control form-control-sm" name="id" placeholder="" value="<?php echo $reg_id; ?>">
 <br>
@@ -581,7 +702,7 @@ $name= $rows['Product_Name'];
 <button type="submit" class="btn btn-outline-primary btn-sm btn-block" id="card"  onclick="data()">Upload Gaurantor Image</button>
 </form>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-4" style="display:none">
 <form action="" method="POST" enctype="multipart/form-data" id="cardupload">
 <center>
 <p><img id="idcd" src="<?php echo $rows['ID_Image']; ?>" style="height: 250px; width:250px; border-radius:50px;"  class="img-thumbnail"/></p>
@@ -722,13 +843,31 @@ y.style.display = 'none';
 
 
 
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+setTimeout(function(){
+///alert(data)
+$("#mydiv").load( "application_loan_profile.php?id=<?php echo $regid; ?> #mydiv" );// 
+//$("#hey").html(data);
+}, 1000);
+// ajax function ends here
+});
+</script>
+
+
+
+
+
 <script type="text/javascript">
 function getProduct()  {
 var pr = document.getElementById("pr").value;
 // ajax function start here
 $.ajax({
 method: "POST",
-url: "load_tenure.php",
+url: "tenure_list.php",
 dataType: "html",  
 data: {'pr': pr},
 success:function(data){
@@ -847,6 +986,7 @@ $("#please").show();
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();
+$("#doc").attr("src", "");
 $("#toat").css("display", "block");
 $("#toat").show();
 }, 3000);
@@ -979,6 +1119,7 @@ cache: false,
 processData:false,
 success: function(data){
 $("#uploadDoc")[0].reset();
+$("#doc").attr("src", "");
 $("#please").show();
 if(data == 1){
 setTimeout(function(){

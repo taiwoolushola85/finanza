@@ -13,7 +13,7 @@ include '../config/user_session.php';
 
 // Prepare base query with proper escaping
 $searchEscaped = mysqli_real_escape_string($con, $search);
-$baseWhere = "Status = 'Waiting For Verification'";
+$baseWhere = "Status = 'Waiting For Verification' AND Branch = '$brss'";
 
 // Build query based on conditions
 if (!empty($search)) {
@@ -57,7 +57,7 @@ Total Record: <?php echo $total; ?>
 </small>
 <br><br>
 
-<div id="table-container" style="height:350px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -102,8 +102,8 @@ Total Record: <?php echo $total; ?>
     <?php endforeach; ?>
 <?php else: ?>
     <tr>
-        <td colspan="10" style="text-align:center; font-size:9px; color:#999;">
-            No record found
+        <td colspan="10" style="text-align:center; font-size:11px">
+            <span>No record found</span>
         </td>
     </tr>
 <?php endif; ?>
@@ -117,33 +117,45 @@ Total Record: <?php echo $total; ?>
 
 
 <script>
-// Modal data loading
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if (id) {
-$.ajax({
-url: 'review_verification.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') "cleans the slate" before adding the listener.
+    // This is the essential fix for the double-firing/blinking bug.
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Stops other scripts from interfering
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profileContainer = $('#profile');
+
+        // 2. Open the modal immediately
+        $modal.modal('show');
+
+        // 3. Set Loading State with min-height to prevent modal "jumping"
+        $profileContainer.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted">Loading verification details...</p>
+            </div>`);
+
+        // 4. Optimized AJAX call
+        $.ajax({
+            url: 'review_verification.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject content and fade in.
+                // .stop(true, true) cancels active animations for a snappy feel.
+                $profileContainer.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profileContainer.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Could not load verification profile.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>

@@ -1,165 +1,198 @@
 <?php
-// Sanitize and validate inputs
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 0;
-
-// Set CORS headers at the top
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Set CORS and Headers
 header("Access-Control-Allow-Origin: *");
+header("Content-Type: text/html; charset=UTF-8");
 
 include '../config/db.php';
 include '../config/user_session.php';
 
-// Escape user input for SQL
-$User_escaped = mysqli_real_escape_string($con, $User);
-$search_escaped = mysqli_real_escape_string($con, $search);
+// 1. Inputs & Sanitization
+$search = isset($_POST['search']) ? trim($_POST['search']) : '';
+$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 10;
+$page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
 
-// Build query based on conditions
-$whereClause = "Status = 'Ready For Review'";
+if ($maxRows <= 0) $maxRows = 10;
+if ($page < 1) $page = 1;
+
+// 2. Base Query Filters
+$whereClause = "Status = ?";
+$params = ['Ready For Underwriting'];
+$types = 's';
 
 if (!empty($search)) {
-$whereClause .= " AND (BVN LIKE '%$search_escaped%' OR Firstname LIKE '%$search_escaped%' OR Middlename LIKE '%$search_escaped%' OR Lastname LIKE '%$search_escaped%')";
+    $whereClause .= " AND (BVN LIKE ? OR Branch LIKE ? OR CONCAT(Firstname, ' ', Middlename, ' ', Lastname) LIKE ?)";
+    $searchParam = "%$search%";
+    $params = array_merge($params, array_fill(0, 3, $searchParam));
+    $types .= 'sss';
 }
 
-// Count query
-$countQuery = "SELECT COUNT(*) FROM register WHERE $whereClause";
-$countResult = mysqli_query($con, $countQuery);
-$row = mysqli_fetch_array($countResult);
-$total = $row[0];
+// 3. Get Total Record Count & Breakdown
+$countQuery = "SELECT 
+    COUNT(*) as total,
+    SUM(CASE WHEN Status = 'Under Review' THEN 1 ELSE 0 END) as total_under_review,
+    SUM(CASE WHEN Status = 'Declined' THEN 1 ELSE 0 END) as total_declined,
+    SUM(CASE WHEN Status = 'Ready For Underwriting' THEN 1 ELSE 0 END) as total_ready
+    FROM register WHERE $whereClause";
 
-// Data query
-$dataQuery = "SELECT id, Firstname, Lastname, Middlename, Gender, Phone, Branch, BVN, Status, Date_Reg, Time_Reg, Officer_Name 
-FROM register WHERE $whereClause ORDER BY id ASC";
+$countStmt = mysqli_prepare($con, $countQuery);
+mysqli_stmt_bind_param($countStmt, $types, ...$params);
+mysqli_stmt_execute($countStmt);
+$countData = mysqli_stmt_get_result($countStmt)->fetch_assoc();
 
-if ($maxRows > 0) {
-$dataQuery .= " LIMIT $maxRows";
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= " LIMIT 10";
-}
+$total = $countData['total'];
+$totalUnderReview = $countData['total_under_review'] ?? 0;
+$totalDeclined = $countData['total_declined'] ?? 0;
+$totalReady = $countData['total_ready'] ?? 0;
+mysqli_stmt_close($countStmt);
 
-$result = mysqli_query($con, $dataQuery) or die("Database query failed: " . mysqli_error($con));
+// 4. Pagination Math
+$totalPages = ceil($total / $maxRows);
+if ($page > $totalPages && $totalPages > 0) $page = $totalPages;
+$offset = ($page - 1) * $maxRows;
 
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
+// 5. Data Query with LIMIT and OFFSET
+$dataQuery = "SELECT id, CONCAT(Firstname, ' ', Middlename, ' ', Lastname) as Full_Name, 
+              Gender, Product, Loan_Amount, Tenure, Frequency, Phone, Branch, BVN, 
+              Status, Date_Reg, Time_Reg, Officer_Name 
+              FROM register WHERE $whereClause ORDER BY id ASC LIMIT ? OFFSET ?";
 
-// Save to JSON file
-$fp = fopen('../data/loan_underwriting_lists.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
+$dataParams = array_merge($params, [$maxRows, $offset]);
+$dataTypes = $types . "ii";
 
-mysqli_close($con);
+$stmt = mysqli_prepare($con, $dataQuery);
+mysqli_stmt_bind_param($stmt, $dataTypes, ...$dataParams);
+mysqli_stmt_execute($stmt);
+$results = mysqli_stmt_get_result($stmt)->fetch_all(MYSQLI_ASSOC);
+mysqli_stmt_close($stmt);
+
+// Save to JSON
+file_put_contents('../data/loan_underwriting_lists.json', json_encode($results, JSON_PRETTY_PRINT));
+
+$startRecord = ($total > 0) ? ($offset + 1) : 0;
+$endRecord = min($offset + $maxRows, $total);
 ?>
 
-<small>
-Total Record: <?php echo $total; ?>
-</small>
-<br><br>
-<div id="table-container" style="height:400px;">
-<table>
-<thead>
-<tr>
-<th style="font-size:8px">BVN</th>
-<th style="font-size:8px">NAME</th>
-<th style="font-size:8px">PHONE</th>
-<th style="font-size:8px">GENDER</th>
-<th style="font-size:8px">BRANCH</th>
-<th style="font-size:8px">LOAN OFFICER</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">DATE</th>
-<th style="font-size:8px">TIME</th>
-<th style="font-size:8px">ACTION</th>
-</tr>
-</thead>
-<tbody>
-<?php
-if (!empty($results)) {
-    foreach($results as $member) {
-        // Escape output for XSS protection
-        $bvn = htmlspecialchars($member['BVN']);
-        $firstname = htmlspecialchars($member['Firstname']);
-        $middlename = htmlspecialchars($member['Middlename']);
-        $lastname = htmlspecialchars($member['Lastname']);
-        $phone = htmlspecialchars($member['Phone']);
-        $gender = htmlspecialchars($member['Gender']);
-        $branch = htmlspecialchars($member['Branch']);
-        $officer = htmlspecialchars($member['Officer_Name']);
-        $status = htmlspecialchars($member['Status']);
-        $dateReg = htmlspecialchars($member['Date_Reg']);
-        $timeReg = htmlspecialchars($member['Time_Reg']);
-        $id = (int)$member['id'];
+<div style="margin-bottom: 15px; border-left: 4px solid #007bff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div>
+        <small style="font-weight: bold;">Total: <?= number_format($total) ?></small> | 
+        <small style="color: #17a2b8; font-weight: bold;">Review: <?= $totalUnderReview ?></small> | 
+        <small style="color: #dc3545; font-weight: bold;">Declined: <?= $totalDeclined ?></small> | 
+        <small style="color: #28a745; font-weight: bold;">Ready: <?= $totalReady ?></small>
+    </div>
 
-        // Status badge
-        $badgeClass = 'badge-soft-success';
-        if ($status == 'Under Review') {
-            $badgeClass = 'badge-soft-info';
-        } elseif ($status == 'Declined') {
-            $badgeClass = 'badge-soft-danger';
-        }
-        ?>
-        <tr style="font-size:8px">
-            <td><?php echo $bvn; ?></td>
-            <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-            <td><?php echo $phone; ?></td>
-            <td><?php echo $gender; ?></td>
-            <td><?php echo $branch; ?></td>
-            <td><?php echo $officer; ?></td>
-            <td><span class='<?php echo $badgeClass; ?>'><?php echo $status; ?></span></td>
-            <td><?php echo $dateReg; ?></td>
-            <td><?php echo $timeReg; ?></td>
-            <td>
-                <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-                    <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-                </a>
-            </td>
-        </tr>
-        <?php
-    }
-} else {
-    // Display no records found
-    ?>
-    <tr>
-        <td colspan="10" style="text-align:center; font-size:8px;">No records found</td>
-    </tr>
-    <?php
-}
-?>
-</tbody>
-</table>
+    <?php if ($totalPages > 1): ?>
+    <div style="display: flex; gap: 4px;">
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeUnderwritingPage(1)" <?= ($page <= 1) ? 'disabled' : '' ?> >Next</button>
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeUnderwritingPage(<?= $page - 1 ?>)" <?= ($page <= 1) ? 'disabled' : '' ?> >Prev</button>
+        
+        <span style="font-size: 10px; align-self: center; font-weight: bold;">Page <?= $page ?>/<?= $totalPages ?></span>
+        
+        <button type="button" class="btn btn-xs btn-primary" onclick="changeUnderwritingPage(<?= $page + 1 ?>)" <?= ($page >= $totalPages) ? 'disabled' : '' ?>>Next</button>
+        <button type="button" class="btn btn-xs btn-outline-secondary" onclick="changeUnderwritingPage(<?= $totalPages ?>)" <?= ($page >= $totalPages) ? 'disabled' : '' ?>>Prev</button>
+    </div>
+    <?php endif; ?>
 </div>
 
+<div id="table-container" style="height:340px; overflow-y:auto;">
+    <table >
+        <thead>
+            <tr style="font-size:8px">
+                <th>BVN</th><th>NAME</th><th>PHONE</th><th>GENDER</th><th>PRODUCT</th><th>TENURE</th><th>FREQ</th><th>AMOUNT</th><th>BRANCH</th><th>OFFICER</th><th>STATUS</th><th>DATE</th><th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($results)): ?>
+                <?php foreach($results as $member): 
+                    $badgeClass = ($member['Status'] === 'Under Review') ? 'badge-soft-info' : (($member['Status'] === 'Declined') ? 'badge-soft-danger' : 'badge-soft-success');
+                ?>
+                <tr style="font-size:8px">
+                    <td><?= htmlspecialchars($member['BVN']) ?></td>
+                    <td style="text-transform:capitalize"><span><?= htmlspecialchars($member['Full_Name']) ?></span></td>
+                    <td><?= htmlspecialchars($member['Phone']) ?></td>
+                    <td><?= htmlspecialchars($member['Gender']) ?></td>
+                    <td><?= htmlspecialchars($member['Product']) ?></td>
+                    <td><?= htmlspecialchars($member['Tenure']) ?></td>
+                    <td><?= htmlspecialchars($member['Frequency']) ?></td>
+                    <td><?= number_format($member['Loan_Amount'], 2) ?></td>
+                    <td><?= htmlspecialchars($member['Branch']) ?></td>
+                    <td><?= htmlspecialchars($member['Officer_Name']) ?></td>
+                    <td><span class='<?= $badgeClass ?>'><?= htmlspecialchars($member['Status']) ?></span></td>
+                    <td><?= htmlspecialchars($member['Date_Reg']) ?></td>
+                    <td>
+                        <a class="invks" href="#" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?= $member['id'] ?>">
+                            <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="14" class="text-center p-4">No underwriting records found.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<input type="hidden" id="currentSearch" value="<?= htmlspecialchars($search) ?>">
+<input type="hidden" id="currentMaxRows" value="<?= $maxRows ?>">
 
 <script>
-// Display data in modal
+function changeUnderwritingPage(newPage) {
+    var search = $('#currentSearch').val();
+    var maxRows = $('#currentMaxRows').val();
+    
+    $('#table-container').css('opacity', '0.5');
+    
+    $.ajax({
+        url: 'load_underwriting_list.php',
+        type: 'POST',
+        data: { page: newPage, search: search, maxRows: maxRows },
+        success: function(response) {
+            $('#result').html(response); 
+        }
+    });
+}
+
+
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'client_first_underwriting_page.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') removes previous bindings to prevent "Double Firing" 
+    // especially when this script is re-loaded via AJAX pagination.
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Prevents conflict with other click listeners
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profile = $('#profile');
+
+        // 2. Open modal immediately
+        $modal.modal('show');
+
+        // 3. Set 'Loading' state with min-height to prevent modal layout flickering
+        $profile.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height:250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <span class="text-muted">Analyzing loan profile...</span>
+            </div>
+        `);
+
+        // 4. Optimized AJAX Call
+        $.ajax({
+            url: 'loan_underwriting_page.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject data and fade in. 
+                // .stop(true, true) cancels existing animations if the user clicks rows fast.
+                $profile.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profile.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Failed to load loan underwriting details.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>

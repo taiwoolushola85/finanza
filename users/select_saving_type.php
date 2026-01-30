@@ -1,540 +1,254 @@
 <?php
-$types = @$_POST['types'];
-//
-if($types == 'Express'){
-?>
-
-<?php
-//displaying express saving record
-// Sanitize and validate inputs
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 0;
-
-// Set CORS headers at the top
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Set CORS headers
 header("Access-Control-Allow-Origin: *");
+header("Content-Type: text/html; charset=UTF-8");
 
 include '../config/db.php';
 include '../config/user_session.php';
 
-// Escape user input for SQL
-$User_escaped = mysqli_real_escape_string($con, $User);
-$search_escaped = mysqli_real_escape_string($con, $search);
-
-// Build query based on conditions
-$whereClause = "Status != 'Cancelled'";
-
-if (!empty($search)) {
-$whereClause .= " AND (Client_BVN LIKE '%$search_escaped%' OR Virtual_Account LIKE '%$search_escaped%' OR Loan_Account_No LIKE '%$search_escaped%' 
-OR Disbursement_No LIKE '%$search_escaped%' OR Transaction_id LIKE '%$search_escaped%' OR Savings_Account_No LIKE '%$search_escaped%' 
-OR Unions LIKE '%$search_escaped%' OR Firstname LIKE '%$search_escaped%' OR Middlename LIKE '%$search_escaped%' OR Lastname LIKE '%$search_escaped%')";
-}
-
-// Count query
-$countQuery = "SELECT COUNT(*) FROM savings WHERE $whereClause";
-$countResult = mysqli_query($con, $countQuery);
-$row = mysqli_fetch_array($countResult);
-$total = $row[0];
-
-// Data query
-$dataQuery = "SELECT id, Virtual_Account, Client_BVN, Firstname, Lastname, Middlename, Loan_Account_No, Savings_Account_No, Status,
-(SELECT COALESCE(SUM(Savings), 0) FROM save WHERE Saving_Account = Savings_Account_No  AND Status = 'Paid' ) AS `Savings_Paid`,
-(SELECT COALESCE(SUM(Amount_Withdraw), 0) FROM withdraw WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `withdraw`,
-(SELECT COALESCE(SUM(Amount), 0) FROM saving_rep WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `repayment`,
-(SELECT COALESCE(SUM(Amount), 0) FROM transfers WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `transfer`,
-(SELECT COALESCE(SUM(Amount), 0) FROM saving_upfront WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `upfront`
-FROM savings WHERE $whereClause ORDER BY id ASC";
-
-if ($maxRows > 0) {
-$dataQuery .= " LIMIT $maxRows";
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= " LIMIT 10";
-}
-
-$result = mysqli_query($con, $dataQuery) or die("Database query failed: " . mysqli_error($con));
-
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
-
-// Save to JSON file
-$fp = fopen('../data/all_saving_portfolio_list.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
-
-mysqli_close($con);
-?>
-
-<small>
-Total Record: <?php echo $total; ?>
-</small>
-<br><br>
-<div id="table-container" style="height:350px;">
-<table>
-<thead>
-<tr>
-<th style="font-size:8px">VIRTUAL ACCT</th>
-<th style="font-size:8px">BVN NO</th>
-<th style="font-size:8px">SAVINGS ACCT</th>
-<th style="font-size:8px">NAME</th>
-<th style="font-size:8px">DEPOSIT</th>
-<th style="font-size:8px">WITHDRAW</th>
-<th style="font-size:8px">REPAYMENT</th>
-<th style="font-size:8px">TRANSFER</th>
-<th style="font-size:8px">UPFRONT</th>
-<th style="font-size:8px">BALANCE</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">DETAIL</th>
-</tr>
-</thead>
-<tbody>
-<?php if (!empty($results)): ?>
-    <?php foreach($results as $member): 
-        $vrt = htmlspecialchars($member['Virtual_Account']);
-        $firstname = htmlspecialchars($member['Firstname']);
-        $middlename = htmlspecialchars($member['Middlename']);
-        $lastname = htmlspecialchars($member['Lastname']);
-        $bvn = htmlspecialchars($member['Client_BVN']);
-        $sav_acct = htmlspecialchars($member['Savings_Account_No']);
-        $Savings_Paid = htmlspecialchars($member['Savings_Paid']);
-        $withdraw = htmlspecialchars($member['withdraw']);
-        $repayment = htmlspecialchars($member['repayment']);
-        $transfer = htmlspecialchars($member['transfer']);
-        $upfront = htmlspecialchars($member['upfront']);
-        $status = htmlspecialchars($member['Status']);
-        $id = (int)$member['id'];
-    ?>
-    <tr style="font-size:8px">
-        <td><?php echo $vrt; ?></td>
-        <td><?php echo $bvn; ?></td>
-        <td><?php echo $sav_acct; ?></td>
-        <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-        <td><?php echo number_format($Savings_Paid,2); ?></td>
-        <td><?php echo number_format($withdraw,2); ?></td>
-        <td><?php echo number_format($repayment,2); ?></td>
-        <td><?php echo number_format($transfer,2); ?></td>
-        <td><?php echo number_format($upfront,2); ?></td>
-        <td><?php echo number_format($Savings_Paid - ($withdraw + $repayment + $transfer + $upfront),2); ?></td>
-        <td><?php echo $status; ?></td>
-        <td>
-            <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-                <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-            </a>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="12" style="text-align:center; font-size:8px;">No record found</td>
-    </tr>
-<?php endif; ?>
-</tbody>
-
-</table>
-</div>
-
-
-<script>
-// Display data in modal
-$(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'express_saving_page.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
-});
-</script>
-
-
-
-
-
-
-
-<?php 
-}else if($types == 'Flexi'){
-// displaying flexi savings record
-?>
-
-
-
-
-
-<?php
-//displaying express saving record
-// Sanitize and validate inputs
+// 1. Inputs & Sanitization
+$types = isset($_POST['types']) ? trim($_POST['types']) : 'Express';
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 0;
+$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 10;
+$page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
 
-// Set CORS headers at the top
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Origin: *");
+if ($maxRows <= 0) $maxRows = 10;
+if ($page < 1) $page = 1;
 
-include '../config/db.php';
-include '../config/user_session.php';
+$savingsType = ($types === 'Flexi') ? 'Flexi' : 'Express';
 
-// Escape user input for SQL
-$User_escaped = mysqli_real_escape_string($con, $User);
-$search_escaped = mysqli_real_escape_string($con, $search);
+// --- DATA FETCHING LOGIC ---
+if ($savingsType === 'Flexi') {
+    // FLEXI LOGIC
+    $whereClause = "Status != ?";
+    $params = ['Closed'];
+    $paramTypes = 's';
 
-// Build query based on conditions
-$whereClause = "Status != 'Cancelled'";
+    if (!empty($search)) {
+        $searchParam = "%$search%";
+        $whereClause .= " AND (BVN LIKE ? OR Flexi_Account_No LIKE ? OR Surname LIKE ? OR Firstname LIKE ? OR Officer_Name LIKE ?)";
+        $params = array_merge($params, array_fill(0, 5, $searchParam));
+        $paramTypes .= "sssss";
+    }
 
-if (!empty($search)) {
-$whereClause .= " AND (BVN LIKE '%$search_escaped%' OR Surname LIKE '%$search_escaped%' OR Firstname LIKE '%$search_escaped%' 
-OR Othername LIKE '%$search_escaped%' OR Officer_Name LIKE '%$search_escaped%')";
+    // Count Total
+    $countStmt = mysqli_prepare($con, "SELECT COUNT(*) FROM flexi_account WHERE $whereClause");
+    mysqli_stmt_bind_param($countStmt, $paramTypes, ...$params);
+    mysqli_stmt_execute($countStmt);
+    $total = mysqli_stmt_get_result($countStmt)->fetch_row()[0];
+
+    // Pagination math
+    $totalPages = ceil($total / $maxRows);
+    if ($page > $totalPages && $totalPages > 0) $page = $totalPages;
+    $offset = ($page - 1) * $maxRows;
+
+    // Fetch Data
+    $dataQuery = "SELECT id, BVN, Flexi_Account_No, Surname, Firstname, Othername, Plan, Deposit_Amt, Withdraw_Amt, Total_Bal, Date_Start, Officer_Name, Status 
+                  FROM flexi_account WHERE $whereClause ORDER BY id DESC LIMIT ? OFFSET ?";
+    $stmt = mysqli_prepare($con, $dataQuery);
+    $finalParams = array_merge($params, [$maxRows, $offset]);
+    mysqli_stmt_bind_param($stmt, $paramTypes . "ii", ...$finalParams);
+    mysqli_stmt_execute($stmt);
+    $results = mysqli_stmt_get_result($stmt)->fetch_all(MYSQLI_ASSOC);
+    
+    file_put_contents('../data/general_flexi_portfolio_list.json', json_encode($results));
+
+} else {
+    // EXPRESS LOGIC
+    $whereClause = "Status = ?";
+    $params = ['Active'];
+    $paramTypes = 's';
+
+    if (!empty($search)) {
+        $searchParam = "%$search%";
+        $whereClause .= " AND (Client_BVN LIKE ? OR Virtual_Account LIKE ? OR Savings_Account_No LIKE ? OR Firstname LIKE ? OR Lastname LIKE ?)";
+        $params = array_merge($params, array_fill(0, 5, $searchParam));
+        $paramTypes .= "sssss";
+    }
+
+    // Count Total
+    $countStmt = mysqli_prepare($con, "SELECT COUNT(*) FROM savings WHERE $whereClause");
+    mysqli_stmt_bind_param($countStmt, $paramTypes, ...$params);
+    mysqli_stmt_execute($countStmt);
+    $total = mysqli_stmt_get_result($countStmt)->fetch_row()[0];
+
+    // Pagination math
+    $totalPages = ceil($total / $maxRows);
+    if ($page > $totalPages && $totalPages > 0) $page = $totalPages;
+    $offset = ($page - 1) * $maxRows;
+
+    // Fetch Data
+    $dataQuery = "SELECT id, Virtual_Account, Client_BVN, Firstname, Lastname, Middlename, Savings_Account_No, Status, Savings_Paid, 
+    Withdraw_Savings, Savings_Repayment, Savings_Transfer, Savings_Upfront, Balance FROM savings WHERE $whereClause ORDER BY id DESC LIMIT ? OFFSET ?";
+    $stmt = mysqli_prepare($con, $dataQuery);
+    $finalParams = array_merge($params, [$maxRows, $offset]);
+    mysqli_stmt_bind_param($stmt, $paramTypes . "ii", ...$finalParams);
+    mysqli_stmt_execute($stmt);
+    $results = mysqli_stmt_get_result($stmt)->fetch_all(MYSQLI_ASSOC);
+    
+    file_put_contents('../data/all_saving_portfolio_list.json', json_encode($results));
 }
 
-// Count query
-$countQuery = "SELECT COUNT(*) FROM flexi_account WHERE $whereClause";
-$countResult = mysqli_query($con, $countQuery);
-$row = mysqli_fetch_array($countResult);
-$total = $row[0];
-
-// Data query
-$dataQuery = "SELECT id, BVN, Flexi_Account_No, Surname, Firstname, Othername, Plan, Deposit_Amt, Total_Bal, Date_Start, Officer_Name, Status,
-(SELECT COALESCE(SUM(Amount), 0) FROM flexi_history WHERE Flexi_Account = Flexi_Account_No AND Status = 'Paid' ) AS `deposit`, 
-(SELECT COALESCE(SUM(Amount), 0) FROM flexi_withdraw WHERE Flexi_Accounts = Flexi_Account_No AND Status = 'Paid' ) AS `withdraw`
-FROM flexi_account WHERE $whereClause ORDER BY id ASC";
-
-if ($maxRows > 0) {
-$dataQuery .= " LIMIT $maxRows";
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= " LIMIT 10";
-}
-
-$result = mysqli_query($con, $dataQuery) or die("Database query failed: " . mysqli_error($con));
-
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
-
-// Save to JSON file
-$fp = fopen('../data/general_flexi_portfolio_list.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
-
-mysqli_close($con);
+$startRecord = ($total > 0) ? ($offset + 1) : 0;
+$endRecord = min($offset + $maxRows, $total);
 ?>
 
-<small>
-Total Record: <?php echo $total; ?>
-</small>
-<br><br>
-<div id="table-container" style="height:350px;">
-<table>
-<thead>
-<tr>
-<th style="font-size:8px">BVN NO</th>
-<th style="font-size:8px">SAVINGS ACCOUNT</th>
-<th style="font-size:8px">NAME</th>
-<th style="font-size:8px">SAVING PLAN</th>
-<th style="font-size:8px">TOTAL DEPOSIT</th>
-<th style="font-size:8px">TOTAL WITHDRAWAL</th>
-<th style="font-size:8px">BALANCE</th>
-<th style="font-size:8px">DATE ACTIVETED</th>
-<th style="font-size:8px">CREDIT OFFICER</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">ACTION</th>
-</tr>
-</thead>
-<tbody>
-<?php if (!empty($results)): ?>
-    <?php foreach($results as $member): 
-        $bvn = htmlspecialchars($member['BVN']);
-        $flexiacct = htmlspecialchars($member['Flexi_Account_No']);
-        $surname = htmlspecialchars($member['Surname']);
-        $firstname = htmlspecialchars($member['Firstname']);
-        $othername = htmlspecialchars($member['Othername']);
-        $plan = htmlspecialchars($member['Plan']);
-        $pd = htmlspecialchars($member['deposit']);
-        $with = htmlspecialchars($member['withdraw']);
-        $bal = htmlspecialchars($member['Total_Bal']);
-        $maturity = htmlspecialchars($member['Date_Start']);
-        $ofn = htmlspecialchars($member['Officer_Name']);
-        $status = htmlspecialchars($member['Status']);
-        $id = (int)$member['id'];
-    ?>
-    <tr style="font-size:8px">
-        <td><?php echo $bvn; ?></td>
-        <td><?php echo $flexiacct; ?></td>
-        <td style="text-transform:capitalize"><?php echo "$surname $firstname $othername"; ?></td>
-        <td><?php echo $plan; ?></td>
-        <td><?php echo number_format($pd,2); ?></td>
-        <td><?php echo number_format($with,2); ?></td>
-        <td><?php echo number_format($pd - $with,2); ?></td>
-        <td><?php echo $maturity; ?></td>
-        <td><?php echo $ofn; ?></td>
-        <td><?php echo $status; ?></td>
-        <td>
-            <a class="invk" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-                <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-            </a>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="11" style="text-align:center; font-size:8px;">No record found</td>
-    </tr>
-<?php endif; ?>
-</tbody>
-</table>
+<div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; border-radius: 5px;">
+    <small>
+        <strong>Total <?php echo $types; ?>: <?php echo number_format($total); ?></strong>
+        <?php if (!empty($search)): ?> | <span style="color: #28a745;">Search: "<?php echo htmlspecialchars($search); ?>"</span><?php endif; ?>
+        <span style="color: #17a2b8;"> | Showing: <?php echo $startRecord; ?>-<?php echo $endRecord; ?></span>
+    </small>
+
+    <?php if ($totalPages > 1): ?>
+    <div style="display: flex; gap: 5px;">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(1)" <?php echo ($page <= 1) ? 'disabled' : ''; ?> style="font-size: 10px;">&laquo; First</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(<?php echo $page - 1; ?>)" <?php echo ($page <= 1) ? 'disabled' : ''; ?> style="font-size: 10px;">Prev</button>
+        <span style="font-size: 11px; align-self: center; padding: 0 5px;">Page <strong><?php echo $page; ?></strong>/<?php echo $totalPages; ?></span>
+        <button type="button" class="btn btn-sm btn-primary" onclick="changePage(<?php echo $page + 1; ?>)" <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?> style="font-size: 10px;">Next</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(<?php echo $totalPages; ?>)" <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?> style="font-size: 10px;">Last &raquo;</button>
+    </div>
+    <?php endif; ?>
 </div>
 
-
-
-
-<script>
-// Display data in modal
-$(document).ready(function() {
-$('.invk').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'client_flexi_saving_page.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
-});
-</script>
-
-
-
-
-<?php 
-}else{
-?>
-
-
-<?php
-//default display of savings
-// Sanitize and validate inputs
-$search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 0;
-
-// Set CORS headers at the top
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Origin: *");
-
-include '../config/db.php';
-include '../config/user_session.php';
-
-// Escape user input for SQL
-$User_escaped = mysqli_real_escape_string($con, $User);
-$search_escaped = mysqli_real_escape_string($con, $search);
-
-// Build query based on conditions
-$whereClause = "Status != 'Cancelled'";
-
-if (!empty($search)) {
-$whereClause .= " AND (Client_BVN LIKE '%$search_escaped%' OR Virtual_Account LIKE '%$search_escaped%' OR Loan_Account_No LIKE '%$search_escaped%' 
-OR Disbursement_No LIKE '%$search_escaped%' OR Transaction_id LIKE '%$search_escaped%' OR Savings_Account_No LIKE '%$search_escaped%' 
-OR Unions LIKE '%$search_escaped%' OR Firstname LIKE '%$search_escaped%' OR Middlename LIKE '%$search_escaped%' OR Lastname LIKE '%$search_escaped%')";
-}
-
-// Count query
-$countQuery = "SELECT COUNT(*) FROM savings WHERE $whereClause";
-$countResult = mysqli_query($con, $countQuery);
-$row = mysqli_fetch_array($countResult);
-$total = $row[0];
-
-// Data query
-$dataQuery = "SELECT id, Virtual_Account, Client_BVN, Firstname, Lastname, Middlename, Loan_Account_No, Savings_Account_No, Status,
-(SELECT COALESCE(SUM(Savings), 0) FROM save WHERE Saving_Account = Savings_Account_No  AND Status = 'Paid' ) AS `Savings_Paid`,
-(SELECT COALESCE(SUM(Amount_Withdraw), 0) FROM withdraw WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `withdraw`,
-(SELECT COALESCE(SUM(Amount), 0) FROM saving_rep WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `repayment`,
-(SELECT COALESCE(SUM(Amount), 0) FROM transfers WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `transfer`,
-(SELECT COALESCE(SUM(Amount), 0) FROM saving_upfront WHERE Saving_Account_No = Savings_Account_No  AND Status = 'Paid' ) AS `upfront`
-FROM savings WHERE $whereClause ORDER BY id ASC";
-
-if ($maxRows > 0) {
-$dataQuery .= " LIMIT $maxRows";
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= " LIMIT 10";
-}
-
-$result = mysqli_query($con, $dataQuery) or die("Database query failed: " . mysqli_error($con));
-
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
-
-// Save to JSON file
-$fp = fopen('../data/all_saving_portfolio_list.json', 'w'); 
-fwrite($fp, json_encode($results)); 
-fclose($fp);
-
-mysqli_close($con);
-?>
-
-<small>
-Total Record: <?php echo $total; ?>
-</small>
-<br><br>
-<div id="table-container" style="height:350px;">
-<table>
-<thead>
-<tr>
-<th style="font-size:8px">VIRTUAL ACCT</th>
-<th style="font-size:8px">BVN NO</th>
-<th style="font-size:8px">SAVINGS ACCT</th>
-<th style="font-size:8px">NAME</th>
-<th style="font-size:8px">DEPOSIT</th>
-<th style="font-size:8px">WITHDRAW</th>
-<th style="font-size:8px">REPAYMENT</th>
-<th style="font-size:8px">TRANSFER</th>
-<th style="font-size:8px">UPFRONT</th>
-<th style="font-size:8px">BALANCE</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">DETAIL</th>
-</tr>
-</thead>
-<tbody>
-<?php if (!empty($results)): ?>
-    <?php foreach($results as $member): 
-        $vrt = htmlspecialchars($member['Virtual_Account']);
-        $firstname = htmlspecialchars($member['Firstname']);
-        $middlename = htmlspecialchars($member['Middlename']);
-        $lastname = htmlspecialchars($member['Lastname']);
-        $bvn = htmlspecialchars($member['Client_BVN']);
-        $sav_acct = htmlspecialchars($member['Savings_Account_No']);
-        $Savings_Paid = htmlspecialchars($member['Savings_Paid']);
-        $withdraw = htmlspecialchars($member['withdraw']);
-        $repayment = htmlspecialchars($member['repayment']);
-        $transfer = htmlspecialchars($member['transfer']);
-        $upfront = htmlspecialchars($member['upfront']);
-        $status = htmlspecialchars($member['Status']);
-        $id = (int)$member['id'];
-    ?>
-    <tr style="font-size:8px">
-        <td><?php echo $vrt; ?></td>
-        <td><?php echo $bvn; ?></td>
-        <td><?php echo $sav_acct; ?></td>
-        <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-        <td><?php echo number_format($Savings_Paid,2); ?></td>
-        <td><?php echo number_format($withdraw,2); ?></td>
-        <td><?php echo number_format($repayment,2); ?></td>
-        <td><?php echo number_format($transfer,2); ?></td>
-        <td><?php echo number_format($upfront,2); ?></td>
-        <td><?php echo number_format($Savings_Paid - ($withdraw + $repayment + $transfer + $upfront),2); ?></td>
-        <td><?php echo $status; ?></td>
-        <td>
-            <a class="invks" href="#!" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-                <button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-            </a>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="12" style="text-align:center; font-size:8px;">No record found</td>
-    </tr>
-<?php endif; ?>
-</tbody>
-</table>
+<div id="table-container" style="height:350px; overflow:auto">
+    <table>
+        <thead>
+            <?php if ($savingsType === 'Flexi'): ?>
+                <tr style="font-size:9px;">
+                    <th>BVN</th>
+                    <th>ACCOUNT</th>
+                    <th>NAME</th>
+                    <th>PLAN</th>
+                    <th >DEPOSIT</th>
+                    <th>WITHDRAWAL</th>
+                    <th>BALANCE</th>
+                    <th>DATE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            <?php else: ?>
+                <tr style="font-size:9px;">
+                    <th>VIRTUAL ACCT</th>
+                    <th>BVN</th>
+                    <th>SAVINGS ACCT</th>
+                    <th>NAME</th>
+                    <th>DEPOSIT</th>
+                    <th>WITHDRAW</th>
+                    <th>REPAYMENT</th>
+                    <th>TRANSFER</th>
+                    <th>UPFRONT</th>
+                    <th>CREDIT</th>
+                    <th>BALANCE</th>
+                    <th>STATUS</th>
+                    <th>DETAIL</th>
+                </tr>
+            <?php endif; ?>
+        </thead>
+        <tbody>
+            <?php if (!empty($results)): ?>
+                <?php foreach($results as $member): ?>
+                    <tr style="font-size:9px;">
+                        <?php if ($savingsType === 'Flexi'): ?>
+                            <td><?php echo $member['BVN']; ?></td>
+                            <td><?php echo $member['Flexi_Account_No']; ?></td>
+                            <td style="text-transform:capitalize"><span><?php echo $member['Surname']." ".$member['Firstname']; ?></span></td>
+                            <td><?php echo $member['Plan']; ?></td>
+                            <td ><?php echo number_format($member['Deposit_Amt'], 2); ?></td>
+                            <td ><?php echo number_format($member['Withdraw_Amt'], 2); ?></td>
+                            <td style=" font-weight:bold; color:green"><?php echo number_format($member['Total_Bal'], 2); ?></td>
+                            <td><?php echo $member['Date_Start']; ?></td>
+                            <td><?php echo $member['Status']; ?></td>
+                            <td><button class="btn btn-outline-primary btn-sm invk" data-id="<?php echo $member['id']; ?>" style="font-size:8px">Details</button></td>
+                        <?php else: ?>
+                            <td><?php echo $member['Virtual_Account']; ?></td>
+                            <td><?php echo $member['Client_BVN']; ?></td>
+                            <td><?php echo $member['Savings_Account_No']; ?></td>
+                            <td style="text-transform:capitalize"><span><?php echo $member['Firstname']." ".$member['Lastname']; ?></span></td>
+                            <td ><?php echo number_format($member['Savings_Paid'], 2); ?></td>
+                            <td ><?php echo number_format($member['Withdraw_Savings'], 2); ?></td>
+                            <td ><?php echo number_format($member['Savings_Repayment'], 2); ?></td>
+                            <td ><?php echo number_format($member['Savings_Transfer'], 2); ?></td>
+                            <td ><?php echo number_format($member['Savings_Upfront'], 2); ?></td>
+                            <td ><?php echo number_format($member['Savings_Recieved'], 2); ?></td>
+                            <td style=" font-weight:bold; color:green"><?php echo number_format($member['Balance'], 2); ?></td>
+                            <td ><?php echo $member['Status']; ?></td>
+                            <td ><button class="btn btn-outline-primary btn-sm invks" data-id="<?php echo $member['id']; ?>" style="font-size:8px">Details</button></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="20" class="text-center p-4">No records found.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
-
+<input type="hidden" id="currentTypes" value="<?php echo $types; ?>">
+<input type="hidden" id="currentSearch" value="<?php echo htmlspecialchars($search); ?>">
+<input type="hidden" id="currentMaxRows" value="<?php echo $maxRows; ?>">
 
 <script>
-// Display data in modal
+function changePage(newPage) {
+    var types = $('#currentTypes').val();
+    var search = $('#currentSearch').val();
+    var maxRows = $('#currentMaxRows').val();
+    
+    $('#table-container').css('opacity', '0.5');
+    
+    $.ajax({
+        url: 'select_saving_type.php',
+        type: 'POST',
+        data: { page: newPage, types: types, search: search, maxRows: maxRows },
+        success: function(response) {
+            $('#results').html(response); 
+        }
+    });
+}
+
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'express_saving_page.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off() ensures we don't bind the same click multiple times 
+    // especially after AJAX pagination/table refreshes.
+    $(document).off('click', '.invk, .invks').on('click', '.invk, .invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Stops potential conflicts
+        
+        const $this = $(this);
+        const id = $this.data('id');
+        const $profile = $('#profile');
+        const $updateModal = $("#updateModal");
+        
+        // 2. Logic to pick the right file
+        const targetUrl = $this.hasClass('invk') ? 'client_flexi_saving_page.php' : 'express_saving_page.php';
+
+        // 3. Open modal immediately
+        $updateModal.modal('show');
+
+        // 4. Loading State with min-height to prevent the modal from "collapsing"
+        $profile.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted font-weight-bold">Fetching savings profile...</p>
+            </div>
+        `);
+
+        // 5. AJAX Call
+        $.ajax({
+            url: targetUrl,
+            type: "GET",
+            data: { 'id': id },
+            cache: true, 
+            success: function(data) {
+                // 6. Smoothly transition. .stop(true, true) ensures snappy behavior.
+                $profile.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profile.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Connection Error:</b> Could not load the savings profile.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>
-
-
-
-
-<?php
-}
-?>
-
-<script type="text/javascript">
-function loads()  {
-$.ajax({
-method: "POST",
-url: "select_saving_type.php",
-dataType: "html",
-success:function(data){
-setTimeout(function(){
-$('#results').html(data);
-}, 1000);
-}
-});
-}
-</script> 

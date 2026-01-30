@@ -18,7 +18,7 @@ $officer = $row['Officer_Name'];
 $bv = $row['BVN'];
 $us = $row['User'];
 //
-if($tot == $pd){
+if($pd == $tot){
 // repayment
 $Query = "UPDATE repayments SET Confirmed_Status = 'Valid Outstanding', Status = 'Closed', Reason = 'All Payment Made', Date_Closed = '$d', Closed_By = '$na' 
 WHERE id = '$id'";

@@ -101,7 +101,7 @@ if($gr == "Loan Officers"){
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -170,7 +170,7 @@ $('#result').html(data);
 
 
 <script type="text/javascript">
-function getEntry()  {
+function getEntry() {
 $("#loader").show();
 $("result").hide();
 var maxRows = document.getElementById("maxRows").value;
@@ -198,25 +198,28 @@ $('#result').html(data);
 
 
 
+
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-var types = document.getElementById("types").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+let types  = $("#types").val();
+// add exactly one space at the end of search
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "load_saving_list.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search,
-'types': types
+search: search,
+types: types
 },
-success:function(data){
+success: function (data) {
 $('#result').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
@@ -306,7 +309,7 @@ $('#result').html(data);
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -401,24 +404,26 @@ $('#results').html(data);
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-var types = document.getElementById("types").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+let types  = $("#types").val();
+// add exactly one space at the end of search
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "team_saving_list.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search,
-'types': types
+search: search,
+types: types
 },
-success:function(data){
+success: function (data) {
 $('#results').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
@@ -510,7 +515,7 @@ $('#results').html(data);
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -607,28 +612,30 @@ $('#results').html(data);
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-var types = document.getElementById("types").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+let types  = $("#types").val();
+// add exactly one space at the end of search
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "select_saving_type.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search,
-'types': types
-
+search: search,
+types: types
 },
-success:function(data){
+success: function (data) {
 $('#results').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
+
 
 
 
@@ -677,5 +684,7 @@ $('#results').html(data);
 <?php 
 }
 ?>
+<br>
+<br>
 
 <?php include '../footer.php'; ?>

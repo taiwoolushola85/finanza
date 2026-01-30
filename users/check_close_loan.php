@@ -16,7 +16,7 @@ die("Invalid branch parameter");
 <small><b>Total: 
 <?php 
 // Fix 2: Use prepared statements to prevent SQL injection
-$stmt = mysqli_prepare($con, "SELECT COUNT(*) FROM repayments WHERE Branch = ? AND Total_Bal = '0'");
+$stmt = mysqli_prepare($con, "SELECT COUNT(*) FROM repayments WHERE Status = 'Active' AND Branch = ? AND Total_Bal = '0'");
 mysqli_stmt_bind_param($stmt, "s", $br);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $total);
@@ -32,7 +32,8 @@ echo $total;
 <?php 
 // Fix 3: Use prepared statements for the main query
 $stmt = mysqli_prepare($con, "SELECT id, Reg_id, Branch, Loan_Account_No, Account_Number, Firstname, Middlename, Lastname, Product, Total_Loan, Paid, 
-Expected_Amount, Total_Bal, Date_Disbursed, Status, Maturity_Date, Officer_Name FROM repayments WHERE Branch = ? AND Total_Bal = '0' ORDER BY Firstname ASC");
+Expected_Amount, Total_Bal, Date_Disbursed, Status, Maturity_Date, Officer_Name FROM repayments WHERE Status = 'Active' AND Branch = ?
+AND Total_Bal = '0' ORDER BY Firstname ASC");
 mysqli_stmt_bind_param($stmt, "s", $br);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);

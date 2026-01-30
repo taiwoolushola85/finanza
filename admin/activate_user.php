@@ -1,7 +1,7 @@
 <?php
 include '../config/db.php';
 $id = $_POST['id'];
-$sql = "UPDATE users SET Status='Activate' WHERE id = '$id' ";
+$sql = "UPDATE users SET Status='Activate', Login_Attempts = '0' WHERE id = '$id' ";
 $result = mysqli_query($con, $sql);
 if($result == true){
 echo 1;  

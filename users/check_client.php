@@ -171,7 +171,7 @@ mysqli_close($con);
 <option value="">Select Credit Officer</option>
 <?php 
 include '../config/db.php';
-$Query = "SELECT  * FROM users WHERE  Status = 'Activate' AND User_Group = 'Loan Officers' ORDER BY id ASC";
+$Query = "SELECT  * FROM users WHERE User_Group = 'Loan Officers' ORDER BY Name ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {

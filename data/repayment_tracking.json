@@ -1,0 +1,30 @@
+[
+    {
+        "id": 11,
+        "Loan_Account_No": "10010023",
+        "Firstname": "OLANREWAJU",
+        "Lastname": "SOFOLAHAN",
+        "Middlename": "AKINTUNDE",
+        "Product": "Market Weekly",
+        "Branch": "Ikeja",
+        "Phone": "09065374768",
+        "Total_Loan": "408000",
+        "Paid": "0",
+        "Expected_Amount": "34000",
+        "Date_Disbursed": "2026-01-09",
+        "Maturity_Date": "2026-04-07",
+        "Officer_Name": "John Smith",
+        "Status": "Active",
+        "Total_Bal": "408000",
+        "Duration": "12",
+        "Frequency": "Weekly",
+        "Disbursement_No": "20020023",
+        "Repayment_Day": "Tue",
+        "Missed_Repayments": 0,
+        "Expected_Due_Amount": 0,
+        "Next_Payment_Date": "2026-01-13",
+        "Repayment_Status": "On Track",
+        "Status_Color": "#28a745",
+        "Repayment_Percent": 0
+    }
+]

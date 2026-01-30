@@ -47,7 +47,21 @@ $us = $row['User'];
 <div class="row">
 <div class="col-12 col-sm-12 col-md-3">
 <div class="text-center">
-<img class="profile-user-img img-fluid img-circle" src="<?php echo $loc; ?>"  style="height:150px; width:150px; border-radius:20px">
+<?php
+$img = $loc ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:150px; width:150px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 </div>
 <h4 class="profile-username text-center"><?php echo $na; ?></h4>
 <p class="text-muted text-center"><?php echo $un; ?> Member</p>

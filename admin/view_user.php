@@ -88,9 +88,6 @@
 
 
 
-
-
-
 <?php include 'header.php'; ?>
 <!-- Left Sidebar End -->
 <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
@@ -121,6 +118,9 @@
 </div>
 </div>
 <!-- end page title -->
+<br>
+<br>
+<br>
 <?php 
 $id = $_GET['id'];// get id tbrough query string
 include '../config/db.php'; // db connection
@@ -133,7 +133,7 @@ $data = mysqli_fetch_array($qry); // fetch data
 <div class="card">
 <div class="card-body">
 <center>
-<img src="<?php echo $data['Location']?>" width="150" height="150" class="rounded-circle d-flex">
+<img src="<?php echo $data['Location']?>" width="155" height="155" class="rounded-circle d-flex">
 <br>
 <h4><b><?php echo $data['Name']?></b></h4>
 </center>
@@ -141,8 +141,6 @@ $data = mysqli_fetch_array($qry); // fetch data
 </div>
 <div class="card">
 <div class="card-body">
-<i class="fa fa-user-circle"></i> User Details
-<hr>
 <div id="mydiv">
 <small style="text-transform:capitalize; font-size:12px"><i class="fa fa-home"></i> Branch:</small>
 <small style="text-transform:capitalize; float:right"><b><?php echo $data['Branch']?></b></small>
@@ -152,18 +150,9 @@ $data = mysqli_fetch_array($qry); // fetch data
 <br>
 <small style="text-transform:capitalize; font-size:12px"><i class="fa fa-envelope"></i> Email:</small>
 <small style="text-transform:capitalize; float:right"><b><?php echo $data['Email']?></b></small>
-<br>
-<small style="text-transform:capitalize; font-size:12px"><i class="fa fa-user"></i> Username:</small>       
-<small style="text-transform:capitalize; float:right"><b><?php echo $data['Username']?></b></small>
-<br>    
+<br>  
 <small style="text-transform:capitalize; font-size:12px"><i class="fa fa-star"></i> Status:</small>
 <small style="text-transform:capitalize; float:right"><b><?php echo $data['Status']?></b></small>        
-<br>
-<small style="text-transform:capitalize; font-size:12px"><i class="fa fa-cube"></i> Staff ID:</small>  
-<small style="text-transform:capitalize; float:right"><b><?php echo $data['Staff_ID']?></b></small>
-<br>
-<small style="text-transform:capitalize; font-size:12px"><i class="fa fa-key"></i> Password:</small>
-<small style="text-transform:capitalize; float:right"><b><?php echo $data['Password']?></b></small>
 <br>
 <small style="text-transform:capitalize; font-size:12px"><i class="fa fa-user-circle"></i> Role:</small>
 <small style="text-transform:capitalize; float:right"><b><?php echo $data['User_Group']?></b></small>
@@ -171,8 +160,6 @@ $data = mysqli_fetch_array($qry); // fetch data
 <small style="text-transform:capitalize; font-size:12px"><i class="fa fa-globe"></i> Country:</small>
 <small style="text-transform:capitalize; float:right"><b><?php echo $data['Country']?></b></small>
 </div>
-<hr>
-
 
 </div>
 </div>
@@ -214,9 +201,12 @@ if($data['Status'] == "Activate"){
 </div>
 </div>
 <div class="col-sm-3">
+<form action="" method="POST" enctype="multipart/form-data" id="resetAccount">
 <div class="d-grid gap-2 mb-2">
+<input type="text" value="<?php echo $data['id']; ?>" hidden name="id"  required="required">
 <button class="btn btn-outline-warning btn-sm" style="font-size:10px;"><i class="fa fa-refresh"></i> Reset Account</button>
 </div>
+</form>
 </div>
 <div class="col-sm-3">
 <form action="" method="POST" enctype="multipart/form-data" id="accountDelete">
@@ -232,6 +222,10 @@ if($data['Status'] == "Activate"){
 </div>
 </div>
 </div>
+<br>
+<br>
+<i style="display: none;" id="wait"><img src="../loader/loader.gif" style="height:14px"> Waiting For Response ! Please wait...</i>
+<b style="color:green; display:none" id="done"><i class="fa fa-check"></i> Account successfully reset</b>
 <br>
 <br>
 
@@ -262,7 +256,7 @@ if($data['Status'] == "Activate"){
 </div>
 <div class="col-sm-6">
 <label>Password</label>
-<input type="password" class="form-control form-control-sm" name="ps" value="<?php echo $data['Password']?>" required>
+<input type="password" class="form-control form-control-sm" name="ps" value="<?php echo htmlspecialchars($data['Password'])?>" required>
 </div>
 </div>
 <br>
@@ -357,7 +351,7 @@ mysqli_close($con);
 
 <!-- /.bank modal -->
 <div class="modal" id="standard-modal" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered"  style="display:none; width:900px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content" >
 <div class="modal-header">
 <h4 class="modal-title">User Account Form Update</h4>
@@ -385,7 +379,7 @@ Branch
 <option value="<?php echo $data['Branch_id']; ?>"><?php echo $data['Branch']; ?></option>
 <?php
 include '../config/db.php';
-$Query = "SELECT id, Name FROM branch WHERE Status = 'Activate' ORDER BY id ASC";
+$Query = "SELECT id, Name FROM branch ORDER BY id ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -681,6 +675,43 @@ error: function(){
 });
 </script>
 
+
+<script type="text/javascript">
+$(document).ready(function (e){
+$("#resetAccount").on('submit',(function(e){ e.preventDefault();
+WRN_PROFILE_DELETE = "You are about to reset this user account.?";
+var checked = confirm(WRN_PROFILE_DELETE);
+if(checked == true) {
+$("#please").show();
+$.ajax({
+url: "account_reset.php",
+type: "POST",
+data: new FormData(this),
+contentType: false, 
+cache: false, 
+processData:false,
+success: function(data){
+if(data == 1){
+setTimeout(function(){
+$("#please").hide();
+$("#done").show();
+}, 3000);
+setTimeout(function(){
+$("#please").hide();
+$("#done").hide();
+}, 5000);
+}else{
+$("#please").hide();
+alert ("🚫" + data)
+}
+},
+error: function(){
+}
+});
+}
+}));
+});
+</script>
 
 
 <?php include '../footer.php'; ?>

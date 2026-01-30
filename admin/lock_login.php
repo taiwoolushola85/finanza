@@ -1,48 +1,41 @@
 <?php
 session_start();
 include '../config/db.php';
-extract($_POST);
-if (empty($ps)) {
-echo 1;
-}else{
-$id = $_POST['id'];// user id
-$us = $_POST['us'];// username
-$bck = $_POST['bck'];// resume location
-// checking the if login is correct
-$sql ="SELECT * FROM users WHERE Username = '$us' AND Password = '$ps' AND id = '$id'";
-$result=mysqli_query($con,$sql); 
-$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
-if (mysqli_num_rows($result) === 1) {
-$idd = $row['id'];
-$name = $row['Name'];
-$User = $row['Username'];
-$type = $row['Usertype'];
-$Status = $row['Status'];
-$chk = $row['Checks'];
+$pass = $_POST['pass'] ?? '';
+$id = $_POST['id'] ?? '';
+$us = $_POST['us'] ?? '';
+$bck = $_POST['bck'] ?? '';
+if (empty($pass)) {
+echo 1; // password empty
+exit;
+}
+// Fetch the user securely
+$stmt = mysqli_prepare($con, "SELECT * FROM users WHERE Username = ? AND id = ? LIMIT 1");
+mysqli_stmt_bind_param($stmt, "si", $us, $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-// check if user is admin
-if($type == 'Admin'){
-$_SESSION["Username"] = $User;
-$_SESSION["Name"] = $name;
+if ($row = mysqli_fetch_assoc($result)) {
+// Verify password
+if (!password_verify($pass, $row['Password'])) {
+echo 6; // invalid password
+exit;
+}
+// Check account status
+if ($row['Status'] === 'Deactivated') {
+echo 4; // account deactivated
+exit;
+}
+// Login successful, set session
+$_SESSION["Username"] = $row['Username'];
+$_SESSION["Name"] = $row['Name'];
 $_SESSION['login_time'] = time();
-echo "$bck";
-
-}elseif($type == 'User'){
-$_SESSION["Username"] = $User;
-$_SESSION["Name"] = $name;
-$_SESSION['login_time'] = time();
-echo "$bck";
-
-}elseif($type == 'User' && $Status == 'Deactivated'){
-echo 4;
-
+// Redirect or echo resume location
+echo htmlspecialchars($bck);
 } else {
-echo 5;
-
+echo 6; // user not found
 }
 
-}else{
-echo 6;
-}
-}
+mysqli_stmt_close($stmt);
+mysqli_close($con);
 ?>

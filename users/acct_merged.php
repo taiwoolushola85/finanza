@@ -80,7 +80,7 @@ Officer_Name='$new_ofn', Team_Leader='$new_tl', Team_Name='$new_tm', Team_id='$n
 
 "UPDATE transfers SET Reg_id='$new_reg', Loan_Account_No='$new_ln', Transaction_id='$new_tr', Saving_Account_No='$new_sv', User='$new_us', User_id='$new_us_id',
 Branch='$new_br', Branch_id='$new_br_id', Officer_Name='$new_ofn', Team_Leader='$new_tl', Team_Name='$new_tm', Unions='$new_un', Union_id='$new_un_id', 
-Product='$new_pr', Product_id='$new_pr_id', Team_id='$new_tm_id' WHERE Saving_Account_N o= '$old_sv'",
+Product='$new_pr', Product_id='$new_pr_id', Team_id='$new_tm_id' WHERE Saving_Account_No = '$old_sv'",
 
 "UPDATE saving_upfront SET Reg_id='$new_reg', Loan_Account_No='$new_ln', Transaction_id='$new_tr', Saving_Account_No='$new_sv', User='$new_us',
 User_id='$new_us_id', Branch='$new_br', Branch_id='$new_br_id', Officer_Name='$new_ofn', Team_Leader='$new_tl', Team_Name='$new_tm', Unions='$new_un', 

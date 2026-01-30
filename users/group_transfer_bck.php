@@ -41,10 +41,6 @@ $result= mysqli_query($con, $Query);
 $Query = "UPDATE savings SET User = '$us_name', User_id = '$user_id', Team_Leader = '$tm', Team_Name = '$tn', Officer_Name = '$off', Branch = '$us_br', 
 Branch_id = '$brid' WHERE Union_id = '$un_id'";
 $result= mysqli_query($con, $Query);
-// overdeu
-$Query = "UPDATE overdue SET User = '$us_name', User_id = '$user_id', Team_Leader = '$tm', Team_Name = '$tn', Officer_Name = '$off', Branch = '$us_br', 
-Branch_id = '$brid' WHERE Union_id = '$un_id'";
-$result= mysqli_query($con, $Query);
 // history
 $Query = "UPDATE history SET User = '$us_name', User_id = '$user_id', Team_Leader = '$tm', Team_Name = '$tn', Officer_Name = '$off', Branch = '$us_br', 
 Branch_Code = '$brid' WHERE Union_Code = '$un_id'";

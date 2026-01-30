@@ -125,7 +125,7 @@ if($cus_no == '0'){
 <option value="">Select Credit Officer</option>
 <?php 
 include_once '../config/db.php';
-$Query = "SELECT  * FROM users WHERE User_Group = 'Loan Officers' AND Status = 'Activate' ORDER BY id ASC";
+$Query = "SELECT  * FROM users WHERE User_Group = 'Loan Officers' AND Status = 'Activate' ORDER BY Name ASC";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
 if ($Count > 0) {
@@ -168,6 +168,9 @@ b.style.display = 'block';
 a.style.display = 'none';
 }
 </script>
+
+
+
 
 
 <script>

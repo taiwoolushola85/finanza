@@ -87,7 +87,21 @@ $dc = $row['Date_Reg'];
 $stt = $row['Status'];
 ?>
 <div class="text-center">
-<img class="profile-user-img img-fluid img-circle" src="<?php echo $pic; ?>" alt="User profile picture" style="width:100px; height:100px; border-radius:14px">
+<?php
+$img = $pic ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:150px; width:150px; border-radius:50px; margin-left:8px;" onerror="this.src='../assets/no-image.png';">
 </div>
 <br>
 <center>

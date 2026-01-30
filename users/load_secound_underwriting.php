@@ -58,7 +58,7 @@ mysqli_close($con);
 Total Record: <?php echo $total; ?>
 </small>
 <br><br>
-<div id="table-container" style="height:400px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -122,7 +122,7 @@ if (!empty($results)) {
     // Show no records message
     ?>
     <tr>
-        <td colspan="10" style="text-align:center; font-size:8px;">No record found</td>
+        <td colspan="10" style="text-align:center; font-size:11px;">No record found</td>
     </tr>
     <?php
 }

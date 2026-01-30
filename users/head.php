@@ -11,7 +11,7 @@ $user = $_SESSION['Username'];
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Finanza</title>
+<title>Finanza Sign In </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="description" content="Loan management system for all kinds of loans - personal, business, and more. Streamline your lending process with our user-friendly platform.">
 <meta name="keywords" content="loan management system, loan processing, lending platform, personal loans, business loans">
@@ -19,7 +19,7 @@ $user = $_SESSION['Username'];
 <!-- layout setup -->
 <!-- <script type="module" src="assets/js/layout-setup.js"></script> -->
 <!-- App favicon -->
-<link rel="shortcut icon" href="../assets/images/logo-sm.png">
+<link rel="shortcut icon" href="../assets/images/logo.png">
 <!-- select2 -->
 <link href="../assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
 <!-- Simplebar Css -->
@@ -32,12 +32,8 @@ $user = $_SESSION['Username'];
 <link href="../assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
 <!-- my css -->
 <link href="../assets/css/mystyle.min.css" rel="stylesheet" type="text/css">
-<!-- Include SheetJS library from CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- my jquery -->
 <script src="../js/jquery-2.2.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
 
 .form-control {
@@ -155,21 +151,34 @@ redirect();
 
 </script>
 
+
+
+<!-- loan closed end-->
+
 <?php
 include('../config/db.php') ;
 if (isset($_SESSION['Username'])) {
 $user = $_SESSION['Username'];
-$Query = "SELECT id, Staff_ID, Username, Location, Name, Password, Email, Branch, Branch_id, Pin, User_Group, Checks,
-Address, Role_Categorys, Mapped, Status, Usertype, Phone, Zone, Zone_id, Country FROM users WHERE Username='$user'";
+$Query = "SELECT id, Staff_ID, Username, Gender, Location, Name, Password, Email, Branch, Branch_id, Pin, User_Group, Checks, Sale_Target,
+Address, Role_Categorys, Mapped, Status, Usertype, Phone, Pin, Zone, Zone_id, Country FROM users WHERE Username='$user'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_fetch_array($result);
 $usid = $row['id'];
+$na = $row['Name'];
+$pin = $row['Pin'];
+$status = $row['Status'];
+$gender = $row['Gender'];
+$phone = $row['Phone'];
+$target = $row['Sale_Target'];
+$pwd = $row['Password'];
+$address = $row['Address'];
 $User = $row['Username'];
 $loc = $row['Location'];
 $gr = $row['User_Group'];
 $ct = $row['Role_Categorys'];
 $mapped = $row['Mapped'];
 $brss = $row['Branch'];
+$stid = $row['Staff_ID'];
 }
 ?>
 <!-- Begin page -->
@@ -301,7 +310,7 @@ $brss = $row['Branch'];
 <span>DASHBOARD</span>
 </a>
 </li>
-<li class="menu-title">Menu List</li>
+<li class="menu-title">Authorized Menu List</li>
 <?php
 include '../config/db.php';
 //Get branch Details
@@ -346,12 +355,22 @@ echo "<i style='margin-left:20px'>No Menu Available</i>";
 
 }
 ?>
+<li class="menu-title">Profile</li>
+<li>
+<a href="my_account.php" style="font-size:12px;">
+<i class="fas fa-square"></i>
+<span>MY ACCOUNT</span>
+</a>
+</li>
 </ul>
+
+
 </div>
 <!-- Sidebar -->
-</div>
-</div>
 
+
+</div>
+</div>
 
 
 <div class="modal" id="loader" tabindex="-1" aria-labelledby="verticallyCenteredModalLabel" aria-hidden="true" style="display:none;">
@@ -397,6 +416,12 @@ echo "<i style='margin-left:20px'>No Menu Available</i>";
 </i>
 </center>
 </div>
+</div>
+</div>
+</div>
+
+
+
 </div>
 </div>
 </div>

@@ -94,7 +94,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-container" style="overflow-y:auto; height:330px;">
+<div class="table-container" style="overflow-y:auto; height:300px;">
 <table>
 <thead>
 <tr> 
@@ -174,7 +174,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-container" style="overflow-y:auto; height:330px;">
+<div class="table-container" style="overflow-y:auto; height:300px;">
 <table>
 <thead>
 <tr> 
@@ -253,7 +253,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-container" style="overflow-y:auto; height:330px;">
+<div class="table-container" style="overflow-y:auto; height:300px;">
 <table>
 <thead>
 <tr> 

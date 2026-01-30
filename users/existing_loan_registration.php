@@ -35,7 +35,7 @@ if($loan_status == 'Closed' && $uzer == $User){
 
 
 
-<form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
+<form action="" method="POST" enctype="multipart/form-data" id="createProfile">
 <div style="margin: auto; width:250px">
 <label style="font-size:13px"><i style="color:red">*</i> Fee Type</label>
 <input type="number" class="form-control form-control-md" name="id" value="<?php echo $register_id ; ?>" hidden required="required">
@@ -145,7 +145,7 @@ $("#hey").html(data);
 
 <script type="text/javascript">
 $(document).ready(function (e){
-$("#uploadForm").on('submit',(function(e){ e.preventDefault();
+$("#createProfile").on('submit',(function(e){ e.preventDefault();
 WRN_PROFILE_DELETE = "You are about to create a loan profile ..";
 var checked = confirm(WRN_PROFILE_DELETE);
 if(checked == true) {
@@ -160,7 +160,7 @@ cache: false,
 processData:false,
 success: function(data){
 $("#please").show();
-$("#uploadForm")[0].reset();
+$("#createProfile")[0].reset();
 if(data == 1){
 alert("🚫 Please fill all required fields before creating loan profile.!");
 $("#please").hide();

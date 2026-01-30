@@ -8,30 +8,39 @@ $repid = str_replace( array("#", "'", ";", "/", "-", "@", "_", ","), '', $_POST[
 $rep_amt = str_replace( array("#", "'", ";", "/", "-", "@", "_", ","), '', $_POST['amt']);//repayment amount
 $d =  $_POST['date'];//repayment date
 //
-$am = str_replace( array("#", "'", ";", "/", "-", "@", "_", ","), '', $_POST['am']);// amount deposited
-$sa = str_replace( array("#", "'", ";", "/", "-", "@", "_",  ","), '',$_POST['sa']);// savings deopsited
+// Sanitize and handle empty input for amount deposited
+$am = isset($_POST['am']) ? str_replace(array("#", "'", ";", "/", "-", "@", "_", ","), '', $_POST['am']) : 0;
+
+// Sanitize and handle empty input for savings deposited
+$sa = isset($_POST['sa']) ? str_replace(array("#", "'", ";", "/", "-", "@", "_", ","), '', $_POST['sa']) : 0;
+
+// Convert to float to ensure numeric addition
+$am = floatval($am);
+$sa = floatval($sa);
+
+// Calculate total repayment
 $total_rep = $am + $sa;
+
+
 $mth = date('M');
 $yrs = date('Y');
 // avoid zero input in repayment
-if($am == "0"){
+if($am == "0" && $sa == "0"){
 echo 20;
 exit();
 }
-// avoid zero input in savings
-if($sa == "0"){
-echo 21;
-exit();
-}
+
 //
 if($total_rep != $rep_amt){
 echo 7;
 exit();
 }
 $result = mysqli_query($con, "SELECT * FROM repayments WHERE id='$repid' AND Status = 'Active'");
-$row= mysqli_fetch_array($result);
+
+if ($result && mysqli_num_rows($result) > 0) {
+$row = mysqli_fetch_assoc($result); // safer than fetch_array
 $id = $row['id'];
-$virtaul_acct = $row['Account_Number'];
+$virtual_acct = $row['Account_Number'];
 $dis = $row['Disbursement_No'];
 $tr = $row['Transaction_id'];
 $ln = $row['Loan_Account_No'];
@@ -39,7 +48,7 @@ $sn = $row['Savings_Account_No'];
 $fn = $row['Firstname'];
 $md = $row['Middlename'];
 $lnm = $row['Lastname'];
-$fll = $fn." ". $md. " ". $lnm;
+$fll = trim("$fn $md $lnm");
 $un = $row['Unions'];
 $cu_id = $row['Union_id'];
 $pr_name = $row['Product'];
@@ -57,18 +66,26 @@ $rt = $row['Rate'];
 $du = $row['Duration'];
 $tim = $row['Team_id'];
 $exp_amt = $row['Expected_Amount'];
-$int_amt = round($row['Interest_Amt'] / $row['Duration']);
+$int_amt = $du != 0 ? round($row['Interest_Amt'] / $du, 2) : 0; // avoid division by zero
 $reg = $row['Reg_id'];
 $total_loan = $row['Total_Loan'];
-$bal = $row['Total_Bal'];// balance
+$bal = $row['Total_Bal']; // balance
 $ph = $row['Phone'];
 $alert = $row['Alert'];
 $maturity = $row['Maturity_Date'];
-$ss = date('h:m:sa');
+$ss = date('h:i:sa');
 $date = date('Y-m-d');
 $rand = rand();
 $ran = uniqid();
+
+// Make sure $am is numeric
+$am = isset($am) ? floatval($am) : 0;
 $nxt_bal = $total_loan - $am;
+} else {
+// No repayment info found
+echo "The customer you are try to post for did not have an active loan to recieve this payment.! Please check..";
+exit;
+}
 
 
 // check if notification id is duplicate
@@ -104,11 +121,11 @@ exit();
 }
 
 
-if (empty($am) && empty($sa)){
+if ($am == "0" && $am == "0"){
 // do nothing
 echo 13;
 /// if only amount input are empty
-}elseif (empty($am)) {
+}elseif ($am == "0") {
 echo 14;
 exit();
 /*
@@ -126,12 +143,12 @@ echo("Error description: " . mysqli_error($con));
 }
 */
 // if only saving input are empty
-}elseif (empty($sa)) {
+}elseif ($sa == "0") {
 $query  = "INSERT INTO history (Session_id, Notification_id, Virtual_No, Rep_id, Disbursement_No, Register_id, Repayment_id, Loan_Account_No, Transaction_id,
 Saving_Account_No, Firstname, Middlename, Lastname, Unions, Union_Code, Loan_Amount, Amount, Savings, Duration, Frequency, Rate, Loan_Type, Product_id, Branch,
 Branch_Code, Status, User, User_id, Team_Leader, Team_Name, Officer_Name, Date_Paid, Time_Paid, Team_id, Interest_Amt, Expected_Amount, Total_Loan, Location,
 Balance, Phone, Payment_Method, Alert, Post_Method, Reciept_No, Reciept_Status, Posting_Status, Months, Years)
-VALUES ('$sessionid', '$notid', '$virtaul_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '0', '$du', 
+VALUES ('$sessionid', '$notid', '$virtual_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '0', '$du', 
 '$fr', '$rt', '$pr_name', '$pr_id', '$br_name', '$br_id', 'Waiting For Approval', '$us', '$us_id', '$tm', '$tmn', '$ofn', '$d', '$ss', '$tim', '$int_amt', 
 '$exp_amt', '$total_loan', 'Invalid', '$nxt_bal', '$ph', 'Wema Bank', '$alert', 'Basic Posting', 'Invalid', 'Denied', 'Denied', '$mth', '$yrs')";
 $result = mysqli_query($con, $query);
@@ -143,12 +160,12 @@ echo("Error description: " . mysqli_error($con));
 
 }else{
 // if all input are correct
-if (trim($_POST['am'] != '') && trim($_POST['sa'] != '')) {
+if (trim($_POST['am'] != "0") && trim($_POST['sa'] != "0")) {
 $query  = "INSERT INTO history (Session_id, Notification_id, Virtual_No, Rep_id, Disbursement_No, Register_id, Repayment_id, Loan_Account_No, Transaction_id,
 Saving_Account_No, Firstname, Middlename, Lastname, Unions, Union_Code, Loan_Amount, Amount, Savings, Duration, Frequency, Rate, Loan_Type, Product_id, Branch,
 Branch_Code, Status, User, User_id, Team_Leader, Team_Name, Officer_Name, Date_Paid, Time_Paid, Team_id, Interest_Amt, Expected_Amount, Total_Loan, Location,
 Balance, Phone, Payment_Method, Alert, Post_Method, Reciept_No, Reciept_Status, Posting_Status, Months, Years)
-VALUES ('$sessionid', '$notid', '$virtaul_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '$sa',
+VALUES ('$sessionid', '$notid', '$virtual_acct', '$id', '$dis', '$reg', '$id', '$ln', '$tr', '$sn', '$fn', '$md', '$lnm', '$un', '$cu_id', '$la', '$am', '$sa',
 '$du', '$fr', '$rt', '$pr_name', '$pr_id', '$br_name', '$br_id', 'Waiting For Approval', '$us', '$us_id', '$tm', '$tmn', '$ofn', '$d', '$ss', '$tim', '$int_amt', 
 '$exp_amt', '$total_loan', 'Invalid', '$nxt_bal', '$ph', 'Wema Bank', '$alert', 'Basic Posting', 'Invalid', 'Denied', 'Denied', '$mth', '$yrs')";
 $result = mysqli_query($con, $query);

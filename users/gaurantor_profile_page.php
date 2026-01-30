@@ -205,7 +205,23 @@ mysqli_close($con);
 }
 </style>
 <center>
-<img src="<?php echo $pic; ?>" style="height:100px; width:100px" class="img-fluid rounded-pill avatar-100" loading="lazy">
+
+<?php
+$img = $pic ?? '';
+$defaultImage = '../assets/no-image.png';
+if (!empty($img)) {
+// Check if path starts with ../
+if (strpos($img, '../') === 0) {
+$imgPath = $img;
+} else {
+$imgPath = '../' . $img;
+}
+} else {
+$imgPath = $defaultImage;
+}
+?>
+<img src="<?= htmlspecialchars($imgPath) ?>" style="height:100px; width:100px" class="img-fluid rounded-pill avatar-100" loading="lazy" onerror="this.src='../assets/no-image.png';">
+<br>
 </center>
 <div class="col-12">
 

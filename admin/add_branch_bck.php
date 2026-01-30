@@ -19,7 +19,7 @@ $row = mysqli_fetch_array($result);
 $zone_id = $row['id'];
 $zone = $row['Name'];
 $sql = "INSERT INTO branch (Name, Address, State, Zone, Zone_id, Country, Status, User, Date_Register, Time_Register) 
-VALUES ('$name', '$st', '$st', '$zone', '$zone_id', 'Nigeria', 'Activate', 'Admin', '$d', '$s')";
+VALUES ('$name', '$st', '$st', '$zone', '$zone_id', 'Nigeria', 'Active', 'Admin', '$d', '$s')";
 if (mysqli_query($con, $sql)) {
 echo 2;
 }else {

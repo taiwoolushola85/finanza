@@ -68,21 +68,54 @@
 <br>
 <div class="mb-3">
 <div class="nav nav-lines mb-0" id="nav1-tab" role="tablist">
+<?php 
+if($gr == 'Operations'){
+?>
 <a class="nav-item nav-link active" id="nav1-home-tab" data-bs-toggle="tab" href="#nav1-home" aria-selected="true" role="tab" style="font-size:13px;">
 <i class="fa fa-box"></i> Withdrawal Request</a>
-<a class="nav-item nav-link" id="nav1-profile-tab" data-bs-toggle="tab" href="#nav1-profile" aria-selected="false" role="tab" tabindex="-1" style="font-size:13px;">
+<?php 
+}else{
+
+}
+?>
+<?php 
+if($gr == 'Risk'){
+?>
+<a class="nav-item nav-link active" id="nav1-profile-tab" data-bs-toggle="tab" href="#nav1-profile" aria-selected="false" role="tab" tabindex="-1" style="font-size:13px;">
 <i class="fa fa-plus"></i> Savings Repayment Request</a>
+<?php 
+}else{
+
+}
+?>
+<?php 
+if($gr == 'Operations'){
+?>
 <a class="nav-item nav-link" id="nav1-flexi-tab" data-bs-toggle="tab" href="#nav1-flexi" aria-selected="false" role="tab" tabindex="-1" style="font-size:13px;">
 <i class="fa fa-star"></i> Flexi Withdrawal Request</a> 
+<?php 
+}else{
+
+}
+?>
+<?php 
+if($gr == 'Risk'){
+?>
 <a class="nav-item nav-link" id="nav1-off-tab" data-bs-toggle="tab" href="#nav1-off" aria-selected="false" role="tab" tabindex="-1" style="font-size:13px;">
 <i class="fa fa-cog"></i> Loan Write-Off Request</a> 
+<?php 
+}else{
+
+}
+?>
 </div>
 </div>
 <div class="tab-content" id="nav1-tabContent">
 <div class="tab-pane fade active show" id="nav1-home" role="tabpanel" aria-labelledby="#nav1-home-tab">
 <br>
-<br>
-<br>
+<?php 
+if($gr == 'Operations'){
+?>
 <div class="row">
 <div class="col-sm-2">
 
@@ -104,13 +137,18 @@
 </div>
 <br>
 <div id="result"></div>
+<?php 
+}else{
 
+}
+?>
 
 </div>
-<div class="tab-pane fade" id="nav1-profile" role="tabpanel" aria-labelledby="#nav1-profile-tab">
+<div class="tab-pane fade active show" id="nav1-profile" role="tabpanel" aria-labelledby="#nav1-profile-tab">
 <br>
-<br>
-<br>
+<?php 
+if($gr == 'Risk'){
+?>
 <div class="row">
 <div class="col-sm-2">
 
@@ -132,12 +170,17 @@
 </div>
 <br>
 <div id="results"></div>
+<?php 
+}else{
 
+}
+?>
 </div>
 <div class="tab-pane fade" id="nav1-off" role="tabpanel" aria-labelledby="#nav1-off-tab">
 <br>
-<br>
-<br>
+<?php 
+if($gr == 'Risk'){
+?>
 <div class="row">
 <div class="col-sm-2">
 
@@ -159,12 +202,17 @@
 </div>
 <br>
 <div id="writeoff"></div>
+<?php 
+}else{
 
+}
+?>
 </div>
 <div class="tab-pane fade" id="nav1-flexi" role="tabpanel" aria-labelledby="#nav1-flexi-tab">
 <br>
-<br>
-<br>
+<?php 
+if($gr == 'Operations'){
+?>
 <div class="row">
 <div class="col-sm-2">
 
@@ -186,7 +234,11 @@
 </div>
 <br>
 <div id="flexi"></div>
+<?php 
+}else{
 
+}
+?>
 </div>
 
 </div>
@@ -195,7 +247,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER REQUEST PROFILE</h5>
@@ -213,7 +265,7 @@
 
 
 <div class="modal" id="updateModals" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER REQUEST PROFILE</h5>
@@ -231,7 +283,7 @@
 
 
 <div class="modal" id="updatePage" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER REQUEST PROFILE</h5>
@@ -246,7 +298,9 @@
 </div>
 </div>
 </div>
-
+<?php 
+if($gr == 'Operations'){
+?>
 <script type="text/javascript">
 $(document).ready(function(){
 //setInterval(function(){
@@ -267,10 +321,16 @@ $('#result').html(data);
 // ajax function ends here
 });
 </script>
+<?php 
+}else{
+
+}
+?>
 
 
-
-
+<?php 
+if($gr == 'Risk'){
+?>
 <script type="text/javascript">
 $(document).ready(function(){
 //setInterval(function(){
@@ -291,7 +351,11 @@ $('#results').html(data);
 // ajax function ends here
 });
 </script>
+<?php 
+}else{
 
+}
+?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -356,5 +420,6 @@ $('#schedule').html(data);
 });
 </script>
 
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

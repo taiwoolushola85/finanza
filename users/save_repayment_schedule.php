@@ -24,9 +24,6 @@ Expected_Date, Amount_Paid, Savings, Status, Loan_Type, Loan_Account_No, Transac
 VALUES ('Null', '$id', '$fn', '$mn', '$ln', '$ph', '$bv', '$an', '$la', '$int_amt', '$re_amt', '$exp', '0', '0', 'Ready For Disbursement', '$pt', 'Null', 'Null',
 'Null', 'Outstanding', '-', 'Null', '$day')";
 $result = mysqli_query($con, $query);
-//updating register status
-$query = "UPDATE register SET Status='Ready For Disbursement', Underwriter='$na', Schedule_Status= 'Confirmed' WHERE id ='$id'";
-$result = mysqli_query($con, $query);
 }
 }
 if($result == true){

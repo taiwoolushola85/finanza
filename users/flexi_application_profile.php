@@ -27,9 +27,9 @@ $rows = mysqli_fetch_array($result);
 </div>
 <div class="col-sm-3">
 <form action="" method="POST" enctype="multipart/form-data" id="uploadForm">
-<input type="text" hidden class="form-control form-control-sm" name="id" placeholder="id" required="required" value="<?php echo $id; ?>"> 
-<input type="text" hidden class="form-control form-control-sm" name="deposit" placeholder="deposit" required="required" value="<?php echo $rows['Deposit']; ?>"> 
-<input type="text" hidden class="form-control form-control-sm" name="reciept" placeholder="reciept" required="required" value="<?php echo $rows['Location']; ?>">  
+<input type="text"  class="form-control form-control-sm" name="id" placeholder="id" hidden required="required" value="<?php echo $id; ?>"> 
+<input type="text"  class="form-control form-control-sm" name="deposit" placeholder="Deposit Amount" hidden required="required" value="<?php echo $rows['Deposit']?>"> 
+<input type="text"  class="form-control form-control-sm" name="reciept" placeholder="Reciept" hidden required="required" value="<?php echo $rows['Location']?>"> 
 <button type="submit" class="btn btn-light btn-sm w-100"><i class="fa fa-check"></i> Approve Application</button>
 </form>
 </div>

@@ -1,226 +1,266 @@
 <?php
-// Set CORS headers at the top
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// Set CORS and Headers
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/html; charset=UTF-8");
 
-// Handle preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-exit(0);
-}
-
 include '../config/db.php';
 include '../config/user_session.php';
-$d = date('Y-m-d');
-// Sanitize and validate inputs
+
+// 1. Inputs & Sanitization
+$types = isset($_POST['types']) ? trim($_POST['types']) : '';
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
-$maxRows = isset($_POST['maxRows']) ? max(0, (int)$_POST['maxRows']) : 0;
+$page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+$maxRows = isset($_POST['maxRows']) ? (int)$_POST['maxRows'] : 10;
+$d = date('Y-m-d');
 
-// Use prepared statements to prevent SQL injection
-$whereClause = "Status = ?";
-$params = ['Active'];
-$types = 's';
+if ($maxRows <= 0) $maxRows = 10;
+if ($page < 1) $page = 1;
 
+// 2. Build Efficient WHERE clause
+$params = [];
+$paramTypes = '';
+$whereClause = "1=1";
+
+// Status Filter
+if (!empty($types)) {
+    $whereClause .= " AND Status = ?";
+    $params[] = $types;
+    $paramTypes .= 's';
+}
+
+// Search Filter (Optimized)
 if (!empty($search)) {
-$searchParam = "%$search%";
-$whereClause .= " AND (BVN LIKE ? OR Account_Number LIKE ? OR Loan_Account_No LIKE ? 
-OR Disbursement_No LIKE ? OR Transaction_id LIKE ? OR Savings_Account_No LIKE ? 
-OR Status LIKE ? OR Unions LIKE ? OR Firstname LIKE ? OR Middlename LIKE ? OR Lastname LIKE ? AND Status != 'Disbursed')";
+    $searchParam = "%$search%";
+    // Columns to search
+    $cols = [
+        "Account_Number", 
+        "Loan_Account_No", 
+        "Disbursement_No", 
+        "BVN", 
+        "CONCAT(Firstname, ' ', Lastname)", // Note: CONCAT can be slow on huge tables
+        "Branch", 
+        "Product"
+    ];
     
-// Add search parameter 11 times for all LIKE clauses
-for ($i = 0; $i < 11; $i++) {
-$params[] = $searchParam;
-$types .= 's';
-}
+    // Dynamically build the OR clause
+    $likeParts = [];
+    foreach ($cols as $col) {
+        $likeParts[] = "$col LIKE ?";
+        $params[] = $searchParam;
+        $paramTypes .= 's';
+    }
+    $whereClause .= " AND (" . implode(" OR ", $likeParts) . ")";
 }
 
-// Count query using prepared statement
-$countQuery = "SELECT COUNT(*) as total FROM repayments WHERE $whereClause";
+// 3. Get Total Record Count (Lightweight Query)
+$countQuery = "SELECT COUNT(id) as total FROM repayments WHERE $whereClause";
 $stmt = mysqli_prepare($con, $countQuery);
-
-if ($stmt === false) {
-die("Error preparing count query: " . mysqli_error($con));
+if (!empty($params)) {
+    mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
 }
-
-mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
 $countResult = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($countResult);
-$total = $row['total'];
+$total = $countResult->fetch_assoc()['total'];
 mysqli_stmt_close($stmt);
 
-// Data query using prepared statement
-$dataQuery = "SELECT id, Account_Number, Firstname, Lastname, Middlename, Product, Branch, 
-Loan_Amount, Interest_Amt, Paid, Maturity_Status, Expected_Amount, Date_Disbursed, Maturity_Date, 
-Status, Total_Bal FROM repayments WHERE $whereClause ORDER BY id ASC";
+// 4. Pagination Math
+$totalPages = ($total > 0) ? ceil($total / $maxRows) : 1;
+if ($page > $totalPages) $page = $totalPages;
+$offset = ($page - 1) * $maxRows;
+if ($offset < 0) $offset = 0;
 
-if ($maxRows > 0) {
-$dataQuery .= " LIMIT ?";
+// 5. Data Query (Fetch ONLY what is needed)
+$dataQuery = "SELECT id, Account_Number, Firstname, Lastname, Branch, Product, 
+              Loan_Amount, Interest_Amt, Paid, Expected_Amount,
+              Date_Disbursed, Maturity_Date, Status, Total_Bal 
+              FROM repayments 
+              WHERE $whereClause 
+              ORDER BY id DESC 
+              LIMIT ? OFFSET ?";
+
+// Add Limit/Offset params
 $params[] = $maxRows;
-$types .= 'i';
-} elseif (empty($search) && $maxRows == 0) {
-$dataQuery .= " LIMIT 10";
-}
+$params[] = $offset;
+$paramTypes .= "ii";
 
 $stmt = mysqli_prepare($con, $dataQuery);
-
-if ($stmt === false) {
-die("Error preparing data query: " . mysqli_error($con));
-}
-
-mysqli_stmt_bind_param($stmt, $types, ...$params);
+mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
 mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-// Fetch results
-$results = array();
-while($row = mysqli_fetch_assoc($result)) {
-$results[] = $row; 
-}
+$resultData = mysqli_stmt_get_result($stmt);
+$results = $resultData->fetch_all(MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
-
-// Save to JSON file with proper error handling
-$jsonData = json_encode($results, JSON_PRETTY_PRINT);
-if ($jsonData === false) {
-error_log("JSON encoding failed: " . json_last_error_msg());
-} else {
-$filePath = '../data/general_portfolio_list.json';
-$dirPath = dirname($filePath);
-// Ensure directory exists
-if (!is_dir($dirPath)) {
-mkdir($dirPath, 0755, true);
-}
-    
-if (file_put_contents($filePath, $jsonData) === false) {
-error_log("Failed to write JSON file: $filePath");
-}
-}
-
 mysqli_close($con);
+
+// Calculate display range
+$startRecord = ($total > 0) ? ($offset + 1) : 0;
+$endRecord = min($offset + $maxRows, $total);
 ?>
 
-<small>
-Total Record: <?php echo htmlspecialchars($total); ?>
-</small>
-<br><br>
+<div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded">
+    <small>
+        <strong>Total Records: <?php echo number_format($total); ?></strong>
+        <?php if (!empty($types)): ?> | <span class="text-primary">Status: <?php echo htmlspecialchars($types); ?></span><?php endif; ?>
+        <span class="text-info"> | Showing: <?php echo $startRecord; ?>-<?php echo $endRecord; ?></span>
+    </small>
 
-<?php if (empty($results) && !empty($search)): ?>
-<?php elseif (empty($results)): ?>
-<div class="alert alert-info" role="alert" style="margin: 20px 0; padding: 15px; text-align: center;">
-<i class="fas fa-info-circle"></i> No records available at this time.
+    <?php if ($totalPages > 1): ?>
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(1)" <?php echo ($page <= 1) ? 'disabled' : ''; ?>>&laquo;</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(<?php echo $page - 1; ?>)" <?php echo ($page <= 1) ? 'disabled' : ''; ?>>Prev</button>
+        <button type="button" class="btn btn-sm btn-light" disabled><strong><?php echo $page; ?></strong>/<?php echo $totalPages; ?></button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="changePage(<?php echo $page + 1; ?>)" <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>>Next</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage(<?php echo $totalPages; ?>)" <?php echo ($page >= $totalPages) ? 'disabled' : ''; ?>>&raquo;</button>
+    </div>
+    <?php endif; ?>
 </div>
-<?php endif; ?>
 
-<div id="table-container" style="height:340px; overflow-y:auto;">
-<table >
-<thead>
-<tr>
-<th style="font-size:8px">VIRTUAL ACCT</th>
-<th style="font-size:8px">NAME</th>
-<th style="font-size:8px">BRANCH</th>
-<th style="font-size:8px">PRODUCT</th>
-<th style="font-size:8px">PRINCIPAL</th>
-<th style="font-size:8px">INTEREST</th>
-<th style="font-size:8px">PAID</th>
-<th style="font-size:8px">OUTSTANDING</th>
-<th style="font-size:8px">EXPECTED AMT</th>
-<th style="font-size:8px">DATE DISBURSED</th>
-<th style="font-size:8px">DATE EXPIRED</th>
-<th style="font-size:8px">STATUS</th>
-<th style="font-size:8px">DETAIL</th>
-</tr>
-</thead>
-<tbody>
-<?php
-if (!empty($results)) {
-foreach($results as $member) {
-// Escape output for XSS protection
-$vrt = htmlspecialchars($member['Account_Number'], ENT_QUOTES, 'UTF-8');
-$firstname = htmlspecialchars($member['Firstname'], ENT_QUOTES, 'UTF-8');
-$middlename = htmlspecialchars($member['Middlename'], ENT_QUOTES, 'UTF-8');
-$lastname = htmlspecialchars($member['Lastname'], ENT_QUOTES, 'UTF-8');
-$branch = htmlspecialchars($member['Branch'], ENT_QUOTES, 'UTF-8');
-$product = htmlspecialchars($member['Product'], ENT_QUOTES, 'UTF-8');
-$totalloan = htmlspecialchars($member['Loan_Amount'], ENT_QUOTES, 'UTF-8');
-$int = htmlspecialchars($member['Interest_Amt'], ENT_QUOTES, 'UTF-8');
-$paid = htmlspecialchars($member['Paid'], ENT_QUOTES, 'UTF-8');
-$exp = htmlspecialchars($member['Expected_Amount'], ENT_QUOTES, 'UTF-8');
-$totalbal = htmlspecialchars($member['Total_Bal'], ENT_QUOTES, 'UTF-8');
-$datedisburse = htmlspecialchars($member['Date_Disbursed'], ENT_QUOTES, 'UTF-8');
-$maturitydate = htmlspecialchars($member['Maturity_Date'], ENT_QUOTES, 'UTF-8');
-$status = htmlspecialchars($member['Maturity_Status'], ENT_QUOTES, 'UTF-8');
-$id = (int)$member['id'];
-?>
-<tr style="font-size:8px">
-<td><?php echo $vrt; ?></td>
-<td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
-<td><?php echo $branch; ?></td>
-<td><?php echo $product; ?></td>
-<td><?php echo number_format((float)$totalloan, 2); ?></td>
-<td><?php echo number_format((float)$int, 2); ?></td>
-<td><?php echo number_format((float)$paid, 2); ?></td>
-<td><?php echo number_format((float)$totalbal, 2); ?></td>
-<td><?php echo number_format((float)$exp, 2); ?></td>
-<td><?php echo $datedisburse; ?></td>
-<td><?php echo $maturitydate; ?></td>
-<td>
-<span><?php 
-if($d > $maturitydate){
-echo "<span style='color:red'>Expired</span>";
-}else{
-echo "<span style='color:green'>Active</span>";
-}
-?></span>
-</td>
-<td>
-<a class="invks" href="#" data-bs-toggle="modal" data-bs-target="#updateModal" data-id="<?php echo $id; ?>">
-<button type="button" class="btn btn-outline-primary btn-sm" style="font-size:7px">Details</button>
-</a>
-</td>
-</tr>
-<?php
-}
-} else {
-echo '<tr><td colspan="8" style="text-align:center; font-size:10px; padding: 10px;">No matching records</td></tr>';
-}
-?>
-</tbody>
-</table>
+<div id="table-container" style="height:335px; overflow:auto;">
+    <table>
+        <thead>
+            <tr>
+                <th style="font-size:9px;">VIRTUAL ACCT</th>
+                <th style="font-size:9px;">NAME</th>
+                <th style="font-size:9px;">BRANCH</th>
+                <th style="font-size:9px;">PRODUCT</th>
+                <th style="font-size:9px;">PRINCIPAL</th>
+                <th style="font-size:9px;">INTEREST</th>
+                <th style="font-size:9px;">PAID</th>
+                <th style="font-size:9px;">OUTSTANDING</th>
+                <th style="font-size:9px;">EXPECTED</th>
+                <th style="font-size:9px;">DISBURSED</th>
+                <th style="font-size:9px;">EXPIRES</th>
+                <th style="font-size:9px;">MATURITY STATUS</th>
+                <th style="font-size:9px;">LOAN STATUS</th>
+                <th style="font-size:9px;">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($results)): ?>
+                <?php foreach($results as $member): 
+                    $isExpired = ($d > $member['Maturity_Date']);
+                    $bal = (float)$member['Total_Bal'];
+                ?>
+                <tr style="font-size:9px; text-align:left;">
+                    <td><?php echo $member['Account_Number']; ?></td>
+                    <td class="text-uppercase text-nowrap"><?php echo htmlspecialchars($member['Firstname']." ".$member['Lastname']); ?></td>
+                    <td><?php echo $member['Branch']; ?></td>
+                    <td><?php echo $member['Product']; ?></td>
+                    <td><?php echo number_format($member['Loan_Amount'], 2); ?></td>
+                    <td><?php echo number_format($member['Interest_Amt'], 2); ?></td>
+                    <td><?php echo number_format($member['Paid'], 2); ?></td>
+                    <td style="color: <?php echo ($bal > 0 ? '#dc3545' : '#28a745'); ?>; font-weight:bold;">
+                        <?php echo number_format($bal, 2); ?>
+                    </td>
+                    <td><?php echo number_format($member['Expected_Amount'], 2); ?></td>
+                    <td><?php echo date("d-M-Y", strtotime($member['Date_Disbursed'])); ?></td>
+                    <td><?php echo date("d-M-Y", strtotime($member['Maturity_Date'])); ?></td>
+                    
+                    <td>
+                        <?php if($isExpired): ?>
+                            <span style="font-size:8px; color:red">Expired</span>
+                        <?php else: ?>
+                            <span  style="font-size:8px; color:green">Running</span>
+                        <?php endif; ?>
+                    </td>
+
+                    <td>
+                        <?php 
+                        if($bal == 0 && $member['Status'] == 'Active'){
+                            echo "<span style='color:pink'> Ready For Auditing</span>";
+                        } else if($bal == 0 && $member['Status'] == 'Closed'){
+                            echo "<span style='color:red'>Closed</span>";
+                        } else {
+                            echo $member['Status'];
+                        }
+                        ?>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm page" 
+                                data-id="<?php echo $member['id']; ?>" 
+                               style="font-size:8px" >Details</button>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="20" class="text-center p-4 text-muted">No records found matching your criteria.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+
+<input type="hidden" id="currentTypes" value="<?php echo htmlspecialchars($types); ?>">
+<input type="hidden" id="currentSearch" value="<?php echo htmlspecialchars($search); ?>">
+<input type="hidden" id="currentMaxRows" value="<?php echo $maxRows; ?>">
 
 <script>
-// Display data in modal with CSRF protection
+// Efficient Pagination Function
+function changePage(newPage) {
+    const $container = $('#table-container');
+    const $resultsDiv = $('#hey'); // Assuming 'hey' is the main container ID from your parent page
+    
+    // UI Feedback
+    $container.css('opacity', '0.5');
+    
+    $.ajax({
+        url: 'loan_portfolio_bck_list.php',
+        type: 'POST',
+        data: {
+            page: newPage,
+            types: $('#currentTypes').val(),
+            search: $('#currentSearch').val(),
+            maxRows: $('#currentMaxRows').val()
+        },
+        success: function(response) {
+            $resultsDiv.html(response); 
+        },
+        error: function() {
+            alert("Connection error. Please try again.");
+            $container.css('opacity', '1');
+        }
+    });
+}
+
+
+
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-// Validate ID is a positive integer
-if(id && Number.isInteger(id) && id > 0) {
-$.ajax({
-url: 'client_loan_page.php',
-type: "GET",
-data: {'id': id},
-dataType: 'html',
-timeout: 10000,
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#prof').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-console.error('AJAX Error:', status, error);
-alert('Error loading profile. Please try again.');
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') ensures only ONE listener is active at a time.
+    // This stops the "multiple-trigger" and "blinking modal" bug.
+    $(document).off('click', '.page').on('click', '.page', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Stops the click from triggering other scripts
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModals");
+        const $profileContainer = $('#profi');
+
+        // 2. Open the modal immediately
+        $modal.modal('show');
+
+        // 3. Set Loading State with a fixed min-height to prevent layout shifting
+        $profileContainer.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height:300px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted font-weight-bold">Fetching profile data...</p>
+            </div>`);
+
+        // 4. Optimized AJAX call
+        $.ajax({
+            url: 'client_loan_profile_data.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject data. .stop(true, true) kills any active fades to show content instantly.
+                $profileContainer.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profileContainer.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Could not load profile. Please refresh and try again.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>

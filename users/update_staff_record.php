@@ -54,12 +54,14 @@ $data = mysqli_fetch_array($result);
 $uzer_id = $data['id'];
 $email = $data['Email'];
 $staff_id = $data['Staff_ID'];
+/*
 if($staff_id == $staffid && $email == $em && $uzer_id == $userid){
 // confirmation is correct
 }else{
 echo 1;// email or staff id belong to another staff
 exit();
 }
+*/
 //loan officer
 if($gr_name == 'Loan Officers'){
 $sql = "UPDATE users SET Staff_ID = '$staffid', Name = '$nm', Email = '$em', Gender = '$gender', Usertype = 'User', Branch = '$br_name', Branch_id = '$br_id',

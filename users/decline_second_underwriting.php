@@ -4,10 +4,10 @@ include '../config/db.php';
 include '../config/user_session.php';
 $id = trim($_POST['id']);// reg id
 //
-$Query = "UPDATE register SET Status = 'Ready For Review', Stage = '4' WHERE id = '$id'";
+$Query = "UPDATE register SET Status = 'Pending' WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 //
-$Query = "DELETE FROM comment WHERE Reg_No = '$id' AND User_Role = 'Underwriters' ORDER BY id DESC LIMIT 1";
+$Query = "DELETE FROM comment WHERE Reg_No = '$id' AND User_Role = 'Team Leaders' ORDER BY id DESC LIMIT 1";
 $result= mysqli_query($con, $Query);
 if($result == true){
 echo 1;

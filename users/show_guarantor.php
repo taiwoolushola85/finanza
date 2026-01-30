@@ -32,6 +32,8 @@ $stmt = $con->prepare("
         r.BVN,
         r.Phone,
         r.Branch,
+        r.Product,
+        r.Duration,
         r.Loan_Amount,
 
         reg.Address AS Address,
@@ -82,13 +84,15 @@ $result = $stmt->get_result();
 <div class="table-responsive">
 
 <div class="table-responsive" style="overflow: auto; height:300px;">
-            <table >
+            <table id="demo1">
                 <thead>
                     <tr style="font-size:9px;">
     <th>LOAN ACCOUNT</th>
     <th>CLIENT BVN</th>
     <th>CLIENT NAME</th>
     <th>BRANCH</th>
+    <th>PRODUCT</th>
+    <th>TENURE</th>
     <th>CLIENT PHONE</th>
     <th>LOAN AMOUNT</th>
     <th>CLIENT ADDRESS</th>
@@ -107,6 +111,8 @@ $result = $stmt->get_result();
         <?= htmlspecialchars($row['Firstname']." ".$row['Middlename']." ".$row['Lastname']) ?>
     </td>
     <td><?= htmlspecialchars($row['Branch']) ?></td>
+    <td><?= htmlspecialchars($row['Product']) ?></td>
+    <td><?= htmlspecialchars($row['Duration']) ?></td>
     <td><?= htmlspecialchars($row['Phone']) ?></td>
     <td><?= number_format($row['Loan_Amount'], 2) ?></td>
     <td><?= htmlspecialchars($row['Address']) ?></td>

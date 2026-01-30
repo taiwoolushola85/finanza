@@ -28,16 +28,16 @@
 <div class="row">
 <div class="col-12">
 <div class="page-title-box d-flex align-items-center justify-content-between">
-<h3 class="mb-sm-0">Transfer</h3>
+<h3 class="mb-sm-0">Application</h3>
 <nav aria-label="breadcrumb" class="page-title-right">
 <ol class="breadcrumb border-0">
 <li class="breadcrumb-item">
 <a href="#!">
 <i class="mdi mdi-home-outline fs-18 lh-1"></i>
-<span class="visually-hidden">Applications</span>
+<span class="visually-hidden">Home</span>
 </a>
 </li>
-<li class="breadcrumb-item"><a href="#!">Applications</a></li>
+<li class="breadcrumb-item"><a href="#!">Home</a></li>
 <li class="breadcrumb-item active" aria-current="page">Applications</li>
 </ol>
 </nav>
@@ -74,7 +74,7 @@ $("#please").show();
 var id = document.getElementById('reg').value;
 $.ajax({
 url: "check_client.php?id=" + id,
-type: "GETT",
+type: "GET",
 data: new FormData(this),
 contentType: false, 
 cache: false, 

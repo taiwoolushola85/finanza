@@ -96,7 +96,7 @@
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:700px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-dialog-centered modal-lg" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h6 class="modal-title" id="exampleModalLabel">GROUP PROFILE</h6>
@@ -111,6 +111,7 @@
 </div>
 </div>
 </div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -160,26 +161,27 @@ $('#result').html(data);
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "load_all_group.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search
+search: search
 },
-success:function(data){
+success: function (data) {
 $('#result').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
-
 
 <script type="text/javascript">
 function loads() {
@@ -195,5 +197,6 @@ $('#result').html(data);
 });
 }
 </script> 
-
+<br>
+<br>
 <?php include '../footer.php'; ?>

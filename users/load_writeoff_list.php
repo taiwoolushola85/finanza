@@ -33,7 +33,7 @@ fclose($fp);
 //echo json_encode($results);
 ?>
 
-<div class="table-container" style="height:320px;">
+<div class="table-container" style="height:330px;">
 <table>
 <thead>
 <tr style="font-size:8px"> 
@@ -66,7 +66,7 @@ if (!empty($json)) {
             <td><?php echo ($member->Request_Type == 'Close Loan Account') ? "Loan Write Off" : $member->Request_Type; ?></td>
             <td><?php echo $member->Status?></td>
             <td>
-                <a class="invk" href="#!" data-id="<?php echo $member->id?>">
+                <a class="invkof" href="#!" data-id="<?php echo $member->id?>">
                     <button type="submit" class="btn btn-outline-primary btn-sm" style="font-size:8px">Details</button>
                 </a>
             </td>
@@ -95,7 +95,7 @@ if (!empty($json)) {
 <script>
 // Display data in modal
 $(document).ready(function() {
-$('.invk').on('click', function(e) {e.preventDefault();
+$('.invkof').on('click', function(e) {e.preventDefault();
 $("#updateModals").modal('hide');
 $("#view").modal('show');
 var id = $(this).data('id');

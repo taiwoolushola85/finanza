@@ -1,3 +1,4 @@
+<div class="row">
 <?php 
 include '../config/db.php';
 $regid = $_POST['regid'];// reg id
@@ -9,10 +10,8 @@ if ($Count > 0) {
 for ($j=0 ; $j < $Count; $j++){
 $rows = mysqli_fetch_array($result);
 ?>
-<div style="margin:auto;">
-<center>
-<img src="<?php echo $rows['Location']; ?>" class="img-fluid d-block" style="height:60vh">
-</center>
+<div class="col-sm-3">
+<img src="<?php echo $rows['Location']; ?>" class="img-fluid d-block" style="height:50vh">
 </div>
 <?php
 }
@@ -20,3 +19,4 @@ $rows = mysqli_fetch_array($result);
 echo "<span style='color:red'>No $document_type Document Image Uploaded</i>";
 }
 ?>
+</div>

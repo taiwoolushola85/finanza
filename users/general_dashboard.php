@@ -256,14 +256,8 @@ echo number_format($total,2);
 <h6 class="mb-1">OVERALL TARGET</h6>
 <h5 class="text mb-5" style="margin-top:10px;">Total: 
 <?php 
-include '../config/db.php';
-$d = date('Y-m-d');
-$m = date('M');
-$y = date('Y');
-$result = mysqli_query($con, "SELECT SUM(Interest_Amt) FROM history WHERE Months = '$m' AND Years = '$y' AND Status ='Paid'");
-$row = mysqli_fetch_array($result);
-$total = $row[0];
-echo number_format($total,2);
+$overall = '50000000000';
+echo number_format($overall,2);
 ?>
 </h5>
 
@@ -287,25 +281,12 @@ echo number_format($total,2);
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$yrs = date('Y');
-$mt = date('M');
-$result = mysqli_query($con, "SELECT SUM(Upfront) FROM register WHERE Months = '$mt' AND Year_Booked = '$yrs' AND Status = 'Disbursed'");
+$m = date('M');
+$y = date('Y');
+$result = mysqli_query($con, "SELECT SUM(Loan_Amount) FROM repayments WHERE Years = '$y' AND Status !='Cancelled'");
 $row = mysqli_fetch_array($result);
-$totalm = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Inssurance) FROM register WHERE Months = '$mt' AND Year_Booked = '$yrs' AND Status = 'Disbursed'");
-$row = mysqli_fetch_array($result);
-$totalup = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Form) FROM register WHERE Months = '$mt' AND Year_Booked = '$yrs' AND Status = 'Disbursed'");
-$row = mysqli_fetch_array($result);
-$totalman = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Card) FROM register WHERE Months = '$mt' AND Year_Booked = '$yrs' AND Status = 'Disbursed'");
-$row = mysqli_fetch_array($result);
-$total1 = $row[0];
-
-echo number_format($totalm + $totalup + $totalman + $total1,2);
+$total = $row[0];
+echo number_format($total,2);
 ?>
 </h5>
 
@@ -380,17 +361,24 @@ mysqli_close($con);
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
-$result = mysqli_query($con, "SELECT sum(Loan_Amount) FROM repayments WHERE Status != 'Cancelled'");
-$row = mysqli_fetch_array($result);
-$disbursement = $row[0];
-//
-$result = mysqli_query($con, "SELECT SUM(Total_Bal) FROM repayments WHERE '$d' > Maturity_Date AND Status = 'Active'");
-$row = mysqli_fetch_array($result);
-$overdue = $row[0];
-//
-$npl = ($overdue/$disbursement)*100;
-echo round($npl);
+
+// Total disbursement (excluding cancelled loans)
+$result = mysqli_query($con, "SELECT SUM(Loan_Amount) AS total_disbursement FROM repayments WHERE Status != 'Cancelled'");
+$row = mysqli_fetch_assoc($result);
+$disbursement = $row['total_disbursement'] ?? 0;
+
+// Total overdue loans
+$result = mysqli_query($con, "SELECT SUM(Total_Bal) AS total_overdue FROM repayments WHERE Status = 'Active' AND '$d' > Maturity_Date");
+$row = mysqli_fetch_assoc($result);
+$overdue = $row['total_overdue'] ?? 0;
+
+// Calculate NPL safely
+$npl = ($disbursement > 0) ? ($overdue / $disbursement) * 100 : 0;
+
+// Output rounded NPL
+echo round($npl); // 2 decimal places
 ?>%
+
 </span>
 <div class="progress progress-sm bg-primary-subtle" >
 <div class="progress-bar bg-danger" style="width:<?php echo round($npl);?>%;"></div>
@@ -518,7 +506,7 @@ $percentage = ($grandTotal > 0) ? ($dailyTotal / $grandTotal) * 100 : 0;
 <i class="fa fa-file"></i>
 </div>
 </div>
-<h5 class="mb-4 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:10px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -543,7 +531,7 @@ echo $total;
 <i class="fa fa-folder"></i>
 </div>
 </div>
-<h5 class="mb-4 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:10px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');
@@ -569,7 +557,7 @@ echo $total;
 <i class="fa fa-wallet"></i>
 </div>
 </div>
-<h5 class="mb-4 fw-medium" style="margin-left:30px;">
+<h5 class="mb-4 fw-medium" style="margin-left:10px;">
 <?php 
 include '../config/db.php';
 $d = date('Y-m-d');

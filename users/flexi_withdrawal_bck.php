@@ -7,7 +7,7 @@ $acct = $_POST['acct']; // account no
 $actname = $_POST['actname']; // account name
 $bnk = $_POST['bnk']; // bank name
 $reason = $_POST['reason']; // reason for withdrawal
-$balance = $_POST['bal']; // balance
+///$balance = $_POST['bal']; // balance
 $d = date('Y-m-d');
 $s = date('h:m:sa');
 $result = mysqli_query($con, "SELECT * FROM flexi_account WHERE id ='$id' ");
@@ -36,7 +36,18 @@ $us = $row['User'];
 $usd = $row['User_id'];
 $dp = $row['Deposit_Amt'];
 $ds = $row['Date_Start'];
+//
+$sql = "SELECT COALESCE(SUM(Amount), 0) AS lm FROM flexi_history WHERE Flexi_Reg = '$flexid' AND Status = 'Paid' ";
+$result=mysqli_query($con,$sql);
+$rows=mysqli_fetch_assoc($result);
+$pm = $rows['lm'];
+//
+$sql = "SELECT COALESCE(SUM(Amount), 0) AS lm FROM flexi_withdraw WHERE Flexi_id = '$flexid' AND Status = 'Paid'";
+$result=mysqli_query($con,$sql);
+$rows=mysqli_fetch_assoc($result);
+$pmt = $rows['lm'];
 
+$balance = $pm - $pmt;
 //
 $Query = "SELECT * FROM flexi_withdraw WHERE Flexi_Accounts = '$fan' AND Status != 'Paid'";
 $result = mysqli_query($con, $Query);
@@ -56,7 +67,8 @@ $sql = "INSERT INTO flexi_withdraw (Flexi_id, Flexi_Accounts, Name, Branch, Bran
 Team_Leader, Approved_By, Date_Approved, Payment_By, Bank, Account_Name, Account_No, Reason) 
 VALUES ('$flexid', '$fan', '$fullx', '$br', '$brid', '$amt', '$d', '$s', 'Processing', '$ofn', '$us', '$usd', '$tm', 'Null', 'Null', 'Null', '$bnk', '$actname',
 '$acct', '$reason')";
-if (mysqli_query($con, $sql)) {
+$result = mysqli_query($con, $sql);
+if ($result == true) {
 echo 3;
 }else{
 echo("Error description: " . mysqli_error($con));

@@ -1,16 +1,27 @@
 <?php
 include '../config/db.php';
-$id = $_POST['id'];
-$Query = "SELECT id, Firstname, Lastname, Location FROM history WHERE id = '$id'";
-$result = mysqli_query($con, $Query);
-$row = mysqli_fetch_array($result);
-if($row != 0){
+$id = $_POST['id'] ?? '';
+$query = "SELECT * FROM history WHERE id = '$id'";
+$result = mysqli_query($con, $query);
+if ($result && mysqli_num_rows($result) > 0) {
+$row = mysqli_fetch_assoc($result);
 $ids = $row['id'];
-$fn = $row['Firstname']. " ".$row['Lastname'];
-$lo = $row['Location'];
-echo json_encode(array("historyId"=>$ids, "fullName"=>$fn, "recieptLocation"=>$lo));
-}else{
-
+$receipt = $row['Location'] ?? '';
+// Determine correct path for receipt
+if (!empty($receipt)) {
+if (strpos($receipt, '../') === 0) {
+$receiptPath = $receipt;
+} else {
+$receiptPath = '../' . $receipt;
+}
+} else {
+$receiptPath = '';
+}
+echo json_encode(["historyId" => $ids, "recieptLocation" => $receiptPath]);
+} else {
+echo json_encode([
+"error" => "Record not found"
+]);
 }
 mysqli_close($con);
 ?>

@@ -1,6 +1,7 @@
 <?php 
 include '../config/db.php';
-$pr = $_POST['pr'];
+$pr = $_POST['prn'];
+
 $Query = "SELECT id, Tenure FROM product_list WHERE Product_id = '$pr'";
 $result = mysqli_query($con, $Query);
 $Count = mysqli_num_rows($result);
@@ -16,8 +17,8 @@ $namez= $rows['id'];
 $uzer= $rows['Tenure'];
 ?>
 <option value="<?php echo $uzer; ?>"><?php echo $uzer; ?></option>
+</select>
 <?php
 }
 }
 ?>
-</select>

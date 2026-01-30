@@ -445,7 +445,7 @@ cache: false,
 processData:false,
 success: function(data){
 $("#please").show();
-$("#productConfig")[0].reset();
+//$("#productConfig")[0].reset();
 if(data == 1){
 setTimeout(function(){
 $("#please").hide();

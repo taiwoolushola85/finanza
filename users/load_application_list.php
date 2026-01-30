@@ -29,7 +29,7 @@ $row = mysqli_fetch_array($countResult);
 $total = $row[0];
 
 // Data query
-$dataQuery = "SELECT id, Firstname, Lastname, Middlename, Gender, Phone, Branch, BVN, Status, Date_Reg, Time_Reg, Officer_Name 
+$dataQuery = "SELECT id, Firstname, Lastname, Middlename, Gender, Phone, Branch, BVN, Status, Date_Reg, Time_Reg, Officer_Name, Virtual_Account
 FROM register WHERE $whereClause ORDER BY id ASC";
 
 if ($maxRows > 0) {
@@ -58,10 +58,11 @@ mysqli_close($con);
 Total Record: <?php echo $total; ?>
 </small>
 <br><br>
-<div id="table-container" style="height:400px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
+<th style="font-size:8px">VIRTUAL ACCOUNT</th>
 <th style="font-size:8px">BVN</th>
 <th style="font-size:8px">NAME</th>
 <th style="font-size:8px">PHONE</th>
@@ -79,14 +80,15 @@ Total Record: <?php echo $total; ?>
 if (empty($results)) {
 ?>
 <tr>
-<td colspan="12" style="text-align:center; font-size:10px; padding:15px;">
-<strong>No record found</strong>
+<td colspan="12" style="text-align:center; font-size:11px">
+<span>No record found</span>
 </td>
 </tr>
 <?php
 } else {
 foreach ($results as $member) {
 // Escape output for XSS protection
+$vrt = htmlspecialchars($member['Virtual_Account']);
 $bvn = htmlspecialchars($member['BVN']);
 $firstname = htmlspecialchars($member['Firstname']);
 $middlename = htmlspecialchars($member['Middlename']);
@@ -108,6 +110,7 @@ $badgeClass = 'badge-soft-danger';
 }
 ?>
 <tr style="font-size:8px">
+<td><?php echo $vrt; ?></td>
 <td><?php echo $bvn; ?></td>
 <td style="text-transform:capitalize"><?php echo "$firstname $middlename $lastname"; ?></td>
 <td><?php echo $phone; ?></td>
@@ -133,35 +136,46 @@ $badgeClass = 'badge-soft-danger';
 </table>
 </div>
 
-
 <script>
-// Display data in modal
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'client_loan_profile.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') ensures we "clean the slate" before adding a listener.
+    // This stops the "One Click = 5 Requests" bug.
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Stops other scripts from fighting for this click
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profileContainer = $('#profile');
+
+        // 2. Open the modal immediately
+        $modal.modal('show');
+
+        // 3. Loading State with min-height (Prevents the modal from "blinking/collapsing")
+        $profileContainer.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted">Loading client loan details...</p>
+            </div>`);
+
+        // 4. Optimized AJAX call
+        $.ajax({
+            url: 'client_loan_profile.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject content instantly. 
+                // .stop(true, true) cancels any active animation queues for a snappy feel.
+                $profileContainer.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profileContainer.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Could not retrieve loan details. Please try again.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>

@@ -67,14 +67,14 @@ if($gr == "Loan Officers"){
 
 
 
-<div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal" id="loanofficerModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
 </div>
 <div class="modal-body">
-<div id="profile"></div>
+<div id="pageloader"></div>
 </div>
 <div class="modal-footer">
 <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
@@ -83,6 +83,28 @@ if($gr == "Loan Officers"){
 </div>
 </div>
 </div>
+
+
+<div class="modal" id="recieptdata" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:400px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">REPAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" alt="" id="recp" style="height:520px" width="350px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -131,23 +153,26 @@ $('#result').html(data);
 
 
 
+
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "loan_portfolio_list.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search
+search: search
 },
-success:function(data){
+success: function (data) {
 $('#result').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
@@ -156,7 +181,7 @@ $('#result').html(data);
 
 
 <script type="text/javascript">
-function loads()  {
+function loads() {
 $.ajax({
 method: "POST",
 url: "loan_portfolio_list.php",
@@ -208,14 +233,33 @@ $('#result').html(data);
 
 
 
-<div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal" id="updateBm" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
 </div>
 <div class="modal-body">
-<div id="profile"></div>
+<div id="page"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal" id="recieptdata" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:400px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">REPAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" alt="" id="recp" style="height:520px" width="350px" class="img-thumbnail">
+</center>
 </div>
 <div class="modal-footer">
 <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
@@ -272,27 +316,30 @@ $('#results').html(data);
 
 
 
+
+
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
-var search = document.getElementById("search").value;
-// ajax function start here
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
 $.ajax({
 method: "POST",
 url: "team_lead_portfolio.php",
-dataType: "html",  
+dataType: "html",
 data: {
-'search': search
+search: search
 },
-success:function(data){
+success: function (data) {
 $('#results').html(data);
 }
 });
-// ajax function ends here
 });
 });
 </script>
-
 
 
 
@@ -481,13 +528,19 @@ expired loan outstanding</p>
 </div>
 </div>
 <div class="row">
-<div class="col-sm-10" style="margin-top: 10px;">
+<div class="col-sm-8" style="margin-top: 10px;">
 <label>Show Entries</label>
 <select class="form-control form-control-sm" id="maxRows" style="width:50px;" oninput="getEntry()">
 <option value="10">10</option>
 <option value="20">20</option>
 <option value="50">50</option>
 <option value="100">100</option>
+</select>
+</div>
+<div class="col-sm-2" style="margin-top:20px;">
+<select class="form-control form-control-sm" id="types" oninput="loanType()">
+<option value="Active">Active Loans</option>
+<option value="Closed">Closed Loans</option>
 </select>
 </div>
 <div class="col-sm-2" style="margin-top: 10px;">
@@ -502,7 +555,7 @@ expired loan outstanding</p>
 
 
 <div class="modal" id="updateModal" tabindex="-1" aria-hidden="true">
-<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1000px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
 <div class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
@@ -517,6 +570,64 @@ expired loan outstanding</p>
 </div>
 </div>
 </div>
+
+
+<div class="modal" id="updateModals" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:1200px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">CUSTOMER PROFILE</h5>
+</div>
+<div class="modal-body">
+<div id="profi"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal" id="recieptdata" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:400px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">REPAYMENT RECIEPT</h5>
+</div>
+<div class="modal-body">
+<center>
+<img src="" alt="" id="recp" style="height:520px" width="350px" class="img-thumbnail">
+</center>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal" id="crcData" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" style="display:none; width:900px; display: flex !important; align-items: center; justify-content: center;">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">CRC DATA</h5>
+</div>
+<div class="modal-body">
+<b id="de"></b>
+<embed src="" id="pdf" type="application/pdf"  height="450px" width="100%">
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -563,11 +674,37 @@ $('#hey').html(data);
 }
 </script>
 
-
+<script type="text/javascript">
+function loanType()  {
+$("#loader").show();
+$("hey").hide();
+var types = document.getElementById("types").value;
+// ajax function start here
+$.ajax({
+method: "POST",
+url: "loan_portfolio_bck_list.php",
+dataType: "html",  
+data: {
+'types': types
+},
+success:function(data){
+$("hey").show();
+setTimeout(function(){
+$("#loader").hide();
+$('#hey').html(data);
+}, 1000);
+}
+});
+// ajax function ends here
+}
+</script>
 
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keydown(function(){
+function getEntry()  {
+$("#loader").show();
+$("hey").hide();
+var maxRows = document.getElementById("maxRows").value;
+var types = document.getElementById("types").value;
 var search = document.getElementById("search").value;
 // ajax function start here
 $.ajax({
@@ -575,16 +712,46 @@ method: "POST",
 url: "loan_portfolio_bck_list.php",
 dataType: "html",  
 data: {
+'maxRows': maxRows,
+'types': types,
 'search': search
 },
 success:function(data){
+$("hey").show();
+setTimeout(function(){
+$("#loader").hide();
 $('#hey').html(data);
+}, 1000);
 }
 });
 // ajax function ends here
+}
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+$("#search").on("keyup", function () {
+let search = $(this).val();
+// add exactly one space at the end
+if (search !== "") {
+search = search.trim() + " ";
+}
+$.ajax({
+method: "POST",
+url: "loan_portfolio_bck_list.php",
+dataType: "html",
+data: {
+search: search
+},
+success: function (data) {
+$('#hey').html(data);
+}
+});
 });
 });
 </script>
+
 
 
 
@@ -615,6 +782,7 @@ $('#hey').html(data);
 }
 ?>
 
-
+<br>
+<br>
 
 <?php include '../footer.php'; ?>

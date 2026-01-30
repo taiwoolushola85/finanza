@@ -3,7 +3,7 @@ include '../config/db.php';
 include '../config/user_session.php';
 $bvn = $_POST['bvn'];
 // checking if client exist
-$Query = "SELECT * FROM register WHERE BVN = '$bvn' AND Status != 'Disbursed' AND Application_Status = 'Registered'";
+$Query = "SELECT * FROM register WHERE BVN = '$bvn' AND Status NOT IN ('Disbursed', 'Cancelled', 'Loan Closed')";
 $result = mysqli_query($con, $Query);
 $row = mysqli_num_rows($result);
 if($row != 0){

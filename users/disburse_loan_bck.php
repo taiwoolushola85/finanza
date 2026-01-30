@@ -81,7 +81,7 @@ exit();
 }
 
 //
-$Query = "SELECT * FROM repayments WHERE Reg_id = '$id' AND Status = 'Active'";
+$Query = "SELECT * FROM repayments WHERE (BVN = '$clbv' OR Reg_id = '$id') AND Status = 'Active'";
 $result = mysqli_query($con, $Query);
 $row = mysqli_num_rows($result);
 if($row != 0){
@@ -117,7 +117,7 @@ Time_Disbursed, Officer_Name, Team_Name, Status, Transaction_Date, Last_Amount, 
 Underwiter, Disbursed_By, Team_id, Maturity_Date, Date_Reg, Total_Loan, Next_Payment_Date, Map_id, Maturity_Status, Recovery_Status, Alert, Years, Client_Type, Repayment_Day)
 VALUE('$sku', '$dn', '$fn', '$md', '$ln', '$ph', '$gn', '1010$id', '$lon', '2000$id', '$la', '$un', '$un_id', '$pr', '$dur', '$pr_id', '$bv', '$rat',
 '$ten', '$us', '$user_id', '$tl', '$br', '$br_id', '$na', '$d', '$s', '$of', '$tn', 'Active', '$d', '0', '$lo', '$mth', '$id', '$re_am', '$int', '0', '0', '$tll',
-'$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repayment_day')";
+'$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', 'Daily')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);
 
@@ -150,6 +150,7 @@ $result = mysqli_query($con, "UPDATE register SET Disbursed_By = '$na', Status =
 $result = mysqli_query($con, "SELECT * FROM schedule WHERE Regs_id = '$id' ORDER BY id DESC LIMIT 1");
 $row= mysqli_fetch_array($result);
 $def = $row['Expected_Date'];
+$repday = $row['Repayment_Day'];
 
 //
 $result = mysqli_query($con, "SELECT Expected_Date FROM schedule WHERE Regs_id = '$id' AND Payment_Status = 0 ORDER BY id ASC LIMIT 1");
@@ -167,7 +168,7 @@ Time_Disbursed, Officer_Name, Team_Name, Status, Transaction_Date, Last_Amount, 
 Underwiter, Disbursed_By, Team_id, Maturity_Date, Date_Reg, Total_Loan, Next_Payment_Date, Map_id, Maturity_Status, Recovery_Status, Alert, Years, Client_Type, Repayment_Day)
 VALUE('$sku', '$dn', '$fn', '$md', '$ln', '$ph', '$gn', '1010$id', '$lon', '2000$id', '$la', '$un', '$un_id', '$pr', '$dur', '$pr_id', '$bv', '$rat',
 '$ten', '$us', '$user_id', '$tl', '$br', '$br_id', '$na', '$d', '$s', '$of', '$tn', 'Active', '$d', '0', '$lo', '$mth', '$id', '$re_am', '$int', '0', '0', '$tll',
-'$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repayment_day')";
+'$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repday')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);
 
@@ -239,7 +240,7 @@ Time_Disbursed, Officer_Name, Team_Name, Status, Transaction_Date, Last_Amount, 
 Underwiter, Disbursed_By, Team_id, Maturity_Date, Date_Reg, Total_Loan, Next_Payment_Date, Map_id, Maturity_Status, Recovery_Status, Alert, Years, Client_Type, Repayment_Day)
 VALUE('$sku', '$dn', '$fn', '$md', '$ln', '$ph', '$gn', '1010$id', '$lon', '$sva', '$la', '$un', '$un_id', '$pr', '$dur', '$pr_id', '$bv', '$rat',
 '$ten', '$us', '$user_id', '$tl', '$br', '$br_id', '$na', '$d', '$s', '$of', '$tn', 'Active', '$d', '0', '$lo', '$mth', '$id', '$re_am', '$int', '0', '$balance',
-'$tll', '$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repayment_day')";
+'$tll', '$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', 'Daily')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);
 
@@ -335,6 +336,7 @@ $result = mysqli_query($con, "UPDATE register SET Disbursed_By = '$na', Status =
 $result = mysqli_query($con, "SELECT * FROM schedule WHERE Regs_id = '$id' ORDER BY id DESC LIMIT 1");
 $row= mysqli_fetch_array($result);
 $def = $row['Expected_Date'];
+$repday = $row['Repayment_Day'];
 
 //
 $result = mysqli_query($con, "SELECT Expected_Date FROM schedule WHERE Regs_id = '$id' AND Payment_Status = 0 ORDER BY id ASC LIMIT 1");
@@ -358,7 +360,7 @@ Time_Disbursed, Officer_Name, Team_Name, Status, Transaction_Date, Last_Amount, 
 Underwiter, Disbursed_By, Team_id, Maturity_Date, Date_Reg, Total_Loan, Next_Payment_Date, Map_id, Maturity_Status, Recovery_Status, Alert, Years, Client_Type, Repayment_Day)
 VALUE('$sku', '$dn', '$fn', '$md', '$ln', '$ph', '$gn', '1010$id', '$lon', '$sva', '$la', '$un', '$un_id', '$pr', '$dur', '$pr_id', '$bv', '$rat',
 '$ten', '$us', '$user_id', '$tl', '$br', '$br_id', '$na', '$d', '$s', '$of', '$tn', 'Active', '$d', '0', '$lo', '$mth', '$id', '$re_am', '$int', '0', '$balance',
-'$tll', '$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repayment_day')";
+'$tll', '$under', '$na', '$tms_id', '$def', '$dg_reg', '$ttn', '$pay', '$map_id', 'Runing', 'No', 'Enabled', '$yrs', '$client_type', '$repday')";
 $result = mysqli_query($con, $query);
 $last_id = mysqli_insert_id($con);
 

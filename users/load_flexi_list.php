@@ -58,7 +58,7 @@ mysqli_close($con);
 Total Record: <?php echo $total; ?>
 </small>
 <br><br>
-<div id="table-container" style="height:400px;">
+<div id="table-container" style="height:330px;">
 <table>
 <thead>
 <tr>
@@ -79,8 +79,8 @@ Total Record: <?php echo $total; ?>
 if (empty($results)) {
 ?>
 <tr>
-<td colspan="10" style="text-align:center; font-size:9px; color:#999;">
-<b>No record found</b>
+<td colspan="10" style="text-align:center; font-size:11px">
+<span>No record found</span>
 </td>
 </tr>
 <?php
@@ -126,33 +126,46 @@ $id = (int)$member['id'];
 
 
 <script>
-// Display data in modal
 $(document).ready(function() {
-$('.invks').on('click', function(e) {e.preventDefault();
-$("#updateModal").hide();
-$("#view").show();
-var id = $(this).data('id');
-if(id) {
-$.ajax({
-url: 'flexi_application_profile.php',
-type: "GET",
-data: {'id': id},
-success: function(data) { 
-setTimeout(function() {
-$("#updateModal").show();
-$("#view").hide();
-$('#profile').html(data);
-}, 1000);
-},
-error: function(xhr, status, error) {
-alert('Error loading profile: ' + error);
-$("#view").hide();
-}
-});
-} else {
-alert('Invalid ID');
-$("#view").hide();
-}
-});
+    // 1. .off('click') kills any existing listeners before adding a new one.
+    // This is the absolute cure for the "multiple triggers" bug.
+    $(document).off('click', '.invks').on('click', '.invks', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Prevents other scripts from fighting for this click
+
+        const id = $(this).data('id');
+        const $modal = $("#updateModal");
+        const $profileContainer = $('#profile');
+
+        // 2. Open the modal immediately
+        $modal.modal('show');
+
+        // 3. Set a Loading State with min-height (Prevents the modal from "collapsing/blinking")
+        $profileContainer.html(`
+            <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 250px;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p class="text-muted">Loading client loan details...</p>
+            </div>`);
+
+        // 4. Optimized AJAX call
+        $.ajax({
+            url: 'flexi_application_profile.php',
+            type: "GET",
+            data: {'id': id},
+            cache: true, 
+            success: function(data) { 
+                // 5. Inject content instantly. 
+                // .stop(true, true) cancels any active animation queues for a snappy feel.
+                $profileContainer.stop(true, true).hide().html(data).fadeIn(200);
+            },
+            error: function() {
+                $profileContainer.html(`
+                    <div class="alert alert-danger m-3 text-center">
+                        <b>Error:</b> Could not retrieve details. Please check your network.
+                    </div>`);
+            }
+        });
+    });
 });
 </script>
+

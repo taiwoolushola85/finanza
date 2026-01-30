@@ -1,4 +1,6 @@
-
+<?php 
+mysqli_close($con);
+?>
         <!-- Begin Footer -->
         <footer class="footer">
             <div class="container-fluid">

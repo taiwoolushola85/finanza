@@ -6,7 +6,7 @@ $type = $_POST['type']; // type
 $d = date('Y-m-d');
 $s = date('h:m:sa');
 // updating  register info
-$Query = "UPDATE register SET Upfront_Types = '$type' WHERE id='$id'";
+$Query = "UPDATE register SET Upfront_Types = '$type' WHERE id = '$id'";
 $result= mysqli_query($con, $Query);
 if($result == true){
 echo 1;

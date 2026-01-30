@@ -307,22 +307,9 @@ $name= $rows['Savings_Account_No'];
 </div>
 </div>
 </div>
-<?php 
-include '../config/db.php';
-$Query = "SELECT * FROM saving_merge WHERE New = '$ll' AND Status = 'Account Merged' ORDER BY id ASC";
-$result = mysqli_query($con, $Query);
-$row = mysqli_num_rows($result);
-if($row == 0){
-?>
 <br>
 <button type="submit" class="btn btn-success btn-sm">Merged Account</button>
 <button type="reset" class="btn btn-danger btn-sm" style="float:right">Reset Input Form</button>
-<?php 
-//
-}else{
-
-}
-?>
 </form>
 <?php 
 }else{
